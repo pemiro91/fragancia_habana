@@ -1,0 +1,50 @@
+{% extends "fragancia/base.html" %}
+{% load static %}
+<link href="{% static 'fragancia/css/catalogo/style.css' %}" rel="icon">
+<link href="{% static 'fragancia/css/catalogo/bootstrap.min.css' %}" rel="icon">
+{% block header_content %}
+    <h1 class="h3 mb-0 text-gray-800">Aplicación Web</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Principal</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Catálogo de Productos</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-sm-6 col-md-3 product-grid">
+                <div class="col-md-12 product-location">
+                          <span class="pull-right">
+                            <span class="rate fa-star fa"></span>
+                            <span class="rate fa-star fa"></span>
+                            <span class="rate fa-star fa"></span>
+                            <span class="rate fa-star fa"></span>
+                            <span class="rate fa-star-half fa"></span>
+                          </span>
+                </div>
+                <div class="thumbnail">
+                    <div class="product-price product-price-bottom">
+                        <h4>$1,716</h4>
+                    </div>
+                    <img src="holder.js/250x250" alt="...">
+                    <div class="caption">
+                        <small>Category</small>
+                        <small class="pull-right">
+                            <span>20 Minutes Ago</span>
+                        </small>
+                        <h4>Product Name</h4>
+                        <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis.</p>
+                        <p><a href="#" class="btn btn-info" role="button">Buy</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+<!-- plugins -->
+
+<script src="{% static 'fragancia/js/catalogo/holder.min.js' %}"></script>
+<script src="asset/js/plugins/holder.min.js"></script>
+<script src="asset/js/plugins/moment.min.js"></script>
+<script src="asset/js/plugins/jquery.nicescroll.js"></script>
