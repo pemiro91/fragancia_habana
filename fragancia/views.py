@@ -3,6 +3,11 @@ from django.shortcuts import render
 
 # Create your views here.
 
+def login(request):
+    context = {}
+    return render(request, 'fragancia/login.html', context)
+
+
 def index(request):
     context = {}
     return render(request, 'fragancia/index.html', context)

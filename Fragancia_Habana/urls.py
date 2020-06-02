@@ -15,16 +15,18 @@ Including another URLconf
 """
 from django.urls import path
 from fragancia import views
+from django.contrib import admin
 
 urlpatterns = [
-    # path('', views.login, name="login"),
+    path('admin/', admin.site.urls),
+
+    path('', views.login, name="login"),
+
     path('index', views.index, name="index"),
 
-    #Principal
+    # Principal
     path('catalogue', views.catalogue, name="catalogue"),
 
-
-    #Gestionar Productos
+    # Gestionar Productos
     path('products', views.products_list, name="products_list"),
 ]
-
