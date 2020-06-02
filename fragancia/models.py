@@ -10,6 +10,11 @@ from .managers import CustomUserManager
 # Create your models here.
 
 
+class CustomUser(AbstractUser):
+    is_seller = models.BooleanField(default=False)
+    is_administrator = models.BooleanField(default=False)
+
+
 class Product(models.Model):
     image = models.ImageField(upload_to='product_images')
     name = models.CharField(max_length=200, name='nombre')
@@ -37,6 +42,6 @@ class Reservation(models.Model):
     count_prod = models.IntegerField(name='cantidad_producto')
     service_messenger = models.ForeignKey(Service_Messenger, on_delete=models.CASCADE, name='servicio_mensajeria')
     date_res = models.DateField(default=datetime.datetime.now, name='fecha_reservacion')
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, name='vendedor')
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, name='vendedor')
 
     def __str__(self): return self.product
