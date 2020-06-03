@@ -130,4 +130,4 @@ STATICFILES_DIRS = [
     '/fragancia/static/']
 
 
-AUTH_USER_MODEL = 'fragancia.CustomUser'
+AUTH_USER_MODEL = 'fragancia.User'
