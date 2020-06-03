@@ -5,8 +5,24 @@ from django.db import models
 
 from Fragancia_Habana import settings
 
-
 # Create your models here.
+CATEGORIA_PERFUME = (
+    ('H', 'Hombre'),
+    ('M', 'Mujer')
+)
+
+TIPO_PERFUME = (
+    ('Fl', 'Floral'),
+    ('Fr', 'Frutal'),
+    ('Ve', 'Verde'),
+    ('Ar', 'Aromático'),
+    ('Fo', 'Fougère'),
+    ('Ci', 'Cítrico'),
+    ('Ch', 'Chipre'),
+    ('Am', 'Amaderado'),
+    ('Or', 'Oriental'),
+    ('Mu', 'Musk')
+)
 
 
 class User(AbstractUser):
@@ -32,6 +48,8 @@ class Product(models.Model):
     precio = models.CharField(max_length=50, name='precio')
     capacidad = models.CharField(max_length=50, name='capacidad')
     cantidad_disponible = models.IntegerField(name='cantidad_disponible')
+    categoria = models.CharField(max_length=15, choices=CATEGORIA_PERFUME, name='categoria')
+    tipo = models.CharField(max_length=30, choices=TIPO_PERFUME, name='tipo')
 
     def __str__(self): return self.nombre
 
