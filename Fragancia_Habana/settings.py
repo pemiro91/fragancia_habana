@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fragancia.apps.FraganciaConfig',
+    'graphene_django',
+    'graphene_pacho.apps.GraphenePachoConfig',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,7 @@ STATICFILES_DIRS = [
 
 
 AUTH_USER_MODEL = 'fragancia.User'
+
+GRAPHENE = {
+    'SCHEMA': 'graphene_pacho.schema.schema'
+}

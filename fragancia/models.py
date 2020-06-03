@@ -37,15 +37,13 @@ class Product(models.Model):
 
 
 class Service_Messenger(models.Model):
-    nombre = models.CharField(max_length=25, name='nombre')
-    apellido = models.CharField(max_length=25, name='apellido')
-    address = models.CharField(max_length=200, name='direccion')
-    phone = models.CharField(max_length=20, name='telefono')
-    time_ent = models.DateTimeField(max_length=50, name='horario_entrega')
-    date_ent = models.DateField(max_length=50, name='fecha_entrega')
+    nombre_apellido = models.CharField(max_length=100, name='nombre_apellido')
+    direccion = models.CharField(max_length=200, name='direccion')
+    telefono = models.CharField(max_length=20, name='telefono')
+    horario_entrega = models.DateTimeField(max_length=50, name='horario_entrega')
 
     def __str__(self):
-        return self.nombre
+        return self.nombre_apellido
 
 
 class Reservation(models.Model):
