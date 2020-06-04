@@ -1,7 +1,18 @@
 {% extends "fragancia/base.html" %}
 {% load static %}
-<link href="{% static 'fragancia/css/catalogo/style.css' %}" rel="icon">
-<link href="{% static 'fragancia/css/catalogo/bootstrap.min.css' %}" rel="icon">
+{% block header_style %}
+    <link href="{% static 'fragancia/catalogo/vendor/icofont/icofont.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fragancia/catalogo/vendor/remixicon/remixicon.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fragancia/catalogo/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'fragancia/catalogo/vendor/venobox/venobox.css' %}" rel="stylesheet">
+    <link href="{% static 'fragancia/catalogo/vendor/animate.css/animate.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fragancia/catalogo/css/style.css' %}" rel="stylesheet">
+
+{% endblock %}
+
 {% block header_content %}
     <h1 class="h3 mb-0 text-gray-800">Aplicación Web</h1>
     <ol class="breadcrumb">
@@ -10,41 +21,140 @@
     </ol>
 {% endblock %}
 {% block content %}
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-sm-6 col-md-3 product-grid">
-                <div class="col-md-12 product-location">
-                          <span class="pull-right">
-                            <span class="rate fa-star fa"></span>
-                            <span class="rate fa-star fa"></span>
-                            <span class="rate fa-star fa"></span>
-                            <span class="rate fa-star fa"></span>
-                            <span class="rate fa-star-half fa"></span>
-                          </span>
-                </div>
-                <div class="thumbnail">
-                    <div class="product-price product-price-bottom">
-                        <h4>$1,716</h4>
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <section id="portfolio" class="portfolio">
+                <div class="container" style="padding: 1%">
+
+                    <div class="row" data-aos="fade-up" data-aos-delay="200">
+                        <div class="col-lg-12 d-flex justify-content-center">
+                            <ul id="portfolio-flters" class="catalogo">
+                                <li data-filter="*" class="filter-active">Todos</li>
+                                <li data-filter=".filter-hombre">De Hombre</li>
+                                <li data-filter=".filter-mujer">De Mujer</li>
+                            </ul>
+                        </div>
                     </div>
-                    <img src="holder.js/250x250" alt="...">
-                    <div class="caption">
-                        <small>Category</small>
-                        <small class="pull-right">
-                            <span>20 Minutes Ago</span>
-                        </small>
-                        <h4>Product Name</h4>
-                        <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis.</p>
-                        <p><a href="#" class="btn btn-info" role="button">Buy</a></p>
+
+                    <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="400">
+
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/hombre1.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Aqua d´ Gio</h4>
+                                    <p>De Hombre</p>
+                                    <div class="portfolio-links">
+{#                                        <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"#}
+{#                                           class="venobox" title="App 1"><i class="bx bx-plus"></i></a>#}
+                                        <a href="{% url 'details_products' %}" title="More Details"><i id class="fas fa-fw fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/photo_2020-06-03_14-55-46.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Fahrenheit</h4>
+                                    <p>De Hombre</p>
+                                    <div class="portfolio-links">
+                                        <a href="" data-gall="portfolioGallery"
+                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-mujer">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/mujer1.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Aqua d´ Gio</h4>
+                                    <p>De Mujer</p>
+                                    <div class="portfolio-links">
+{#                                        <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"#}
+{#                                           class="venobox" title="App 1"><i class="bx bx-plus"></i></a>#}
+                                        <a href="{% url 'details_products' %}" title="More Details"><i class="bx bx-plus"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/hombre 5.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Fahrenheit</h4>
+                                    <p>De Hombre</p>
+                                    <div class="portfolio-links">
+                                        <a href="" data-gall="portfolioGallery"
+                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-mujer">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/mujer2.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Aqua d´ Gio</h4>
+                                    <p>De Mujer</p>
+                                    <div class="portfolio-links">
+                                        <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"
+                                           class="venobox" title="App 1"><i class="bx bx-plus"></i></a>
+                                        <a href="{% url 'details_products' %}" title="More Details">Detalles</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/hombre 4.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Fahrenheit</h4>
+                                    <p>De Hombre</p>
+                                    <div class="portfolio-links">
+                                        <a href="" data-gall="portfolioGallery"
+                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
+
                 </div>
-            </div>
+            </section>
         </div>
-    </div>
+    </div><!-- End Portfolio Section -->
 
 {% endblock %}
 <!-- plugins -->
 
-<script src="{% static 'fragancia/js/catalogo/holder.min.js' %}"></script>
-<script src="asset/js/plugins/holder.min.js"></script>
-<script src="asset/js/plugins/moment.min.js"></script>
-<script src="asset/js/plugins/jquery.nicescroll.js"></script>
+{% block plugin_section %}
+
+
+    <script src="{% static 'fragancia/catalogo/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/php-email-form/validate.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/waypoints/jquery.waypoints.min.js' %}"></script>
+
+    <script src="{% static 'fragancia/catalogo/vendor/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/venobox/venobox.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/js/main.js' %}"></script>
+{% endblock %}
+

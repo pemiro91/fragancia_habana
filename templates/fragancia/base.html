@@ -8,12 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <!-- Favicons -->
+    <link href="{% static 'fragancia/catalogo/img/favicon.png'%}" rel="icon">
+    <link href="{% static 'fragancia/catalogo/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+{#    <!-- Google Fonts -->#}
+{#    <link href="{% static 'fragancia/catalogo/fonts.css' %}"#}
+{#          rel="stylesheet">#}
+
     <link href="{% static 'fragancia/img/logo/logo.png' %}" rel="icon">
-    <title>RuangAdmin - Dashboard</title>
+    <title>Fragancias/Habana</title>
+
+    <!-- Fragancias/Habana CSS Files -->
     <link href="{% static 'fragancia/css/fragancia.css' %}" rel="stylesheet">
     <link href="{% static 'fragancia/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/css/ruang-admin.min.css' %}" rel="stylesheet">
+
+    {% block header_style %}
+
+    {% endblock %}
+
 </head>
 
 <body id="page-top">
@@ -22,7 +36,7 @@
     <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
         <a id="nav_izquierdo" class="sidebar-brand d-flex align-items-center justify-content-center" href="base.html">
             <div class="sidebar-brand-icon">
-                <img src="../../centro/static/centro/img/logo/logo2.png">
+                <img src="{% static 'fragancia/img/logo/logo2.png' %}">
             </div>
             <div class="sidebar-brand-text mx-3"><span id="texto_nav" class="">Fragancias/Habana</span></div>
         </a>
@@ -32,7 +46,7 @@
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Aplicación Web</span></a>
         </li>
-        <hr class="sidebar-divider">
+        <hr id="nav_divider" class="sidebar-divider">
         <div class="sidebar-heading">
             Principal
         </div>
@@ -49,14 +63,7 @@
                 <span>Catálogo de Productos</span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="ui-colors.html">
-                <i class="fas fa-fw fa-palette"></i>
-                <span>Reservaciones</span>
-            </a>
-        </li>
-        <hr class="sidebar-divider">
+        <hr id="nav_divider" class="sidebar-divider">
         <div class="sidebar-heading">
             Tableros de Control
         </div>
@@ -66,7 +73,25 @@
                 <span>Usuarios</span>
             </a>
         </li>
-        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-fw fa-pager"></i>
+                <span>Productos</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-fw fa-palette"></i>
+                <span>Reservaciones</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-fw fa-memory"></i>
+                <span>Servicios de Mensajeria</span>
+            </a>
+        </li>
+        <hr id="nav_divider" class="sidebar-divider">
         <div class="version" id="version-ruangadmin"></div>
     </ul>
     <!-- Sidebar -->
@@ -248,7 +273,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <img class="img-profile rounded-circle" src="../../centro/static/centro/img/boy.png"
+                            <img class="img-profile rounded-circle" src="{% static 'fragancia/img/boy.png' %}"
                                  style="max-width: 60px">
                             <span id="texto_nav" class="ml-2 d-none d-lg-inline small">Maman Ketoprak</span>
                         </a>
@@ -321,6 +346,10 @@
 <script src="{% static 'fragancia/js/ruang-admin.min.js' %}"></script>
 <script src="{% static 'fragancia/vendor/chart.js/Chart.min.js' %}"></script>
 <script src="{% static 'fragancia/js/demo/chart-area-demo.js' %}"></script>
+
+{% block plugin_section %}
+
+{% endblock %}
 </body>
 
 </html>

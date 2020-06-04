@@ -13,6 +13,12 @@ def catalogue(request):
     context = {}
     return render(request, 'fragancia/catalogo_productos.html', context)
 
+# ---------Detalles de un producto------#
+def details_products(request):
+    context = {}
+    return render(request, 'fragancia/detalles_producto.html', context)
+
+
 
 # -------------- Gestionar productos--------------#
 

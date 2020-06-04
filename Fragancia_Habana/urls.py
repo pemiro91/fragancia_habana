@@ -14,17 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+
 from fragancia import views
 
 urlpatterns = [
     # path('', views.login, name="login"),
     path('index', views.index, name="index"),
 
-    #Principal
+    # Principal
     path('catalogue', views.catalogue, name="catalogue"),
+    path('details_products', views.details_products, name="details_products"),
 
-
-    #Gestionar Productos
+    # Gestionar Productos
     path('products', views.products_list, name="products_list"),
 ]
-

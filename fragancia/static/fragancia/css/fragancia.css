@@ -12,7 +12,7 @@
 
 #texto_nav, #encabezado_dropdown {
     color: #625e5e;
-    font-size: 16px;
+    font-size: 14px;
 
 }
 
@@ -23,8 +23,13 @@ li a i, #sidebarToggleTop {
 li a i:hover {
     color: #ffffff;
 }
-.thumbnail{
-    box-shadow: 0 1px 0px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+
+#nav_divider {
+    border-top: 1px solid #fdfd96;
+}
+
+.thumbnail {
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
     border: none !important;
 
     display: block;
@@ -37,12 +42,40 @@ li a i:hover {
     box-sizing: border-box;
     color: #918C8C;
 
-    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 13px;
 
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
 /* Menu izquierdo*/
 /*#encabezado_nav_izq {*/
 /*    font-size: 10px;*/
 /*}*/
+
+/* Catalogo de productos*/
+
+#portfolio ul.catalogo li:hover, #portfolio ul.catalogo li.filter-active {
+    color: #625e5e;
+    background: #ffff7e;
+}
+
+#iconos_catalogo {
+    font-weight: 900;
+    font-size: 15px;
+    width: 1em;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#iconos_catalogo:hover {
+    color: #ffff7e;
+}
+
+

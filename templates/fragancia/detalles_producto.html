@@ -1,0 +1,93 @@
+{% extends "fragancia/base.html" %}
+{% load static %}
+{% block header_style %}
+    <link href="{% static 'fragancia/catalogo/vendor/icofont/icofont.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fragancia/catalogo/vendor/remixicon/remixicon.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fragancia/catalogo/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'fragancia/catalogo/vendor/venobox/venobox.css' %}" rel="stylesheet">
+    <link href="{% static 'fragancia/catalogo/vendor/animate.css/animate.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fragancia/catalogo/css/style.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block header_content %}
+    <h1 class="h3 mb-0 text-gray-800">Aplicación Web</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Principal</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Catálogo de Productos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Detalles del Producto</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <section id="portfolio-details" class="portfolio-details">
+                <div class="container">
+
+                    <div class="row">
+
+                        <div class="col-lg-8">
+                            <h2 class="portfolio-title">Detalles del Producto</h2>
+                            <div class="owl-carousel portfolio-details-carousel">
+                                <img src="{% static 'fragancia/img/fragancias/photo_2020-06-03_14-55-46.jpg' %}"
+                                     class="img-fluid" alt="">
+                                {#              <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">#}
+                                {#              <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">#}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 portfolio-info">
+                            <h3>Aqua d´ Gio</h3>
+                            <ul>
+                                <li><strong>Categoria</strong>: Hombre</li>
+                                <li><strong>Tipo</strong>: Citrico</li>
+                                <li><strong>Capacidad</strong>: 50 ml</li>
+                                <li><strong>Precio</strong>: 25 CUC</li>
+                                <li><spam class="badge-info">Disponibilidad: 30</spam> </li>
+{#                                <li><strong>Precio</strong>: <a href="#">www.example.com</a></li>#}
+
+                            </ul>
+                            <hr id="nav_divider" class="sidebar-divider">
+                            <h5>Reservacion</h5>
+                            <ul>
+
+                                <li><strong>Precio</strong>:<input type="number"></li>
+                                <li><strong>Tipo</strong>: Citrico</li>
+                                <li><strong>Capacidad</strong>: 50 ml</li>
+                                <li><strong>Precio</strong>: 25 CUC</li>
+{#                                <li><strong>Precio</strong>: <a href="#">www.example.com</a></li>#}
+                            </ul>
+
+                            Disponibilidad
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </div><!-- End Portfolio Section -->
+
+{% endblock %}
+<!-- plugins -->
+
+{% block plugin_section %}
+
+
+    <script src="{% static 'fragancia/catalogo/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/php-email-form/validate.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/waypoints/jquery.waypoints.min.js' %}"></script>
+
+    <script src="{% static 'fragancia/catalogo/vendor/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/venobox/venobox.min.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'fragancia/catalogo/js/main.js' %}"></script>
+{% endblock %}
+
