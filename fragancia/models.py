@@ -7,21 +7,36 @@ from Fragancia_Habana import settings
 
 # Create your models here.
 CATEGORIA_PERFUME = (
-    ('H', 'Hombre'),
-    ('M', 'Mujer')
+    ('Hombre', 'Hombre'),
+    ('Mujer', 'Mujer')
 )
 
 TIPO_PERFUME = (
-    ('Fl', 'Floral'),
-    ('Fr', 'Frutal'),
-    ('Ve', 'Verde'),
-    ('Ar', 'Aromático'),
-    ('Fo', 'Fougère'),
-    ('Ci', 'Cítrico'),
-    ('Ch', 'Chipre'),
-    ('Am', 'Amaderado'),
-    ('Or', 'Oriental'),
-    ('Mu', 'Musk')
+    ('Floral', 'Floral'),
+    ('Frutal', 'Frutal'),
+    ('Verde', 'Verde'),
+    ('Aromatico', 'Aromatico'),
+    ('Fougere', 'Fougere'),
+    ('Citrico', 'Citrico'),
+    ('Chipre', 'Chipre'),
+    ('Amaderado', 'Amaderado'),
+    ('Oriental', 'Oriental'),
+    ('Musk', 'Musk')
+)
+
+HORARIO_ENTREGA = (
+    ('8:00am-9:00am',   '8:00am-9:00am'),
+    ('9:00am-10:00am',  '9:00am-10:00am'),
+    ('10:00am-11:00am', '10:00am-11:00am'),
+    ('11:00am-12:00m',  '11:00am-12:00m'),
+    ('12:00m-1:00pm',   '12:00m-1:00pm'),
+    ('1:00pm-2:00pm',   '1:00pm-2:00pm'),
+    ('2:00pm-3:00pm',   '2:00pm-3:00pm'),
+    ('3:00pm-4:00pm',   '3:00pm-4:00pm'),
+    ('4:00pm-5:00pm',   '4:00pm-5:00pm'),
+    ('5:00pm-6:00pm',   '5:00pm-6:00pm'),
+    ('6:00pm-7:00pm',   '6:00pm-7:00pm'),
+    ('7:00pm-8:00pm',   '7:00pm-8:00pm')
 )
 
 
@@ -54,21 +69,16 @@ class Product(models.Model):
     def __str__(self): return self.nombre
 
 
-class Service_Messenger(models.Model):
-    nombre_apellido = models.CharField(max_length=100, name='nombre_apellido')
-    direccion = models.CharField(max_length=200, name='direccion')
-    telefono = models.CharField(max_length=20, name='telefono')
-    horario_entrega = models.DateTimeField(max_length=50, name='horario_entrega')
-
-    def __str__(self):
-        return self.nombre_apellido
-
-
 class Reservation(models.Model):
     producto = models.ForeignKey(Product, on_delete=models.CASCADE, name='producto')
     cantidad_producto = models.IntegerField(name='cantidad_producto')
-    servicio_mensajeria = models.ForeignKey(Service_Messenger, on_delete=models.CASCADE, name='servicio_mensajeria')
     fecha_reservacion = models.DateField(default=datetime.datetime.now, name='fecha_reservacion')
     vendedor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, name='vendedor')
+    nombre = models.CharField(max_length=50, name='nombre', null=True, blank=True)
+    direccion = models.TextField(name='direccion', null=True, blank=True)
+    telefono = models.CharField(max_length=10, name='telefono', null=True, blank=True)
+    fecha_entrega = models.CharField(max_length=50, name='fecha_entrega', null=True, blank=True)
+    horario_entrega = models.CharField(max_length=50, choices=HORARIO_ENTREGA, name='horario_entrega',
+                                       null=True, blank=True)
 
     def __str__(self): return str(self.producto)

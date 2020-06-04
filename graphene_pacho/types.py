@@ -1,7 +1,9 @@
 import graphene
+from graphene import ObjectType
 from graphene_django.types import DjangoObjectType
 
-from fragancia.models import User, Product, Service_Messenger, Reservation
+from fragancia.models import User, Product, Reservation
+from django.db.models import Q
 
 
 class UserType(DjangoObjectType):
@@ -12,37 +14,61 @@ class UserType(DjangoObjectType):
 class ProductType(DjangoObjectType):
     class Meta:
         model = Product
-
-
-class Service_MessengerType(DjangoObjectType):
-    class Meta:
-        model = Service_Messenger
+        fields = '__all__'
 
 
 class ReservationType(DjangoObjectType):
     class Meta:
         model = Reservation
+        fields = '__all__'
 
 
-class Query(object):
+def resolve_all_reservaciones_for_user(info, vendedor=None, **kwargs):
+    user = info.context.user
+    if user.is_anonymous:
+        raise Exception('Authentication Failure!')
+    return Reservation.objects.filter(vendedor_id=vendedor)
+
+
+class Query(ObjectType):
     all_users = graphene.List(UserType)
     all_productos = graphene.List(ProductType)
-    all_servicio_mensajeria = graphene.List(Service_MessengerType)
-    all_reservaciones = graphene.List(ReservationType)
+    all_reservaciones = graphene.List(ReservationType, vendedor=graphene.Int())
+    producto = graphene.Field(ProductType, id=graphene.Int())
+
+    def resolve_producto(self, info, **kwargs):
+        id = kwargs.get('id')
+        if id is not None:
+            return Product.objects.get(pk=id)
+        return None
 
     def resolve_all_users(self, info, **kwargs):
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception('Authentication Failure!')
         return User.objects.all()
 
     def resolve_all_productos(self, info, **kwargs):
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception('Authentication Failure!')
         return Product.objects.all()
 
-    def resolve_all_servicios(self, info, **kwargs):
-        return Service_Messenger.objects.all()
-
-    def resolve_all_reservaciones(self, info, **kwargs):
-        return Reservation.objects.select_related('user').all()
+    def resolve_all_reservaciones(self, info, vendedor=None, **kwargs):
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception('Authentication Failure!')
+        if vendedor:
+            filter_v = (
+                    Q(vendedor_id=vendedor)
+            )
+            return Reservation.objects.filter(filter_v)
+        return Reservation.objects.all()
 
     def resolve_reservacion(self, info, **kwargs):
+        user = info.context.user
+        if user.is_anonymous:
+            raise Exception('Authentication Failure!')
         id = kwargs.get('id')
         vendedor = kwargs.get('vendedor')
         if id is not None:
