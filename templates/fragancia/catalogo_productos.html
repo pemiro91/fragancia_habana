@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block header_content %}
-    <h1 class="h3 mb-0 text-gray-800">Aplicación Web</h1>
+{#    <h1 class="h3 mb-0 text-gray-800">Aplicación Web</h1>#}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Principal</a></li>
         <li class="breadcrumb-item active" aria-current="page">Catálogo de Productos</li>
@@ -24,7 +24,8 @@
     <div class="col-xl-12">
         <div class="card mb-4">
             <section id="portfolio" class="portfolio">
-                <div class="container" style="padding: 1%">
+                <div class="container" style="padding-left: 50px;padding-right: 50px">
+
 
                     <div class="row" data-aos="fade-up" data-aos-delay="200">
                         <div class="col-lg-12 d-flex justify-content-center">
@@ -39,41 +40,96 @@
                     <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="400">
 
                         <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
-                            <div class="portfolio-wrap">
-                                <img src="{% static 'fragancia/img/fragancias/hombre1.jpg' %}" class="img-fluid" alt="">
+                            <div class="portfolio-wrap" id="catalogo_imagenes">
+                                <img src="{% static 'fragancia/img/fragancias/hombre 10.jpeg' %}" class="img-fluid" alt="">
                                 <div class="portfolio-info">
                                     <h4>Aqua d´ Gio</h4>
-                                    <p>De Hombre</p>
+                                    <p>35 CUC</p>
                                     <div class="portfolio-links">
 {#                                        <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"#}
 {#                                           class="venobox" title="App 1"><i class="bx bx-plus"></i></a>#}
-                                        <a href="{% url 'details_products' %}" title="More Details"><i id class="fas fa-fw fa-search"></i></a>
+                                        <a href="{% url 'details_products' %}" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
-                            <div class="portfolio-wrap">
+                            <div class="portfolio-wrap"  id="catalogo_imagenes">
                                 <img src="{% static 'fragancia/img/fragancias/photo_2020-06-03_14-55-46.jpg' %}" class="img-fluid" alt="">
                                 <div class="portfolio-info">
                                     <h4>Fahrenheit</h4>
-                                    <p>De Hombre</p>
+                                    <p>50 CUC</p>
                                     <div class="portfolio-links">
                                         <a href="" data-gall="portfolioGallery"
                                            class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
-                                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                                        <a href="{% url 'details_products' %}" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-lg-3 col-md-6 portfolio-item filter-mujer">
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
+                            <div class="portfolio-wrap" id="catalogo_imagenes">
+                                <img src="{% static 'fragancia/img/fragancias/hombre1.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Boos</h4>
+                                    <p>60 CUC</p>
+                                    <div class="portfolio-links">
+                                        <a href="" data-gall="portfolioGallery"
+                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                        <a href="portfolio-details.html" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
                             <div class="portfolio-wrap">
-                                <img src="{% static 'fragancia/img/fragancias/mujer1.jpg' %}" class="img-fluid" alt="">
+                                <img src="{% static 'fragancia/img/fragancias/hombre 4.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Fahrenheit</h4>
+                                    <p>45 CUC</p>
+                                    <div class="portfolio-links">
+                                        <a href="" data-gall="portfolioGallery"
+                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                        <a href="portfolio-details.html" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/hombre 5.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Fahrenheit</h4>
+                                    <p>55 CUC</p>
+                                    <div class="portfolio-links">
+                                        <a href="" data-gall="portfolioGallery"
+                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                        <a href="portfolio-details.html" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
+                            <div class="portfolio-wrap">
+                                <img src="{% static 'fragancia/img/fragancias/hombre 6.jpg' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Fahrenheit</h4>
+                                    <p>35 CUC</p>
+                                    <div class="portfolio-links">
+                                        <a href="" data-gall="portfolioGallery"
+                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
+                                        <a href="portfolio-details.html" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-mujer">
+                            <div class="portfolio-wrap"  id="catalogo_imagenes">
+                                <img src="{% static 'fragancia/img/fragancias/mujer2.jpg' %}" class="img-fluid" alt="">
                                 <div class="portfolio-info">
                                     <h4>Aqua d´ Gio</h4>
-                                    <p>De Mujer</p>
+                                    <p>40 CUC</p>
                                     <div class="portfolio-links">
 {#                                        <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"#}
 {#                                           class="venobox" title="App 1"><i class="bx bx-plus"></i></a>#}
@@ -83,51 +139,51 @@
                             </div>
                         </div>
 
-
-                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
-                            <div class="portfolio-wrap">
-                                <img src="{% static 'fragancia/img/fragancias/hombre 5.jpg' %}" class="img-fluid" alt="">
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-mujer">
+                            <div class="portfolio-wrap"  id="catalogo_imagenes">
+                                <img src="{% static 'fragancia/img/fragancias/mujer1.jpg' %}" class="img-fluid" alt="">
                                 <div class="portfolio-info">
-                                    <h4>Fahrenheit</h4>
-                                    <p>De Hombre</p>
+                                    <h4>Aqua d´ Gio</h4>
+                                    <p>50 CUC</p>
                                     <div class="portfolio-links">
-                                        <a href="" data-gall="portfolioGallery"
-                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
-                                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
+                                        <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"
+                                           class="venobox" title="App 1"><i class="bx bx-plus"></i></a>
+                                        <a href="{% url 'details_products' %}" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 portfolio-item filter-mujer">
+                            <div class="portfolio-wrap"  id="catalogo_imagenes">
+                                <img src="{% static 'fragancia/img/fragancias/mujer4.gif' %}" class="img-fluid" alt="">
+                                <div class="portfolio-info">
+                                    <h4>Aqua d´ Gio</h4>
+                                    <p>35 CUC</p>
+                                    <div class="portfolio-links">
+{#                                        <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"#}
+{#                                           class="venobox" title="App 1"><i class="bx bx-plus"></i></a>#}
+                                        <a href="{% url 'details_products' %}" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-lg-3 col-md-6 portfolio-item filter-mujer">
-                            <div class="portfolio-wrap">
-                                <img src="{% static 'fragancia/img/fragancias/mujer2.jpg' %}" class="img-fluid" alt="">
+                            <div class="portfolio-wrap"  id="catalogo_imagenes">
+                                <img src="{% static 'fragancia/img/fragancias/mujer5.jpg' %}" class="img-fluid" alt="">
                                 <div class="portfolio-info">
                                     <h4>Aqua d´ Gio</h4>
-                                    <p>De Mujer</p>
+                                    <p>25 CUC</p>
                                     <div class="portfolio-links">
                                         <a href="{% static 'fragancia/catalogo/img/portfolio/portfolio-1.jpg' %}" data-gall="portfolioGallery"
                                            class="venobox" title="App 1"><i class="bx bx-plus"></i></a>
-                                        <a href="{% url 'details_products' %}" title="More Details">Detalles</a>
+                                        <a href="{% url 'details_products' %}" title="More Details"><i id="iconos_catalogo" class="fas fa-fw fa-search"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-lg-3 col-md-6 portfolio-item filter-hombre">
-                            <div class="portfolio-wrap">
-                                <img src="{% static 'fragancia/img/fragancias/hombre 4.jpg' %}" class="img-fluid" alt="">
-                                <div class="portfolio-info">
-                                    <h4>Fahrenheit</h4>
-                                    <p>De Hombre</p>
-                                    <div class="portfolio-links">
-                                        <a href="" data-gall="portfolioGallery"
-                                           class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
-                                        <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
 
 
 
