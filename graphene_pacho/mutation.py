@@ -45,9 +45,14 @@ class CreateProductMutation(graphene.Mutation):
             raise Exception('Authentication Failure!')
         ok = True
         imagen = kwargs.get('imagen', '')
-        producto_intance = Product(imagen=imagen, nombre=input.nombre, precio=input.precio,
-                                   capacidad=input.capacidad, cantidad_disponible=input.cantidad_disponible,
-                                   categoria=input.categoria, tipo=input.tipo)
+        producto_intance = Product(
+            imagen=imagen,
+            nombre=input.nombre,
+            precio=input.precio,
+            capacidad=input.capacidad,
+            cantidad_disponible=input.cantidad_disponible,
+            categoria=input.categoria,
+            tipo=input.tipo)
         producto_intance.save()
         return CreateProductMutation(ok=ok, producto=producto_intance)
 
