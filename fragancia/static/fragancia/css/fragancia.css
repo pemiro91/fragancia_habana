@@ -89,10 +89,10 @@ li a i:hover {
 
 }
 
-.portfolio-details .portfolio-info ul #detalles_producto {
+.portfolio-details .portfolio-info ul #titulo_tablas_formularios {
     font-size: 16px;
 }
-.btn-primary#boton_reservar {
+.btn-primary#boton_reservar,.btn-primary#boton_search {
     color: #625e5e;
     background-color: rgb(253, 253, 150);
     border-color:rgb(253, 253, 150);;
@@ -102,7 +102,7 @@ li a i:hover {
     background-color: #ffff7e;
     border-color: #ffff7e;
 }
-h6 .text-primary#detalles_reservacion{
+h6 .text-primary#titulo_tablas_formularios {
     color: #5a5c69!important;
 
 }
