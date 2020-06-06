@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-
+from django.contrib import admin
 from fragancia import views
 
+
 urlpatterns = [
+    path('admin/', admin.site.urls),
     # path('', views.login, name="login"),
     path('index', views.index, name="index"),
 
@@ -26,5 +28,8 @@ urlpatterns = [
     path('details_products', views.details_products, name="details_products"),
 
     # Gestionar Productos
-    path('products', views.products_list, name="products_list"),
+    path('products', views.products, name="products"),
+    
+    path('users', views.users, name="users"),
+    path('user_profile', views.user_profile, name="user_profile"),
 ]
