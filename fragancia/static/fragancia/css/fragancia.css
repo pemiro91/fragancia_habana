@@ -85,29 +85,34 @@ li a i:hover {
 
 .portfolio-details .portfolio-info h3 #nombre_producto_detalles {
     font-size: 25px;
-    color:#ffff7e;
+    color: #ffff7e;
 
 }
 
 .portfolio-details .portfolio-info ul #titulo_tablas_formularios {
     font-size: 16px;
 }
-.btn-primary#boton_reservar,.btn-primary#boton_search {
+
+.btn-primary#boton_reservar, .btn-primary#boton_search {
     color: #625e5e;
     background-color: rgb(253, 253, 150);
-    border-color:rgb(253, 253, 150);;
+    border-color: rgb(253, 253, 150);;
 }
+
 .btn-primary#boton_reservar:hover {
     color: #625e5e;
     background-color: #ffff7e;
     border-color: #ffff7e;
 }
+
 h6 .text-primary#titulo_tablas_formularios {
-    color: #5a5c69!important;
+    color: #5a5c69 !important;
 
 }
-.custom-control-input:checked~.custom-control-label::before{
+
+.custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
     background-color: #ffff7e;
     border-color: #ffff7e;
 }
+
