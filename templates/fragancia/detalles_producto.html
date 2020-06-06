@@ -22,6 +22,17 @@
     </ol>
 {% endblock %}
 {% block content %}
+    <script>
+        $(function() {
+            $('#customSwitch1').click(function() {
+                if ($(this).is(':checked'))
+                    $('.form-group').show();
+                else
+                    $('.form-group').hide();
+            });
+        });
+    </script>
+
     <div class="col-xl-12">
         <div class="card mb-4">
             <section id="portfolio-details" class="portfolio-details">
@@ -32,7 +43,7 @@
                         <div class="col-lg-7">
                             <h3 class="portfolio-title">Detalles del Producto</h3>
                             <div id="" class="owl-carousel portfolio-details-carousel">
-                                <img src="{% static 'fragancia/img/fragancias/photo_2020-06-03_14-55-46.jpg' %}"
+                                <img src="{{ product.imagen.url }}"
                                      class="img-fluid" alt="">
                                 {#              <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">#}
                                 {#              <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">#}
@@ -40,15 +51,14 @@
                         </div>
 
                         <div class="col-lg-5 portfolio-info">
-                            <h3 id="nombre_producto_detalles"> Fahrenheit</h3>
+                            <h3 id="nombre_producto_detalles"> {{ product.nombre }}</h3>
                             <ul>
-                                <li id="detalles_producto"><strong>Categoria</strong>: Hombre</li>
-                                <li id="detalles_producto"><strong>Tipo</strong>: Citrico</li>
-                                <li id="detalles_producto"><strong>Capacidad</strong>: 100 ml</li>
-                                <li id="detalles_producto"><strong>Precio</strong>: 50 CUC</li>
+                                <li id="detalles_producto"><strong>Categoria</strong>: {{ product.categoria }}</li>
+                                <li id="detalles_producto"><strong>Tipo</strong>: {{ product.tipo }}</li>
+                                <li id="detalles_producto"><strong>Capacidad</strong>: {{ product.capacidad }} ml</li>
+                                <li id="detalles_producto"><strong>Precio</strong>: {{ product.precio }} CUC</li>
                                 <li id="detalles_producto">
-                                    <strong style="font-style: revert">Disponibilidad</strong>: 30 u
-                                </li>
+                                    <strong style="font-style: revert">Disponibilidad</strong>: {{ product.cantidad_disponible }} u
                                 </li>
                                 {#                                <li><strong>Precio</strong>: <a href="#">www.example.com</a></li>#}
 
@@ -60,11 +70,11 @@
                                         class="m-0 font-weight-bold text-primary">Reservacion</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form method="post">{% csrf_token %}
                                         <div class="form-group row">
                                             <label for="inputCantidad" class="col-sm-5 col-form-label">Cantidad </label>
                                             <div class="col-sm-7">
-                                                <input type="number" class="form-control" id="inputCantidad"
+                                                <input type="number" name="count_booking" class="form-control" id="inputCantidad"
                                                        placeholder="1">
                                             </div>
                                         </div>
@@ -82,12 +92,13 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="form-group row">
+                                                <div class="form-group">
                                                     <label for="inputNombre"
                                                            class="col-sm-5 col-form-label">Nombre(s) </label>
                                                     <div class="col-sm-7">
                                                         <input type="text" maxlength="50" class="form-control"
                                                                id="inputNombre"
+                                                               name="name_service"
                                                                placeholder="Regina Maria">
                                                     </div>
 
@@ -98,6 +109,7 @@
                                                     <div class="col-sm-7">
                                                         <input type="tel" maxlength="8" class="form-control"
                                                                id="inputTelefono"
+                                                               name="phone_service"
                                                                placeholder="55555555">
                                                     </div>
 
@@ -108,6 +120,7 @@
                                                     <div class="col-sm-7">
                                                         <textarea class="form-control" maxlength="200"
                                                                   id="inputDireccion"
+                                                                  name="address_service"
                                                                   placeholder="San Francisco #20600.Boyeros"></textarea>
                                                     </div>
 

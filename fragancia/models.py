@@ -43,6 +43,7 @@ HORARIO_ENTREGA = (
 class User(AbstractUser):
     is_vendedor = models.BooleanField(default=False)
     is_administrador = models.BooleanField(default=False)
+    genero = models.CharField(max_length=15, choices=CATEGORIA_PERFUME)
 
     def get_perfil_vendedor(self):
         perfil_vendedor = None
@@ -58,7 +59,7 @@ class User(AbstractUser):
 
 
 class Product(models.Model):
-    imagen = models.ImageField(upload_to='product_images')
+    imagen = models.ImageField(upload_to='product_images/')
     nombre = models.CharField(max_length=200, name='nombre')
     precio = models.CharField(max_length=50, name='precio')
     capacidad = models.CharField(max_length=50, name='capacidad')
