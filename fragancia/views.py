@@ -91,6 +91,18 @@ def details_products(request, id_product=None):
 
 # -------------- Gestionar productos--------------#
 
-def products_list(request):
+def products(request):
     context = {}
     return render(request, 'fragancia/listado_productos.html', context)
+
+
+# -------------- Gestionar usuarios--------------#
+
+def users(request):
+    context = {}
+    return render(request, 'fragancia/listado_usuarios.html', context)
+
+
+def user_profile(request):
+    context = {}
+    return render(request, 'fragancia/perfil_usuario.html', context)

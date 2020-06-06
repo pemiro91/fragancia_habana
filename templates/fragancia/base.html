@@ -9,8 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicons -->
-    <link href="{% static 'fragancia/img/logo/logo.png' %}" rel="icon">
-    <link href="{% static 'fragancia/catalogo/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'fragancia/img/logo/logo.png'%}" rel="icon">
+    <link href="{% static 'fragancia/img/logo/logo.png' %}" rel="apple-touch-icon">
     <title>Fragancias/Habana</title>
 
     <!-- Fragancias/Habana CSS Files -->
@@ -272,9 +272,15 @@
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <img class="img-profile rounded-circle" src="{% static 'fragancia/img/boy.png' %}"
+                            {% if request.user.genero == 'Mujer' %}
+                                <img class="img-profile rounded-circle" src="{% static 'fragancia/img/girl.png' %}"
                                  style="max-width: 60px">
-                            <span id="texto_nav" class="ml-2 d-none d-lg-inline small">Jose González</span>
+                                {% else %}
+                                    <img class="img-profile rounded-circle" src="{% static 'fragancia/img/boy.png' %}"
+                                     style="max-width: 60px">
+                            {% endif %}
+
+                            <span id="texto_nav" class="ml-2 d-none d-lg-inline small">{{request.user.username}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
@@ -291,7 +297,7 @@
                             {#                                Registro de Actividades#}
                             {#                            </a>#}
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="login.html">
+                            <a class="dropdown-item" href="{% url 'logout' %}">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Salir
                             </a>
