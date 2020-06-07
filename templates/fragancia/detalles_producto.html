@@ -17,7 +17,7 @@
     <h1 class="h3 mb-0 text-gray-800">Detalles del Producto</h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Principal</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Catálogo de Productos</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'catalogue' %}">Catálogo de Productos</a></li>
         <li class="breadcrumb-item active" aria-current="page">Detalles del Producto</li>
     </ol>
 {% endblock %}
@@ -32,7 +32,7 @@
                         <div class="col-lg-7">
                             {#                            <h3 class="portfolio-title">Detalles del Producto</h3>#}
                             <div id="" class="owl-carousel portfolio-details-carousel">
-                                <img src="{% static 'fragancia/img/fragancias/photo_2020-06-03_14-55-46.jpg' %}"
+                                <img src="{{ product.imagen.url }}"
                                      class="img-fluid" alt="">
                                 {#              <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">#}
                                 {#              <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">#}
@@ -40,41 +40,54 @@
                         </div>
 
                         <div class="col-lg-5 portfolio-info">
-                            <h3 id="nombre_producto_detalles"> Fahrenheit</h3>
+                            <h3 id="nombre_producto_detalles"> {{ product.nombre }}</h3>
                             <ul>
-                                <li id="detalles_producto"><strong>Categoria</strong>: Hombre</li>
-                                <li id="detalles_producto"><strong>Tipo</strong>: Citrico</li>
-                                <li id="detalles_producto"><strong>Capacidad</strong>: 100 ml</li>
-                                <li id="detalles_producto"><strong>Precio</strong>: 50 CUC</li>
-                                <li id="detalles_producto">
-                                    <strong style="font-style: revert">Disponibilidad</strong>: 30 u
+                                <li id="detalles_producto"><strong>Categoria</strong>: {{ product.categoria }}</li>
+                                <li id="detalles_producto"><strong>Tipo</strong>: {{ product.tipo }}</li>
+                                <li id="detalles_producto"><strong>Capacidad</strong>: {{ product.capacidad }} ml</li>
+                                <li id="detalles_producto"><strong>Precio</strong>: {{ product.precio }} CUC</li>
+                                <li id="detalles_producto"><strong style="font-style: revert">Disponibilidad</strong>
+                                    {% if value_real != 0 %}
+                                        : {{ value_real }} u
+                                    {% else %}
+                                        : {{ product.cantidad_disponible }} u
+                                    {% endif %}
                                 </li>
-                                </li>
-                                {#                                <li><strong>Precio</strong>: <a href="#">www.example.com</a></li>#}
-
                             </ul>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-danger">
+                                        <a class="close" href="#" data-dismiss="alert">×</a>
+                                        No existe disponibilidad suficiente de este producto,
+                                        revise la cantidad especificada que sea menor a la disponibilidad
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             <hr id="nav_divider" class="sidebar-divider">
                             <div class="card mb-4">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 style="color: #5a5c69!important;" id="titulo_tablas_formularios"
-                                        class="m-0 font-weight-bold text-primary">Reservacion</h6>
+                                        class="m-0 font-weight-bold text-primary">Reservacion</h6><br>
+
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form method="post" class="needs-validation" novalidate>{% csrf_token %}
                                         <div class="form-group row">
                                             <label for="inputCantidad" class="col-sm-5 col-form-label">Cantidad </label>
                                             <div class="col-sm-7">
-                                                <input type="number" class="form-control" id="inputCantidad"
-                                                       placeholder="1">
+                                                <input type="number" name="count_booking" class="form-control" id="inputCantidad"
+                                                       placeholder="1" required>
+                                                <div class="invalid-feedback">
+                                                    Por favor, rellene el campo.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <label>Mensajeria</label>
                                                     <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" checked
+                                                        <input type="checkbox" class="custom-control-input"
                                                                name="customSwitch1" id="customSwitch1">
                                                         <label class="custom-control-label" for="customSwitch1">¿Incluir
                                                             Servicio
@@ -82,12 +95,13 @@
                                                     </div>
 
                                                 </div>
-                                                <div id="expandir_mensajeria">
+                                                <div id="expandir_mensajeria" style="display: none">
                                                     <div class="form-group row">
                                                         <label for="inputNombre"
                                                                class="col-sm-5 col-form-label">Nombre(s) </label>
                                                         <div class="col-sm-7">
                                                             <input type="text" maxlength="50" class="form-control"
+                                                                   name="name_service"
                                                                    id="inputNombre"
                                                                    placeholder="Regina Maria">
                                                         </div>
@@ -99,6 +113,7 @@
                                                         <div class="col-sm-7">
                                                             <input type="tel" maxlength="8" class="form-control"
                                                                    id="inputTelefono"
+                                                                   name="phone_service"
                                                                    placeholder="55555555">
                                                         </div>
 
@@ -109,18 +124,46 @@
                                                         <div class="col-sm-7">
                                                         <textarea class="form-control" maxlength="200"
                                                                   id="inputDireccion"
+                                                                  name="address_service"
                                                                   placeholder="San Francisco #20600.Boyeros"></textarea>
                                                         </div>
 
                                                     </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputFechaEntrega"
+                                                               class="col-sm-5 col-form-label">Fecha entrega </label>
+                                                        <div class="col-sm-7">
+                                                            <input type="tel" class="form-control"
+                                                                   id="inputFechaEntrega"
+                                                                   name="date_service"
+                                                                   placeholder="2020-06-16">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputHorarioEntrega"
+                                                               class="col-sm-5 col-form-label">Horario </label>
+                                                        <div class="col-sm-7">
+                                                            <select class="form-control" name="time_service" id="inputHorarioEntrega">
+                                                                <option value="--">---</option>
+                                                                <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
-
-
                                             </div>
-
                                         </div>
-
-
                                         <div class="form-group row">
                                             <div class="col-sm-10">
                                                 <button type="submit" id="boton_reservar" class="btn btn-primary">
@@ -131,17 +174,12 @@
                                     </form>
                                 </div>
                             </div>
-
-
                         </div>
-
                     </div>
-
                 </div>
             </section>
         </div>
     </div><!-- End Portfolio Section -->
-
 {% endblock %}
 <!-- plugins -->
 
@@ -173,6 +211,26 @@
             })
 
         })
+    </script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
     </script>
 {% endblock %}
 

@@ -3,7 +3,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 
 from fragancia.models import Product, Reservation
 import logging
@@ -66,25 +68,33 @@ def catalogue(request):
 # ---------Detalles de un producto------#
 @login_required(login_url='login')
 def details_products(request, id_product=None):
+    value_real = 0
     if request.user.is_authenticated:
         product = get_object_or_404(Product, id=id_product)
         count_booking = request.POST.get('count_booking')
         name_service = request.POST.get('name_service')
         address_service = request.POST.get('address_service')
         phone_service = request.POST.get('phone_service')
+        date_service = request.POST.get('date_service')
+        time_service = request.POST.get('time_service')
         if count_booking:
-            reserva = Reservation(
-                producto_id=id_product,
-                cantidad_producto=count_booking,
-                vendedor_id=request.user.id,
-                nombre=name_service,
-                direccion=address_service,
-                telefono=phone_service
-            )
-            reserva.save()
-        else:
-            messages.error(request, 'username or password not correct')
-        context = {'product': product}
+            if int(count_booking) < product.cantidad_disponible:
+                value_real = product.cantidad_disponible - int(count_booking)
+                Reservation.objects.create(
+                    producto_id=id_product,
+                    cantidad_producto=count_booking,
+                    vendedor_id=request.user.id,
+                    nombre=name_service,
+                    direccion=address_service,
+                    telefono=phone_service,
+                    fecha_entrega=date_service,
+                    horario_entrega=time_service
+                )
+                Product.objects.filter(pk=id_product).update(cantidad_disponible=value_real)
+                return HttpResponseRedirect(reverse('details_products', args=(id_product,)))
+            else:
+                messages.error(request, 'La cantidad proporcionada es mayor que la disponible')
+        context = {'product': product, 'value_real': value_real}
         return render(request, "fragancia/detalles_producto.html", context)
     return redirect('login')
 

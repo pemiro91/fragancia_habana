@@ -30,7 +30,7 @@ urlpatterns = [
 
     # Principal
     path('catalogue', views.catalogue, name="catalogue"),
-    path('catalogue/<int:id_product>/detail', views.details_products, name="details_products"),
+    path('catalogue/<int:id_product>', views.details_products, name="details_products"),
 
     # Gestionar Productos
     path('products', views.products, name="products"),
