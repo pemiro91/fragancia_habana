@@ -93,26 +93,23 @@ li a i:hover {
     font-size: 16px;
 }
 
-.btn-primary#boton_reservar, .btn-primary#boton_search {
+.btn-primary#boton_formularios, .btn-primary#boton_search, .btn-primary#boton_agregar {
     color: #625e5e;
     background-color: rgb(253, 253, 150);
-    border-color: rgb(253, 253, 150);;
+    border-color: rgb(253, 253, 150);
+
 }
 
-.btn-primary#boton_reservar:hover {
+.btn-primary#boton_formularios:hover, .btn-primary#boton_formularios:checked{
     color: #625e5e;
     background-color: #ffff7e;
     border-color: #ffff7e;
 }
 
-h6 .text-primary#titulo_tablas_formularios {
-    color: #5a5c69 !important;
+#titulo_tablas_formularios {
+    /*color: #5a5c69 !important;*/
+
 
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
-    color: #fff;
-    background-color: #ffff7e;
-    border-color: #ffff7e;
-}
 

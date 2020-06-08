@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block header_content %}
-    <h1 class="h3 mb-0 text-gray-800">Listado de Usuarios</h1>
+    <h1 class="h5 mb-0 text-gray-800">Listado de Usuarios</h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
         <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
@@ -16,7 +16,9 @@
     <div class="col-lg-12">
         <div class="card mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 id="titulo_tablas_formularios" class="m-0 font-weight-bold text-primary">Listado de todos los usuarios existentes en la Base de Datos.</h6>
+                <h6 id="" class="m-0 font-weight-bold text-primary"></h6>
+                <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_user' %}">Agregar <i
+                       class="fas fa-plus" ></i></a>
             </div>
             <div class="table-responsive p-3">
                 <table class="table align-items-center table-flush table-hover" id="dataTableHover">
