@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from fragancia.models import Product, Reservation
-from django.contrib.auth.models import User
+from fragancia.models import Product, Reservation, User
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -115,10 +115,20 @@ def users(request):
 def user_profile(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            usuario = request.user.username
-            return render(request, "fragancia/perfil_usuario.html", {'usuario': usuario})
-        context = {}
-        return render(request, "fragancia/perfil_usuario.html", context)
+            nombre = request.POST.get('first_name')
+            apellidos = request.POST.get('last_name')
+            correo = request.POST.get('email')
+            telefono = request.POST.get('phone')
+            usuario = request.POST.get('username')
+            User.objects.filter(pk=request.user.id).update(
+                first_name=nombre,
+                last_name=apellidos,
+                email=correo,
+                telefono=telefono,
+                username=usuario,
+            )
+            return redirect('user_profile')
+        return render(request, "fragancia/perfil_usuario.html", {})
     return redirect('login')
 
 
