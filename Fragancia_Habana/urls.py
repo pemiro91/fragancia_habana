@@ -36,6 +36,7 @@ urlpatterns = [
     path('products', views.products, name="products"),
     path('add_product', views.add_product, name="add_product"),
     path('edit_product', views.edit_product, name="edit_product"),
+    path('products/delete_product/<int:id_product>',  views.delete_product, name="delete_product"),
 
     path('users', views.users, name="users"),
     path('user_profile', views.user_profile, name="user_profile"),

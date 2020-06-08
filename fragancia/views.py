@@ -4,6 +4,7 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -102,18 +103,52 @@ def details_products(request, id_product=None):
 # -------------- Gestionar productos--------------#
 
 def products(request):
-    context = {}
-    return render(request, 'fragancia/listado_productos.html', context)
+    if request.user.is_authenticated:
+        list_products = Product.objects.all()
+        return render(request, "fragancia/listado_productos.html", {'list_products': list_products})
+    return redirect('login')
 
 
 def add_product(request):
-    context = {}
-    return render(request, 'fragancia/agregar_producto.html', context)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            name_product = request.POST.get('name_product')
+            type_product = request.POST.get('type_product')
+            category_product = request.POST.get('category_product')
+            image_product = request.FILES['image_product']
+            capacity_product = request.POST.get('capacity_product')
+            price_product = request.POST.get('price_product')
+            count_product = request.POST.get('count_product')
+            Product.objects.create(
+                imagen=image_product,
+                nombre=name_product,
+                precio=price_product,
+                capacidad=capacity_product,
+                cantidad_disponible=count_product,
+                categoria=category_product,
+                tipo=type_product
+            )
+            return redirect('products')
+        context = {}
+        return render(request, 'fragancia/agregar_producto.html', context)
+    return redirect('login')
 
 
 def edit_product(request):
     context = {}
     return render(request, 'fragancia/editar_productos.html', context)
+
+
+def delete_product(request, id):
+    if request.user.is_anonymous():
+        return HttpResponseRedirect('/')
+    if not request.user.is_superuser:
+        return HttpResponseRedirect('/')
+    c = cliente.objects.get(id=id)
+    C = User.objects.get(username=c.user)
+    C.delete()
+    c.delete()
+    return HttpResponseRedirect('/administrar/')
 
 
 # -------------- Gestionar usuarios--------------#
