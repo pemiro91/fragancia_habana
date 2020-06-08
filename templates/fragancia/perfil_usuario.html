@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block header_content %}
-    <h1 class="h3 mb-0 text-gray-800">Perfil de Usuario</h1>
+    <h1 class="h3 mb-0 text-gray-800">Editar Perfil</h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
         <li class="breadcrumb-item active" ><a href="{% url 'index' %}">Usuarios</a></li>
@@ -65,7 +65,7 @@
                                 <label class="col-lg-3 col-form-label form-control-label">Usuario</label>
                                 <div class="col-lg-9">
                                     <label class="col-lg-9">
-                                        <input class="form-control" type="text" name="username" value="{{ request.user.username }}">
+                                        <input class="form-control" disabled type="text" name="username" value="{{ request.user.username }}">
                                     </label>
                                 </div>
                             </div>

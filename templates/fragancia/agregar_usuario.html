@@ -31,77 +31,67 @@
                             <div class="card-body">
                                 <form>
                                     <div class="form-group row">
-                                        <label for="inputNombre" class="col-sm-3 col-form-label">Nombre </label>
+                                        <label for="inputNombre" class="col-sm-3 col-form-label">Usuario </label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="inputNombre"
-                                                   placeholder="Acqua d' Gio">
+                                            <input type="text" class="form-control" id="inputNombre">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="inputTipo" class="col-sm-3 col-form-label">Tipo</label>
+                                        <label for="inputTipo" class="col-sm-3 col-form-label">Perfil</label>
                                         <div class="col-sm-9">
                                             <select id="inputTipo" class="form-control">
-                                                <option selected>Seleccione Tipo</option>
-                                                <option>Dulce</option>
-                                                <option>Dulce</option>
+                                                <option value="vendedor">Vendedor</option>
+                                                <option value="administrador">Administrador</option>
                                             </select>
                                         </div>
                                     </div>
                                     <fieldset class="form-group">
                                         <div class="row">
-                                            <legend class="col-form-label col-sm-3 pt-0">Categoría</legend>
+                                            <label class="col-form-label col-sm-3 pt-0">Género</label>
                                             <div class="col-sm-9">
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="RadioHombre" checked="checked" name="customRadio"
-                                                           class="custom-control-input">
-                                                    <label class="custom-control-label" for="RadioHombre">De Hombre</label>
-                                                </div>
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" id="RadioMujer" name="customRadio"
                                                            class="custom-control-input">
-                                                    <label class="custom-control-label" for="RadioMujer">De Mujer</label>
+                                                    <label class="custom-control-label" for="RadioMujer">Mujer</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="RadioHombre" checked="checked" name="customRadio"
+                                                           class="custom-control-input">
+                                                    <label class="custom-control-label" for="RadioHombre">Hombre</label>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </fieldset>
+                                    {% if 'fragancia' in perms %}
+                                        {% if 'fragancia.view_product' in perms %}
+                                            <p>In lookup works, too.</p>
+                                        {% endif %}
+                                    {% endif %}
+                                    {{ permis }}
+{#                                    {% for per in permis %}#}
+{#                                        <p>{{ per }}</p>#}
+{#                                    {% endfor %}#}
+
+{#                                    <div class="form-group row">#}
+{#                                        <div class="col-sm-3">Imagen </div>#}
+{#                                        <div class="col-sm-9">#}
+{#                                            <div class="custom-control custom-file">#}
+{#                                                <input type="file"  class="custom-file-input" id="customFile">#}
+{#                                                <label class="custom-file-label" for="customFile">Seleccione archivo</label>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
                                     <div class="form-group row">
-                                        <div class="col-sm-3">Imagen </div>
-                                        <div class="col-sm-9">
-                                            <div class="custom-control custom-file">
-                                                <input type="file"  class="custom-file-input" id="customFile">
-                                                <label class="custom-file-label" for="customFile">Seleccione archivo</label>
-                                            </div>
+                                        <label for="idpassword" class="col-sm-3 col-form-label">Contraseña</label>
+                                        <div class="col-sm-8">
+                                            <input type="password" class="form-control" id="idpassword">
                                         </div>
 
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Capacidad</label>
-                                        <div class="col-sm-8">
-                                            <input type="number" class="form-control" id="inputEmail3"
-                                                   placeholder="500">
-                                        </div>
-                                        <label for="inputEmail3" class="col-form-label">ml</label>
 
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Precio</label>
-                                        <div class="col-sm-8">
-                                            <input type="number" class="form-control" id="inputEmail3"
-                                                   placeholder="20">
-                                        </div>
-                                        <label for="inputEmail3" class="col-form-label">cuc</label>
-
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Cantidad </label>
-                                        <div class="col-sm-8">
-                                            <input type="number" class="form-control" id="inputEmail3"
-                                                   placeholder="10">
-                                        </div>
-                                        <label for="inputEmail3" class="col-form-label">u</label>
-                                    </div>
 {#                                    <div class="form-group row">#}
 {#                                        <div class="col-sm-3">Checkbox</div>#}
 {#                                        <div class="col-sm-9">#}
@@ -115,7 +105,7 @@
 
                                     <div class="form-group row">
                                         <div class="col-sm-10">
-                                            <button type="submit" id="boton_formularios"class="btn btn-primary">Agregar Producto</button>
+                                            <button type="submit" id="boton_formularios" class="btn btn-primary">Agregar Producto</button>
                                         </div>
                                     </div>
                                 </form>

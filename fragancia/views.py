@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Permission
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -105,11 +106,31 @@ def products(request):
     return render(request, 'fragancia/listado_productos.html', context)
 
 
+def add_product(request):
+    context = {}
+    return render(request, 'fragancia/agregar_producto.html', context)
+
+
+def edit_product(request):
+    context = {}
+    return render(request, 'fragancia/editar_productos.html', context)
+
+
 # -------------- Gestionar usuarios--------------#
 
 def users(request):
-    context = {}
-    return render(request, 'fragancia/listado_usuarios.html', context)
+    if request.user.is_authenticated:
+        list_users = User.objects.all()
+        return render(request, "fragancia/listado_usuarios.html", {'list_users': list_users})
+    return redirect('login')
+
+
+def add_user(request):
+    usuario = User.objects.get(pk=2)
+    change_user = Permission.objects.get(codename='change_user')
+    permis = usuario.user_permissions.add(change_user)
+    context = {'permis': permis}
+    return render(request, 'fragancia/agregar_usuario.html', context)
 
 
 def user_profile(request):
