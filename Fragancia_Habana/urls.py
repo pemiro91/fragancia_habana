@@ -29,7 +29,10 @@ urlpatterns = [
 
     # Gestionar Productos
     path('products', views.products, name="products"),
+    path('add_product', views.add_product, name="add_product"),
+    path('edit_product', views.edit_product, name="edit_product"),
     
     path('users', views.users, name="users"),
+    path('add_user', views.add_user, name="add_user"),
     path('user_profile', views.user_profile, name="user_profile"),
 ]
