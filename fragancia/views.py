@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from fragancia.models import Product, Reservation
+from django.contrib.auth.models import User
 import logging
 
 logger = logging.getLogger(__name__)
@@ -17,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 def login_user(request):
-    error = ''
-    logout(request)
     if request.POST:
         form = AuthenticationForm(request.POST)
         username = request.POST.get('username')
@@ -27,7 +26,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/index')
+                return redirect('index')
         else:
             messages.error(request, 'username or password not correct')
             return redirect('login')
@@ -114,5 +113,31 @@ def users(request):
 
 
 def user_profile(request):
-    context = {}
-    return render(request, 'fragancia/perfil_usuario.html', context)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            usuario = request.user.username
+            return render(request, "fragancia/perfil_usuario.html", {'usuario': usuario})
+        context = {}
+        return render(request, "fragancia/perfil_usuario.html", context)
+    return redirect('login')
+
+
+def change_password(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            old_password = request.POST.get('old_password')
+            new_password = request.POST.get('new_password')
+            confirmed_new_password = request.POST.get('confirmed_new_password')
+            U = User.objects.get(username=request.user.username)
+            if not U.check_password(old_password):
+                error = "Contraseña Incorrecta."
+                return render(request, "fragancia/cambiar_contrasena.html", {'error': error})
+            if confirmed_new_password != new_password:
+                error = "Las Contraseñas No Coinciden."
+                return render(request, "fragancia/cambiar_contrasena.html", {'error': error})
+            U.set_password(new_password)
+            U.save()
+            return redirect('login')
+        context = {}
+        return render(request, "fragancia/cambiar_contrasena.html", context)
+    return redirect('login')

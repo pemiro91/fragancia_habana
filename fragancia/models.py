@@ -44,6 +44,7 @@ class User(AbstractUser):
     is_vendedor = models.BooleanField(default=False)
     is_administrador = models.BooleanField(default=False)
     genero = models.CharField(max_length=15, choices=CATEGORIA_PERFUME)
+    telefono = models.CharField(max_length=15, name='telefono')
 
     def get_perfil_vendedor(self):
         perfil_vendedor = None
