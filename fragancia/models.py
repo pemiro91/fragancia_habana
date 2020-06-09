@@ -60,7 +60,7 @@ class User(AbstractUser):
 
 
 class Product(models.Model):
-    imagen = models.ImageField(upload_to='product_images/')
+    imagen = models.ImageField(upload_to='product_images/', null=True, blank=True)
     nombre = models.CharField(max_length=200, name='nombre')
     precio = models.CharField(max_length=50, name='precio')
     capacidad = models.CharField(max_length=50, name='capacidad')
@@ -68,7 +68,7 @@ class Product(models.Model):
     categoria = models.CharField(max_length=15, choices=CATEGORIA_PERFUME, name='categoria')
     tipo = models.CharField(max_length=30, choices=TIPO_PERFUME, name='tipo')
 
-    def __str__(self): return self.nombre
+    def __str__(self): return self.nombre, self.precio, self.capacidad, self.categoria, self.tipo
 
 
 class Reservation(models.Model):

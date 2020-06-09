@@ -11,6 +11,8 @@ from django.urls import reverse
 
 from fragancia.models import Product, Reservation, User
 
+import os
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -134,21 +136,72 @@ def add_product(request):
     return redirect('login')
 
 
-def edit_product(request):
-    context = {}
-    return render(request, 'fragancia/editar_productos.html', context)
+def edit_product(request, id_product):
+    if request.user.is_authenticated:
+        product = Product.objects.get(id=id_product)
+        if request.method == 'POST':
+            name_products = request.POST.get('name_products')
+            type_products = request.POST.get('type_products')
+            category_products = request.POST.get('category_products')
+            image_products = request.FILES.get('image_products')
+            capacity_products = request.POST.get('capacity_products')
+            price_products = request.POST.get('price_products')
+            count_products = request.POST.get('count_products')
+            if image_products is not None:
+                Product.objects.get(pk=id_product).update(
+                    imagen=image_products,
+                    nombre=name_products,
+                    precio=price_products,
+                    capacidad=capacity_products,
+                    cantidad_disponible=count_products,
+                    categoria=category_products,
+                    tipo=type_products
+                )
+            else:
+                Product.objects.filter(pk=id_product).update(
+                    nombre=name_products,
+                    precio=price_products,
+                    capacidad=capacity_products,
+                    cantidad_disponible=count_products,
+                    categoria=category_products,
+                    tipo=type_products
+                )
+            return redirect('products')
+        context = {'product': product}
+        return render(request, 'fragancia/editar_productos.html', context)
+    return redirect('login')
 
 
-def delete_product(request, id):
-    if request.user.is_anonymous():
-        return HttpResponseRedirect('/')
-    if not request.user.is_superuser:
-        return HttpResponseRedirect('/')
-    c = cliente.objects.get(id=id)
-    C = User.objects.get(username=c.user)
-    C.delete()
-    c.delete()
-    return HttpResponseRedirect('/administrar/')
+# def action_edit_product(request, id_product):
+#     if request.user.is_authenticated:
+#         if request.method == 'POST':
+#             name_products = request.POST.get('name_products')
+#             type_products = request.POST.get('type_products')
+#             category_products = request.POST.get('category_products')
+#             image_products = request.FILES.get('image_products')
+#             capacity_products = request.POST.get('capacity_products')
+#             price_products = request.POST.get('price_products')
+#             count_products = request.POST.get('count_products')
+#             Product.objects.filter(pk=id_product).update(
+#                 imagen=image_products,
+#                 nombre=name_products,
+#                 precio=price_products,
+#                 capacidad=capacity_products,
+#                 cantidad_disponible=count_products,
+#                 categoria=category_products,
+#                 tipo=type_products
+#             )
+#             return redirect('products')
+#     return redirect('login')
+
+
+def delete_product(request, id_product):
+    if request.user.is_authenticated:
+        p = Product.objects.get(id=id_product)
+        os.remove(p.imagen.path)
+        p.delete()
+        return redirect('products')
+    return redirect('login')
 
 
 # -------------- Gestionar usuarios--------------#
