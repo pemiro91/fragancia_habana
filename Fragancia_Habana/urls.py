@@ -26,13 +26,23 @@ urlpatterns = [
     # Principal
     path('catalogue', views.catalogue, name="catalogue"),
     path('details_products', views.details_products, name="details_products"),
+    path('user_profile', views.user_profile, name="user_profile"),
 
     # Gestionar Productos
     path('products', views.products, name="products"),
     path('add_product', views.add_product, name="add_product"),
     path('edit_product', views.edit_product, name="edit_product"),
-    
+
+    # Gestionar Usuarios
     path('users', views.users, name="users"),
     path('add_user', views.add_user, name="add_user"),
-    path('user_profile', views.user_profile, name="user_profile"),
+    path('edit_user', views.edit_user, name="edit_user"),
+    path('assign_permissions', views.assign_permissions, name="assign_permissions"),
+
+    # Gestionar Reservaciones
+    path('reservations', views.reservations, name="reservations"),
+    path('edit_reservation', views.edit_reservation, name="edit_reservation"),
+    # path('edit_user', views.edit_user, name="edit_user"),
+
+
 ]
