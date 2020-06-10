@@ -92,27 +92,24 @@ li a i:hover {
 .portfolio-details .portfolio-info ul #titulo_tablas_formularios {
     font-size: 16px;
 }
-
-.btn-primary#boton_reservar, .btn-primary#boton_search {
+li #detalles_producto{
+    font-size: 22px;
+}
+.btn-primary#boton_formularios,.btn-primary#boton_agregar {
     color: #625e5e;
     background-color: rgb(253, 253, 150);
-    border-color: rgb(253, 253, 150);;
+    border-color: rgb(253, 253, 150);
+    margin-left: 15%;
+
 }
 
-.btn-primary#boton_reservar:hover {
+.btn-primary#boton_formularios:hover, .btn-primary#boton_formularios:checked{
     color: #625e5e;
     background-color: #ffff7e;
     border-color: #ffff7e;
 }
 
-h6 .text-primary#titulo_tablas_formularios {
-    color: #5a5c69 !important;
-
-}
-
-.custom-control-input:checked ~ .custom-control-label::before {
-    color: #fff;
-    background-color: #ffff7e;
-    border-color: #ffff7e;
+.custom-file-input:lang(es) ~ .custom-file-label::after {
+  content: "Elegir";
 }
 
