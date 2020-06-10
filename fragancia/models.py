@@ -68,7 +68,7 @@ class Product(models.Model):
     categoria = models.CharField(max_length=15, choices=CATEGORIA_PERFUME, name='categoria')
     tipo = models.CharField(max_length=30, choices=TIPO_PERFUME, name='tipo')
 
-    def __str__(self): return self.nombre, self.precio, self.capacidad, self.categoria, self.tipo
+    def __str__(self): return self.nombre
 
 
 class Reservation(models.Model):

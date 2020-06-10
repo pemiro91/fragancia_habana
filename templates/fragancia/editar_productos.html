@@ -42,16 +42,126 @@
                                         <label for="inputState" class="col-sm-3 col-form-label">Tipo</label>
                                         <div class="col-sm-9">
                                             <select id="inputTipo"  name="type_products" class="form-control">
-                                                <option value="Floral">Floral</option>
-                                                <option value="Frutal">Frutal</option>
-                                                <option value="Verde">Verde</option>
-                                                <option value="Aromatico">Aromático</option>
-                                                <option value="Fougere">Fougere</option>
-                                                <option selected value="Citrico">Cítrico</option>
-                                                <option value="Chipre">Chipre</option>
-                                                <option value="Amaderado">Amaderado</option>
-                                                <option value="Oriental">Oriental</option>
-                                                <option value="Musk">Musk</option>
+                                                {% if product.tipo == 'Floral' %}
+                                                    <option value="Floral" selected>Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Frutal' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal" selected>Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Verde' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde" selected>Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Aromatico' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico" selected>Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Fougere' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere" selected>Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Citrico' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico" selected>Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Chipre' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre" selected>Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Amaderado' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado" selected>Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Oriental' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental" selected>Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Musk' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk" selected>Musk</option>
+                                                {% endif %}
                                             </select>
                                         </div>
                                     </div>

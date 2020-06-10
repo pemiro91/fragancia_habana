@@ -148,15 +148,14 @@ def edit_product(request, id_product):
             price_products = request.POST.get('price_products')
             count_products = request.POST.get('count_products')
             if image_products is not None:
-                Product.objects.get(pk=id_product).update(
-                    imagen=image_products,
-                    nombre=name_products,
-                    precio=price_products,
-                    capacidad=capacity_products,
-                    cantidad_disponible=count_products,
-                    categoria=category_products,
-                    tipo=type_products
-                )
+                product.imagen = image_products,
+                product.nombre = name_products,
+                product.precio = price_products,
+                product.capacidad = capacity_products,
+                product.cantidad_disponible = count_products,
+                product.categoria = category_products,
+                product.tipo = type_products
+                product.save()
             else:
                 Product.objects.filter(pk=id_product).update(
                     nombre=name_products,
