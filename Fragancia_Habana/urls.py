@@ -35,12 +35,14 @@ urlpatterns = [
     # Gestionar Productos
     path('products', views.products, name="products"),
     path('add_product', views.add_product, name="add_product"),
-    path('edit_product', views.edit_product, name="edit_product"),
+
 
     path('users', views.users, name="users"),
     path('user_profile', views.user_profile, name="user_profile"),
     path('change_password', views.change_password, name="change_password"),
     path('add_user', views.add_user, name="add_user"),
+    path('edit_user', views.edit_user, name="edit_user"),
+    path('assign_permissions', views.assign_permissions, name="assign_permissions"),
 
     # Api
     path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),
@@ -48,6 +50,9 @@ urlpatterns = [
     path('', views.login_user, name="login"),
 
     path('', views.logout, name="logout"),
+
+
+    # path('edit_user', views.edit_user, name="edit_user"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

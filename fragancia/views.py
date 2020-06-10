@@ -111,9 +111,14 @@ def add_product(request):
     return render(request, 'fragancia/agregar_producto.html', context)
 
 
-def edit_product(request):
+def edit_user(request):
     context = {}
-    return render(request, 'fragancia/editar_productos.html', context)
+    return render(request, 'fragancia/editar_usuario.html', context)
+
+
+def assign_permissions(request):
+    context = {}
+    return render(request, 'fragancia/asignar_permisos.html', context)
 
 
 # -------------- Gestionar usuarios--------------#
