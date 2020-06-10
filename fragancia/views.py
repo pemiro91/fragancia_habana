@@ -116,3 +116,31 @@ def users(request):
 def user_profile(request):
     context = {}
     return render(request, 'fragancia/perfil_usuario.html', context)
+
+
+# -------------- Asignar otros permisos--------------#
+
+def assign_permissions(request):
+    context = {}
+    return render(request, 'fragancia/asignar_permisos.html', context)
+
+
+# --------------** Gestionar Reservaciones**--------------#
+# -------------- Listar reservaciones--------------#
+
+def reservations(request):
+    if request.user.is_authenticated:
+        list_reservations = Reservation.objects.filter(vendedor=request.user.id)
+        context = {'list_reservations': list_reservations}
+        return render(request, 'fragancia/listado_reservaciones.html', context)
+    return redirect('login')
+
+
+# -------------- Listar reservaciones--------------#
+
+def edit_reservation(request, id_reservation=None):
+    if request.user.is_authenticated:
+        reservation = get_object_or_404(Reservation, id=id_reservation)
+        context = {'reservation': reservation}
+        return render(request, 'fragancia/editar_reservacion.html', context)
+    return redirect('login')

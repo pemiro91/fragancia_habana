@@ -44,6 +44,12 @@ urlpatterns = [
     path('', views.login_user, name="login"),
 
     path('', views.logout, name="logout"),
+
+    path('assign_permissions', views.assign_permissions, name="assign_permissions"),
+
+    # Gestionar Reservaciones
+    path('reservations', views.reservations, name="reservations"),
+    path('edit_reservation/<int:id_reservation>', views.edit_reservation, name="edit_reservation"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
