@@ -23,51 +23,77 @@
             <div class="table-responsive p-3">
                 <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Cantidad</th>
-                        <th>S.Mensajer&iacute;a</th>
-                        <th>Precio(CUC)</th>
-                        <th>Tipo</th>
-                        <th>Capacidad(ml)</th>
-                        <th>Acciones</th>
-                    </tr>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>S.Mensajer&iacute;a</th>
+                            <th>Precio(CUC)</th>
+                            <th>Tipo</th>
+                            <th>Capacidad(ml)</th>
+                            <th>Acciones</th>
+                        </tr>
                     </thead>
                     <tfoot>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Cantidad</th>
-                        <th>S.Mensajer&iacute;a</th>
-                        <th>Precio(CUC)</th>
-                        <th>Tipo</th>
-                        <th>Capacidad(ml)</th>
-                        <th>Acciones</th>
-                    </tr>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>S.Mensajer&iacute;a</th>
+                            <th>Precio(CUC)</th>
+                            <th>Tipo</th>
+                            <th>Capacidad(ml)</th>
+                            <th>Acciones</th>
+                        </tr>
                     </tfoot>
                     <tbody>
-                    <tr>
                         {% for reservation in list_reservations  %}
-                            <td>{{ reservation.producto.nombre }}</td>
-                            <td>{{ reservation.cantidad_producto }}</td>
-                            {% if reservation.nombre != ' ' %}
-                                <td>Si</td>
-                            {% else %}
-                                <td>No</td>
-                            {% endif %}
-                            <td>{{ reservation.producto.precio }}</td>
-                            <td>{{ reservation.producto.tipo }}</td>
-                            <td>{{ reservation.producto.capacidad }}</td>
-                            <td>
-                               <a href="/edit_reservation/{{ reservation.id }}" title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
-                               <a href="#" title="Eliminar Reservacion"><i class="fas fa-fw fa-trash-alt"></i></a>
-                            </td>
+                            <tr>
+                                <td>{{ reservation.producto.nombre }}</td>
+                                <td>{{ reservation.cantidad_producto }}</td>
+                                {% if reservation.nombre != "" %}
+                                    <td>Si</td>
+                                {% else %}
+                                    <td>No</td>
+                                {% endif %}
+                                <td>{{ reservation.producto.precio }}</td>
+                                <td>{{ reservation.producto.tipo }}</td>
+                                <td>{{ reservation.producto.capacidad }}</td>
+                                <td>
+                                   <a href="/edit_reservation/{{ reservation.id }}" title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
+                                   <a href="#" data-href="/delete_reservation/{{ reservation.id }}" data-toggle="modal"
+                                    class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
+                                    data-target="#confirm-delete">
+                                     <i class="fas fa-fw fa-trash-alt"></i>
+                                 </a>
+                                </td>
+                            </tr>
                         {% endfor %}
-                    </tr>
+
 
                     </tbody>
                 </table>
             </div>
         </div>
+    </div>
+
+     <!-- Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Desea eliminar la reservación?</h5>
+{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#              <span aria-hidden="true">&times;</span>#}
+{#            </button>#}
+          </div>
+{#          <div class="modal-body">#}
+{##}
+{#          </div>#}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <a class="btn btn-danger btn-ok">Eliminar</a>
+          </div>
+        </div>
+      </div>
     </div>
 
 {% endblock %}
@@ -82,6 +108,11 @@
         $(document).ready(function () {
 
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
     </script>
 {% endblock %}

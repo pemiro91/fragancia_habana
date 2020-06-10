@@ -50,6 +50,7 @@ urlpatterns = [
     # Gestionar Reservaciones
     path('reservations', views.reservations, name="reservations"),
     path('edit_reservation/<int:id_reservation>', views.edit_reservation, name="edit_reservation"),
+    path('delete_reservation/<int:id_reservation>',  views.delete_reservation, name="delete_product"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

@@ -141,6 +141,24 @@ def reservations(request):
 def edit_reservation(request, id_reservation=None):
     if request.user.is_authenticated:
         reservation = get_object_or_404(Reservation, id=id_reservation)
+        if request.method == "POST":
+            cantidad_reservada = request.POST.get('cantidad_reservada')
+            name_service = request.POST.get('name_service')
+            address_service = request.POST.get('address_service')
+            phone_service = request.POST.get('phone_service')
+            date_service = request.POST.get('date_service')
+            time_service = request.POST.get('time_service')
         context = {'reservation': reservation}
         return render(request, 'fragancia/editar_reservacion.html', context)
+    return redirect('login')
+
+
+def delete_reservation(request, id_reservation):
+    if request.user.is_authenticated:
+        r = Reservation.objects.get(id=id_reservation)
+        product = Product.objects.get(pk=r.producto.id)
+        value_real = product.cantidad_disponible + int(r.cantidad_producto)
+        Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
+        r.delete()
+        return redirect('reservations')
     return redirect('login')
