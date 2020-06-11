@@ -151,3 +151,83 @@ def change_password(request):
         context = {}
         return render(request, "fragancia/cambiar_contrasena.html", context)
     return redirect('login')
+
+
+# -------------- Asignar otros permisos--------------#
+
+def assign_permissions(request):
+    context = {}
+    return render(request, 'fragancia/asignar_permisos.html', context)
+
+
+# --------------** Gestionar Reservaciones**--------------#
+# -------------- Listar reservaciones--------------#
+
+def reservations(request):
+    if request.user.is_authenticated:
+        list_reservations = Reservation.objects.filter(vendedor=request.user.id)
+        context = {'list_reservations': list_reservations}
+        return render(request, 'fragancia/listado_reservaciones.html', context)
+    return redirect('login')
+
+
+# -------------- Edit reservation--------------#
+
+def edit_reservation(request, id_reservation=None):
+    value_real = 0
+    if request.user.is_authenticated:
+        reservation = get_object_or_404(Reservation, id=id_reservation)
+        if request.method == "POST":
+            cantidad_reservada = request.POST.get('cantidad_reservada')
+            name_service = request.POST.get('name_service')
+            address_service = request.POST.get('address_service')
+            phone_service = request.POST.get('phone_service')
+            date_service = request.POST.get('date_service')
+            time_service = request.POST.get('time_service')
+            if int(cantidad_reservada) == reservation.cantidad_producto:
+                Reservation.objects.filter(pk=id_reservation).update(
+                    cantidad_producto=cantidad_reservada,
+                    nombre=name_service,
+                    direccion=address_service,
+                    telefono=phone_service,
+                    fecha_entrega=date_service,
+                    horario_entrega=time_service
+                )
+                return redirect('reservations')
+
+            elif int(cantidad_reservada) <= reservation.producto.cantidad_disponible:
+                if int(cantidad_reservada) > reservation.cantidad_producto:
+                    value_add = int(cantidad_reservada) - reservation.cantidad_producto
+                    value_real = reservation.producto.cantidad_disponible - value_add
+                if int(cantidad_reservada) < reservation.cantidad_producto:
+                    value_sus = reservation.cantidad_producto - int(cantidad_reservada)
+                    value_real = reservation.producto.cantidad_disponible + value_sus
+                Reservation.objects.filter(pk=id_reservation).update(
+                    cantidad_producto=cantidad_reservada,
+                    nombre=name_service,
+                    direccion=address_service,
+                    telefono=phone_service,
+                    fecha_entrega=date_service,
+                    horario_entrega=time_service
+                )
+                Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
+                return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
+
+            elif int(cantidad_reservada) > reservation.producto.cantidad_disponible:
+                messages.error(request, 'La cantidad proporcionada es mayor que la disponible')
+        context = {'reservation': reservation, 'value_real': value_real}
+        return render(request, 'fragancia/editar_reservacion.html', context)
+    return redirect('login')
+
+
+# -------------- Delete reservation--------------#
+
+def delete_reservation(request, id_reservation):
+    if request.user.is_authenticated:
+        r = Reservation.objects.get(id=id_reservation)
+        product = Product.objects.get(pk=r.producto.id)
+        value_real = product.cantidad_disponible + int(r.cantidad_producto)
+        Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
+        r.delete()
+        return redirect('reservations')
+    return redirect('login')
