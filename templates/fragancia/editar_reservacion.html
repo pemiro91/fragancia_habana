@@ -46,11 +46,25 @@
                                 <li id="detalles_producto"><strong>Tipo</strong>: {{ reservation.producto.tipo }}</li>
                                 <li id="detalles_producto"><strong>Capacidad</strong>: {{ reservation.producto.capacidad }} ml</li>
                                 <li id="detalles_producto"><strong>Precio</strong>: {{ reservation.producto.precio }} CUC</li>
-                                <li id="detalles_producto">
-                                    <strong style="font-style: revert">Disponibilidad</strong>: {{ reservation.producto.cantidad_disponible }} u
+                                <li id="detalles_producto"><strong style="font-style: revert">Disponibilidad</strong>:
+                                    {% if value_real != 0 %}
+                                        : {{ value_real }} u
+                                    {% else %}
+                                        : {{ reservation.producto.cantidad_disponible }} u
+                                    {% endif %}
+
                                 </li>
 
                             </ul>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-danger">
+                                        <a class="close" href="#" data-dismiss="alert">×</a>
+                                        No existe disponibilidad suficiente de este producto,
+                                        revise la cantidad especificada que sea menor a la disponibilidad
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             <hr id="nav_divider" class="sidebar-divider">
                             <div class="card mb-4">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -58,277 +72,354 @@
                                         class="m-0 font-weight-bold text-primary">Reservacion</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form method="post" class="needs-validation" novalidate>{% csrf_token %}
                                         <div class="form-group row">
                                             <label for="inputCantidad" class="col-sm-5 col-form-label">Cantidad </label>
                                             <div class="col-sm-7">
                                                 <input type="number" class="form-control" id="inputCantidad"
                                                        name="cantidad_reservada"
                                                        value="{{ reservation.cantidad_producto }}"
-                                                       placeholder="1">
+                                                       placeholder="1" required>
+                                                <div class="invalid-feedback">
+                                                    Por favor, rellene el campo.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-
-                                            <div class="col-sm-12">
-                                                <div class="form-group">
-                                                    <label>Mensajeria</label>
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input"
-                                                               name="customSwitch1"
-                                                               {% if reservation.nombre != "" %}
-                                                                    checked
-                                                                {% endif %}
-                                                               id="customSwitch1">
-                                                        <label class="custom-control-label" for="customSwitch1">¿Incluir
-                                                            Servicio de Mensajería?</label>
-                                                    </div>
-
-                                                </div>
-                                                <div id="expandir_mensajeria"
-
-                                                     style="display: none">
-                                                    <div class="form-group row">
-                                                        <label for="inputNombre"
-                                                               class="col-sm-5 col-form-label">Nombre(s) </label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" maxlength="50" class="form-control"
-                                                                   id="inputNombre"
-                                                                   name="name_service"
-                                                                   value="{{ reservation.nombre }}"
-                                                                   placeholder="Regina Maria">
+                                            {% if reservation.nombre == "" %}
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <label>Mensajeria</label>
+                                                        <div class="custom-control custom-switch">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   name="customSwitch1" id="customSwitch1" >
+                                                            <label class="custom-control-label" for="customSwitch1">¿Incluir
+                                                                Servicio
+                                                                de Mensajería?</label>
                                                         </div>
 
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputTelefono"
-                                                               class="col-sm-5 col-form-label">Telefono </label>
-                                                        <div class="col-sm-7">
-                                                            <input type="tel" maxlength="8" class="form-control"
-                                                                   id="inputTelefono"
-                                                                   name="phone_service"
-                                                                   value="{{ reservation.telefono }}"
-                                                                   placeholder="55555555">
-                                                        </div>
+                                                    <div id="expandir_mensajeria" style="display: none">
+                                                        <div class="form-group row">
+                                                            <label for="inputNombre"
+                                                                   class="col-sm-5 col-form-label">Nombre(s) </label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" maxlength="50" class="form-control"
+                                                                       id="inputNombre"
+                                                                       name="name_service"
+                                                                       placeholder="Regina Maria">
+                                                            </div>
 
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputDireccion"
-                                                               class="col-sm-5 col-form-label">Dirección </label>
-                                                        <div class="col-sm-7">
-                                                        <input class="form-control" maxlength="200"
-                                                                  id="inputDireccion"
-                                                                  name="address_service"
-                                                                  value="{{ reservation.direccion }}"
-                                                                  placeholder="San Francisco #20600.Boyeros"/>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputFechaEntrega"
-                                                               class="col-sm-5 col-form-label">Fecha entrega </label>
-                                                        <div class="col-sm-7">
-                                                            <input type="tel" class="form-control"
-                                                                   id="inputFechaEntrega"
-                                                                   name="date_service"
-                                                                   value="{{ reservation.fecha_entrega }}"
-                                                                   placeholder="2020-06-16">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputHorarioEntrega"
-                                                               class="col-sm-5 col-form-label">Horario </label>
-                                                        <div class="col-sm-7">
-                                                            <select class="form-control" name="time_service" id="inputHorarioEntrega">
-                                                                {% ifequal reservation.horario_entrega '8:00am-9:00am' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am" selected>8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '9:00am-10:00am' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am" selected>9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '10:00am-11:00am' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am" selected>10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '11:00am-12:00m' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m" selected>11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '12:00m-1:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm" selected>12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '1:00pm-2:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm" selected>1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '2:00pm-3:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm" selected>2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '3:00pm-4:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm" selected>3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '4:00pm-5:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm" selected>4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '5:00pm-6:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm" selected>5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '6:00pm-7:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm" selected>6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
-                                                                {% endifequal %}
-                                                                {% ifequal reservation.horario_entrega '7:00pm-8:00pm' %}
-                                                                    <option value="--">---</option>
-                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                    <option value="7:00pm-8:00pm" selected>7:00pm-8:00pm</option>
-                                                                {% endifequal %}
+                                                        <div class="form-group row">
+                                                            <label for="inputTelefono"
+                                                                   class="col-sm-5 col-form-label">Telefono </label>
+                                                            <div class="col-sm-7">
+                                                                <input type="tel" maxlength="8" class="form-control"
+                                                                       id="inputTelefono"
+                                                                       name="phone_service"
+                                                                       placeholder="55555555">
+                                                            </div>
 
-                                                            </select>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputDireccion"
+                                                                   class="col-sm-5 col-form-label">Dirección </label>
+                                                            <div class="col-sm-7">
+                                                            <textarea class="form-control" maxlength="200"
+                                                                      id="inputDireccion"
+                                                                      name="address_service"
+                                                                      placeholder="San Francisco #20600.Boyeros"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputFechaEntrega"
+                                                                   class="col-sm-5 col-form-label">Fecha entrega </label>
+                                                            <div class="col-sm-7">
+                                                                <input type="tel" class="form-control"
+                                                                       id="inputFechaEntrega"
+                                                                       name="date_service"
+                                                                       placeholder="2020-06-16">
+                                                        </div>
+                                                    </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputHorarioEntrega"
+                                                                   class="col-sm-5 col-form-label">Horario </label>
+                                                            <div class="col-sm-7">
+                                                                <select class="form-control" name="time_service" id="inputHorarioEntrega">
+                                                                    <option value="--">---</option>
+                                                                    <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                    <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                    <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                    <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                    <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                    <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                    <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                    <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                    <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                </select>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
+                                            {% else %}
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <label>Mensajeria</label>
+                                                        <div class="custom-control custom-switch">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   name="customSwitch1"
+                                                                   checked
+                                                                   id="customSwitch1">
+                                                            <label class="custom-control-label" for="customSwitch1">¿Incluir
+                                                                Servicio de Mensajería?</label>
+                                                        </div>
 
-                                            </div>
+                                                    </div>
+                                                    <div id="expandir_mensajeria" style="display: block">
+                                                        <div class="form-group row">
+                                                            <label for="inputNombre"
+                                                                   class="col-sm-5 col-form-label">Nombre(s) </label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" maxlength="50" class="form-control"
+                                                                       id="inputNombre"
+                                                                       name="name_service"
+                                                                       value="{{ reservation.nombre }}"
+                                                                       placeholder="Regina Maria">
+                                                            </div>
 
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputTelefono"
+                                                                   class="col-sm-5 col-form-label">Telefono </label>
+                                                            <div class="col-sm-7">
+                                                                <input type="tel" maxlength="8" class="form-control"
+                                                                       id="inputTelefono"
+                                                                       name="phone_service"
+                                                                       value="{{ reservation.telefono }}"
+                                                                       placeholder="55555555">
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputDireccion"
+                                                                   class="col-sm-5 col-form-label">Dirección </label>
+                                                            <div class="col-sm-7">
+                                                            <input class="form-control" maxlength="200"
+                                                                      id="inputDireccion"
+                                                                      name="address_service"
+                                                                      value="{{ reservation.direccion }}"
+                                                                      placeholder="San Francisco #20600.Boyeros"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputFechaEntrega"
+                                                                   class="col-sm-5 col-form-label">Fecha entrega </label>
+                                                            <div class="col-sm-7">
+                                                                <input type="tel" class="form-control"
+                                                                       id="inputFechaEntrega"
+                                                                       name="date_service"
+                                                                       value="{{ reservation.fecha_entrega }}"
+                                                                       placeholder="2020-06-16">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputHorarioEntrega"
+                                                                   class="col-sm-5 col-form-label">Horario </label>
+                                                            <div class="col-sm-7">
+                                                                <select class="form-control" name="time_service" id="inputHorarioEntrega">
+                                                                    {% ifequal reservation.horario_entrega '8:00am-9:00am' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am" selected>8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '9:00am-10:00am' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am" selected>9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '10:00am-11:00am' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am" selected>10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '11:00am-12:00m' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m" selected>11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '12:00m-1:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm" selected>12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '1:00pm-2:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm" selected>1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '2:00pm-3:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm" selected>2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '3:00pm-4:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm" selected>3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '4:00pm-5:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm" selected>4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '5:00pm-6:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm" selected>5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '6:00pm-7:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm" selected>6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+                                                                    {% ifequal reservation.horario_entrega '7:00pm-8:00pm' %}
+                                                                        <option value="--">---</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
+                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
+                                                                        <option value="7:00pm-8:00pm" selected>7:00pm-8:00pm</option>
+                                                                    {% endifequal %}
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                         </div>
-
 
                                         <div class="form-group row">
                                             <div class="col-sm-10">
@@ -366,57 +457,48 @@
     <script src="{% static 'fragancia/catalogo/vendor/aos/aos.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/js/main.js' %}"></script>
 
-
-{#    <script>#}
-{#        $(function () {#}
-{#            $('.custom-control-input').prop('checked', true)#}
-{##}
-{#            $('.custom-control-input').click(function () {#}
-{#                if (!$(this).prop('checked')) {#}
-{#                    $('#expandir_mensajeria').hide();#}
-{##}
-{#                } else {#}
-{#                    $('#expandir_mensajeria').show();#}
-{#                }#}
-{#            })#}
-{#        })#}
-{#        function toggleShow() {#}
-{#            {#}
-{#                if (! $('.custom-control-input').prop('checked')) {#}
-{#                    $('#expandir_mensajeria').hide();#}
-{##}
-{#                } else {#}
-{#                    $('#expandir_mensajeria').show();#}
-{#                }#}
-{#            }#}
-{#        }#}
-{#        $(function () {#}
-{#            $('.custom-control-input').prop('checked', true);#}
-{#            toggleShow();#}
-{#            $('.custom-control-input').click(toggleShow())#}
-{#        })#}
-{#    </script>#}
     <script>
         $(function () {
             $('.custom-control-input').click(function () {
                 if (!$(this).prop('checked')) {
                     $('#expandir_mensajeria').hide();
-
                 } else {
                     $('#expandir_mensajeria').show();
                 }
             })
         })
     </script>
-{#    <script>#}
-{#        $('.custom-control-input').load(function () {#}
-{#                if (!$(this).prop('checked')) {#}
-{#                    $('#expandir_mensajeria').hide();#}
-{##}
-{#                } else {#}
-{#                    $('#expandir_mensajeria').show();#}
-{#                }#}
-{#            })#}
-{#    </script>#}
+
+	<script>
+        $(function () {
+            $('.custom-control-input').click(function () {
+                if ($(this).prop('checked')) {
+					$('#expandir_mensajeria').show();
+                } else {
+                    $('#expandir_mensajeria').hide();
+                }
+            })
+        })
+    </script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+    </script>
 {% endblock %}
 
