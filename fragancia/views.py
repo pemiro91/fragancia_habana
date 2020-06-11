@@ -7,7 +7,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from fragancia.models import Product, Reservation
+from fragancia.models import Product, Reservation, User
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -17,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 def login_user(request):
-    error = ''
-    logout(request)
     if request.POST:
         form = AuthenticationForm(request.POST)
         username = request.POST.get('username')
@@ -27,7 +26,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/index')
+                return redirect('index')
         else:
             messages.error(request, 'username or password not correct')
             return redirect('login')
@@ -78,7 +77,7 @@ def details_products(request, id_product=None):
         date_service = request.POST.get('date_service')
         time_service = request.POST.get('time_service')
         if count_booking:
-            if int(count_booking) <= product.cantidad_disponible:
+            if int(count_booking) < product.cantidad_disponible:
                 value_real = product.cantidad_disponible - int(count_booking)
                 Reservation.objects.create(
                     producto_id=id_product,
@@ -114,85 +113,41 @@ def users(request):
 
 
 def user_profile(request):
-    context = {}
-    return render(request, 'fragancia/perfil_usuario.html', context)
-
-
-# -------------- Asignar otros permisos--------------#
-
-def assign_permissions(request):
-    context = {}
-    return render(request, 'fragancia/asignar_permisos.html', context)
-
-
-# --------------** Gestionar Reservaciones**--------------#
-# -------------- Listar reservaciones--------------#
-
-def reservations(request):
     if request.user.is_authenticated:
-        list_reservations = Reservation.objects.filter(vendedor=request.user.id)
-        context = {'list_reservations': list_reservations}
-        return render(request, 'fragancia/listado_reservaciones.html', context)
-    return redirect('login')
-
-
-# -------------- Edit reservation--------------#
-
-def edit_reservation(request, id_reservation=None):
-    value_real = 0
-    if request.user.is_authenticated:
-        reservation = get_object_or_404(Reservation, id=id_reservation)
         if request.method == "POST":
-            cantidad_reservada = request.POST.get('cantidad_reservada')
-            name_service = request.POST.get('name_service')
-            address_service = request.POST.get('address_service')
-            phone_service = request.POST.get('phone_service')
-            date_service = request.POST.get('date_service')
-            time_service = request.POST.get('time_service')
-            if int(cantidad_reservada) == reservation.cantidad_producto:
-                Reservation.objects.filter(pk=id_reservation).update(
-                    cantidad_producto=cantidad_reservada,
-                    nombre=name_service,
-                    direccion=address_service,
-                    telefono=phone_service,
-                    fecha_entrega=date_service,
-                    horario_entrega=time_service
-                )
-                return redirect('reservations')
-
-            elif int(cantidad_reservada) <= reservation.producto.cantidad_disponible:
-                if int(cantidad_reservada) > reservation.cantidad_producto:
-                    value_add = int(cantidad_reservada) - reservation.cantidad_producto
-                    value_real = reservation.producto.cantidad_disponible - value_add
-                if int(cantidad_reservada) < reservation.cantidad_producto:
-                    value_sus = reservation.cantidad_producto - int(cantidad_reservada)
-                    value_real = reservation.producto.cantidad_disponible + value_sus
-                Reservation.objects.filter(pk=id_reservation).update(
-                    cantidad_producto=cantidad_reservada,
-                    nombre=name_service,
-                    direccion=address_service,
-                    telefono=phone_service,
-                    fecha_entrega=date_service,
-                    horario_entrega=time_service
-                )
-                Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
-                return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
-
-            elif int(cantidad_reservada) > reservation.producto.cantidad_disponible:
-                messages.error(request, 'La cantidad proporcionada es mayor que la disponible')
-        context = {'reservation': reservation, 'value_real': value_real}
-        return render(request, 'fragancia/editar_reservacion.html', context)
+            nombre = request.POST.get('first_name')
+            apellidos = request.POST.get('last_name')
+            correo = request.POST.get('email')
+            telefono = request.POST.get('phone')
+            usuario = request.POST.get('username')
+            User.objects.filter(pk=request.user.id).update(
+                first_name=nombre,
+                last_name=apellidos,
+                email=correo,
+                telefono=telefono,
+                username=usuario,
+            )
+            return redirect('user_profile')
+        return render(request, "fragancia/perfil_usuario.html", {})
     return redirect('login')
 
 
-# -------------- Delete reservation--------------#
-
-def delete_reservation(request, id_reservation):
+def change_password(request):
     if request.user.is_authenticated:
-        r = Reservation.objects.get(id=id_reservation)
-        product = Product.objects.get(pk=r.producto.id)
-        value_real = product.cantidad_disponible + int(r.cantidad_producto)
-        Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
-        r.delete()
-        return redirect('reservations')
+        if request.method == "POST":
+            old_password = request.POST.get('old_password')
+            new_password = request.POST.get('new_password')
+            confirmed_new_password = request.POST.get('confirmed_new_password')
+            U = User.objects.get(username=request.user.username)
+            if not U.check_password(old_password):
+                error = "Contraseña Incorrecta."
+                return render(request, "fragancia/cambiar_contrasena.html", {'error': error})
+            if confirmed_new_password != new_password:
+                error = "Las Contraseñas No Coinciden."
+                return render(request, "fragancia/cambiar_contrasena.html", {'error': error})
+            U.set_password(new_password)
+            U.save()
+            return redirect('login')
+        context = {}
+        return render(request, "fragancia/cambiar_contrasena.html", context)
     return redirect('login')
