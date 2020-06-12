@@ -1,8 +1,11 @@
+import os
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Permission
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -99,10 +102,77 @@ def details_products(request, id_product=None):
 
 
 # -------------- Gestionar productos--------------#
+# -------------- Lista productos--------------#
 
 def products(request):
-    context = {}
-    return render(request, 'fragancia/listado_productos.html', context)
+    if request.user.is_authenticated:
+        list_products = Product.objects.all()
+        return render(request, "fragancia/listado_productos.html", {'list_products': list_products})
+    return redirect('login')
+
+
+# -------------- Adicionar producto--------------#
+
+def add_product(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            name_product = request.POST.get('name_product')
+            type_product = request.POST.get('type_product')
+            category_product = request.POST.get('category_product')
+            image_product = request.FILES['image_product']
+            capacity_product = request.POST.get('capacity_product')
+            price_product = request.POST.get('price_product')
+            count_product = request.POST.get('count_product')
+            Product.objects.create(
+                imagen=image_product,
+                nombre=name_product,
+                precio=price_product,
+                capacidad=capacity_product,
+                cantidad_disponible=count_product,
+                categoria=category_product,
+                tipo=type_product
+            )
+            return redirect('products')
+        context = {}
+        return render(request, 'fragancia/agregar_producto.html', context)
+    return redirect('login')
+
+
+# -------------- Editar producto--------------#
+
+def edit_product(request, id_product):
+    if request.user.is_authenticated:
+        product = Product.objects.get(id=id_product)
+        if request.method == 'POST':
+            name_products = request.POST.get('name_products')
+            type_products = request.POST.get('type_products')
+            category_products = request.POST.get('category_products')
+            capacity_products = request.POST.get('capacity_products')
+            price_products = request.POST.get('price_products')
+            count_products = request.POST.get('count_products')
+            Product.objects.filter(pk=id_product).update(
+                nombre=name_products,
+                precio=price_products,
+                capacidad=capacity_products,
+                cantidad_disponible=count_products,
+                categoria=category_products,
+                tipo=type_products
+            )
+            return redirect('products')
+        context = {'product': product}
+        return render(request, 'fragancia/editar_producto.html', context)
+    return redirect('login')
+
+
+# -------------- Eliminar producto--------------#
+
+def delete_product(request, id_product):
+    if request.user.is_authenticated:
+        p = Product.objects.get(id=id_product)
+        os.remove(p.imagen.path)
+        p.delete()
+        return redirect('products')
+    return redirect('login')
 
 
 # -------------- Gestionar usuarios--------------#
@@ -151,6 +221,14 @@ def change_password(request):
         context = {}
         return render(request, "fragancia/cambiar_contrasena.html", context)
     return redirect('login')
+
+
+def add_user(request):
+    usuario = User.objects.get(pk=2)
+    change_user = Permission.objects.get(codename='change_user')
+    permis = usuario.user_permissions.add(change_user)
+    context = {'permis': permis}
+    return render(request, 'fragancia/agregar_usuario.html', context)
 
 
 # -------------- Asignar otros permisos--------------#

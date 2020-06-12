@@ -25,33 +25,37 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', views.login, name="login"),
+    path('', views.login_user, name="login"),
+    path('', views.logout, name="logout"),
     path('index', views.index, name="index"),
 
     # Principal
     path('catalogue', views.catalogue, name="catalogue"),
     path('catalogue/<int:id_product>', views.details_products, name="details_products"),
 
-    # Gestionar Productos
-    path('products', views.products, name="products"),
-
+    # Gestionar Usuarios
     path('users', views.users, name="users"),
     path('user_profile', views.user_profile, name="user_profile"),
     path('change_password', views.change_password, name="change_password"),
-
-    # Api
-    path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),
-
-    path('', views.login_user, name="login"),
-
-    path('', views.logout, name="logout"),
-
     path('assign_permissions', views.assign_permissions, name="assign_permissions"),
+    path('add_user', views.add_user, name="add_user"),
+
+    # Gestionar Productos
+    path('products', views.products, name="products"),
+    path('add_product', views.add_product, name="add_product"),
+    path('products/edit_product/<int:id_product>', views.edit_product, name="edit_product"),
+    path('products/delete_product/<int:id_product>', views.delete_product, name="delete_product"),
 
     # Gestionar Reservaciones
     path('reservations', views.reservations, name="reservations"),
     path('edit_reservation/<int:id_reservation>', views.edit_reservation, name="edit_reservation"),
-    path('delete_reservation/<int:id_reservation>',  views.delete_reservation, name="delete_product"),
+    path('delete_reservation/<int:id_reservation>', views.delete_reservation, name="delete_product"),
+
+    # Api
+    path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),
+
+
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
