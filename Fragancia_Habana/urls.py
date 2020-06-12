@@ -34,15 +34,10 @@ urlpatterns = [
 
     # Gestionar Productos
     path('products', views.products, name="products"),
-    path('add_product', views.add_product, name="add_product"),
-    path('products/edit_product/<int:id_product>', views.edit_product, name="edit_product"),
-    # path('products/action_edit_product/<int:id_product>', views.action_edit_product, name="action_edit_product"),
-    path('products/delete_product/<int:id_product>',  views.delete_product, name="delete_product"),
 
     path('users', views.users, name="users"),
     path('user_profile', views.user_profile, name="user_profile"),
     path('change_password', views.change_password, name="change_password"),
-    path('add_user', views.add_user, name="add_user"),
 
     # Api
     path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),
@@ -50,6 +45,13 @@ urlpatterns = [
     path('', views.login_user, name="login"),
 
     path('', views.logout, name="logout"),
+
+    path('assign_permissions', views.assign_permissions, name="assign_permissions"),
+
+    # Gestionar Reservaciones
+    path('reservations', views.reservations, name="reservations"),
+    path('edit_reservation/<int:id_reservation>', views.edit_reservation, name="edit_reservation"),
+    path('delete_reservation/<int:id_reservation>',  views.delete_reservation, name="delete_product"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
