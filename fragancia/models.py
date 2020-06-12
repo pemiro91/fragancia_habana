@@ -70,6 +70,28 @@ class Product(models.Model):
 
     def __str__(self): return self.nombre
 
+    def remove_on_image_update(self):
+        try:
+            # is the object in the database yet?
+            obj = Product.objects.get(id=self.id)
+        except Product.DoesNotExist:
+            # object is not in db, nothing to worry about
+            return
+        # is the save due to an update of the actual image file?
+        if obj.imagen and self.imagen and obj.imagen != self.imagen:
+            # delete the old image file from the storage in favor of the new file
+            obj.imagen.delete()
+
+    def delete(self, *args, **kwargs):
+        # object is being removed from db, remove the file from storage first
+        self.imagen.delete()
+        return super(Product, self).delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        # object is possibly being updated, if so, clean up.
+        self.remove_on_image_update()
+        return super(Product, self).save(*args, **kwargs)
+
 
 class Reservation(models.Model):
     producto = models.ForeignKey(Product, on_delete=models.CASCADE, name='producto')

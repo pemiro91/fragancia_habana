@@ -143,28 +143,17 @@ def edit_product(request, id_product):
             name_products = request.POST.get('name_products')
             type_products = request.POST.get('type_products')
             category_products = request.POST.get('category_products')
-            image_products = request.FILES.get('image_products')
             capacity_products = request.POST.get('capacity_products')
             price_products = request.POST.get('price_products')
             count_products = request.POST.get('count_products')
-            if image_products is not None:
-                product.imagen = image_products,
-                product.nombre = name_products,
-                product.precio = price_products,
-                product.capacidad = capacity_products,
-                product.cantidad_disponible = count_products,
-                product.categoria = category_products,
-                product.tipo = type_products
-                product.save()
-            else:
-                Product.objects.filter(pk=id_product).update(
-                    nombre=name_products,
-                    precio=price_products,
-                    capacidad=capacity_products,
-                    cantidad_disponible=count_products,
-                    categoria=category_products,
-                    tipo=type_products
-                )
+            Product.objects.filter(pk=id_product).update(
+                nombre=name_products,
+                precio=price_products,
+                capacidad=capacity_products,
+                cantidad_disponible=count_products,
+                categoria=category_products,
+                tipo=type_products
+            )
             return redirect('products')
         context = {'product': product}
         return render(request, 'fragancia/editar_productos.html', context)
