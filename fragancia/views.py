@@ -1,3 +1,5 @@
+import os
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as do_logout
@@ -100,42 +102,84 @@ def details_products(request, id_product=None):
 
 
 # -------------- Gestionar productos--------------#
+# -------------- Lista productos--------------#
 
 def products(request):
-    context = {}
-    return render(request, 'fragancia/listado_productos.html', context)
+    if request.user.is_authenticated:
+        list_products = Product.objects.all()
+        return render(request, "fragancia/listado_productos.html", {'list_products': list_products})
+    return redirect('login')
 
+
+# -------------- Adicionar producto--------------#
 
 def add_product(request):
-    context = {}
-    return render(request, 'fragancia/agregar_producto.html', context)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            name_product = request.POST.get('name_product')
+            type_product = request.POST.get('type_product')
+            category_product = request.POST.get('category_product')
+            image_product = request.FILES['image_product']
+            capacity_product = request.POST.get('capacity_product')
+            price_product = request.POST.get('price_product')
+            count_product = request.POST.get('count_product')
+            Product.objects.create(
+                imagen=image_product,
+                nombre=name_product,
+                precio=price_product,
+                capacidad=capacity_product,
+                cantidad_disponible=count_product,
+                categoria=category_product,
+                tipo=type_product
+            )
+            return redirect('products')
+        context = {}
+        return render(request, 'fragancia/agregar_producto.html', context)
+    return redirect('login')
 
 
-def edit_user(request):
-    context = {}
-    return render(request, 'fragancia/editar_usuario.html', context)
+# -------------- Editar producto--------------#
+
+def edit_product(request, id_product):
+    if request.user.is_authenticated:
+        product = Product.objects.get(id=id_product)
+        if request.method == 'POST':
+            name_products = request.POST.get('name_products')
+            type_products = request.POST.get('type_products')
+            category_products = request.POST.get('category_products')
+            capacity_products = request.POST.get('capacity_products')
+            price_products = request.POST.get('price_products')
+            count_products = request.POST.get('count_products')
+            Product.objects.filter(pk=id_product).update(
+                nombre=name_products,
+                precio=price_products,
+                capacidad=capacity_products,
+                cantidad_disponible=count_products,
+                categoria=category_products,
+                tipo=type_products
+            )
+            return redirect('products')
+        context = {'product': product}
+        return render(request, 'fragancia/editar_producto.html', context)
+    return redirect('login')
 
 
-def assign_permissions(request):
-    context = {}
-    return render(request, 'fragancia/asignar_permisos.html', context)
+# -------------- Eliminar producto--------------#
+
+def delete_product(request, id_product):
+    if request.user.is_authenticated:
+        p = Product.objects.get(id=id_product)
+        os.remove(p.imagen.path)
+        p.delete()
+        return redirect('products')
+    return redirect('login')
 
 
 # -------------- Gestionar usuarios--------------#
 
 def users(request):
-    if request.user.is_authenticated:
-        list_users = User.objects.all()
-        return render(request, "fragancia/listado_usuarios.html", {'list_users': list_users})
-    return redirect('login')
-
-
-def add_user(request):
-    usuario = User.objects.get(pk=2)
-    change_user = Permission.objects.get(codename='change_user')
-    permis = usuario.user_permissions.add(change_user)
-    context = {'permis': permis}
-    return render(request, 'fragancia/agregar_usuario.html', context)
+    context = {}
+    return render(request, 'fragancia/listado_usuarios.html', context)
 
 
 def user_profile(request):
@@ -176,4 +220,92 @@ def change_password(request):
             return redirect('login')
         context = {}
         return render(request, "fragancia/cambiar_contrasena.html", context)
+    return redirect('login')
+
+
+def add_user(request):
+    usuario = User.objects.get(pk=2)
+    change_user = Permission.objects.get(codename='change_user')
+    permis = usuario.user_permissions.add(change_user)
+    context = {'permis': permis}
+    return render(request, 'fragancia/agregar_usuario.html', context)
+
+
+# -------------- Asignar otros permisos--------------#
+
+def assign_permissions(request):
+    context = {}
+    return render(request, 'fragancia/asignar_permisos.html', context)
+
+
+# --------------** Gestionar Reservaciones**--------------#
+# -------------- Listar reservaciones--------------#
+
+def reservations(request):
+    if request.user.is_authenticated:
+        list_reservations = Reservation.objects.filter(vendedor=request.user.id)
+        context = {'list_reservations': list_reservations}
+        return render(request, 'fragancia/listado_reservaciones.html', context)
+    return redirect('login')
+
+
+# -------------- Edit reservation--------------#
+
+def edit_reservation(request, id_reservation=None):
+    value_real = 0
+    if request.user.is_authenticated:
+        reservation = get_object_or_404(Reservation, id=id_reservation)
+        if request.method == "POST":
+            cantidad_reservada = request.POST.get('cantidad_reservada')
+            name_service = request.POST.get('name_service')
+            address_service = request.POST.get('address_service')
+            phone_service = request.POST.get('phone_service')
+            date_service = request.POST.get('date_service')
+            time_service = request.POST.get('time_service')
+            if int(cantidad_reservada) == reservation.cantidad_producto:
+                Reservation.objects.filter(pk=id_reservation).update(
+                    cantidad_producto=cantidad_reservada,
+                    nombre=name_service,
+                    direccion=address_service,
+                    telefono=phone_service,
+                    fecha_entrega=date_service,
+                    horario_entrega=time_service
+                )
+                return redirect('reservations')
+
+            elif int(cantidad_reservada) <= reservation.producto.cantidad_disponible:
+                if int(cantidad_reservada) > reservation.cantidad_producto:
+                    value_add = int(cantidad_reservada) - reservation.cantidad_producto
+                    value_real = reservation.producto.cantidad_disponible - value_add
+                if int(cantidad_reservada) < reservation.cantidad_producto:
+                    value_sus = reservation.cantidad_producto - int(cantidad_reservada)
+                    value_real = reservation.producto.cantidad_disponible + value_sus
+                Reservation.objects.filter(pk=id_reservation).update(
+                    cantidad_producto=cantidad_reservada,
+                    nombre=name_service,
+                    direccion=address_service,
+                    telefono=phone_service,
+                    fecha_entrega=date_service,
+                    horario_entrega=time_service
+                )
+                Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
+                return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
+
+            elif int(cantidad_reservada) > reservation.producto.cantidad_disponible:
+                messages.error(request, 'La cantidad proporcionada es mayor que la disponible')
+        context = {'reservation': reservation, 'value_real': value_real}
+        return render(request, 'fragancia/editar_reservacion.html', context)
+    return redirect('login')
+
+
+# -------------- Delete reservation--------------#
+
+def delete_reservation(request, id_reservation):
+    if request.user.is_authenticated:
+        r = Reservation.objects.get(id=id_reservation)
+        product = Product.objects.get(pk=r.producto.id)
+        value_real = product.cantidad_disponible + int(r.cantidad_producto)
+        Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
+        r.delete()
+        return redirect('reservations')
     return redirect('login')

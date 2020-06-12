@@ -29,11 +29,11 @@
                                     class="m-0 font-weight-bold text-secondary">Editar un Producto</h6>
                             </div>
                             <div class="card-body">
-                                <form>
+                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Nombre </label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="inputEmail3"
+                                            <input type="text" name="name_products" class="form-control" value="{{ product.nombre }}" id="inputEmail3"
                                                    placeholder="Acqua d' Gio">
                                         </div>
                                     </div>
@@ -41,10 +41,127 @@
                                     <div class="form-group row">
                                         <label for="inputState" class="col-sm-3 col-form-label">Tipo</label>
                                         <div class="col-sm-9">
-                                            <select id="inputState" class="form-control">
-                                                <option selected>Seleccione Tipo</option>
-                                                <option>Dulce</option>
-                                                <option>Dulce</option>
+                                            <select id="inputTipo"  name="type_products" class="form-control">
+                                                {% if product.tipo == 'Floral' %}
+                                                    <option value="Floral" selected>Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Frutal' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal" selected>Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Verde' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde" selected>Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Aromatico' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico" selected>Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Fougere' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere" selected>Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Citrico' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico" selected>Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Chipre' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre" selected>Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Amaderado' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado" selected>Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Oriental' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental" selected>Oriental</option>
+                                                    <option value="Musk">Musk</option>
+                                                {% endif %}
+                                                {% if product.tipo == 'Musk' %}
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Frutal">Frutal</option>
+                                                    <option value="Verde">Verde</option>
+                                                    <option value="Aromatico">Aromático</option>
+                                                    <option value="Fougere">Fougere</option>
+                                                    <option value="Citrico">Cítrico</option>
+                                                    <option value="Chipre">Chipre</option>
+                                                    <option value="Amaderado">Amaderado</option>
+                                                    <option value="Oriental">Oriental</option>
+                                                    <option value="Musk" selected>Musk</option>
+                                                {% endif %}
                                             </select>
                                         </div>
                                     </div>
@@ -53,12 +170,18 @@
                                             <legend class="col-form-label col-sm-3 pt-0">Categoría</legend>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" id="customRadio1" checked="checked" name="customRadio"
+                                                    <input type="radio" id="customRadio1"
+                                                           value="Hombre"
+                                                            {% if product.categoria == 'Hombre'%} checked{% endif %}
+                                                           name="category_products"
                                                            class="custom-control-input">
                                                     <label class="custom-control-label" for="customRadio1">De Hombre</label>
                                                 </div>
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" id="customRadio2" name="customRadio"
+                                                    <input type="radio" id="customRadio2"
+                                                           value="Mujer"
+                                                           {% if product.categoria == 'Mujer' %} checked{% endif %}
+                                                            name="category_products"
                                                            class="custom-control-input">
                                                     <label class="custom-control-label" for="customRadio2">De Mujer</label>
                                                 </div>
@@ -69,26 +192,23 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3">Imagen </div>
                                         <div class="col-sm-9">
-                                            <div class="custom-control custom-file">
-                                                <input type="file"  class="custom-file-input" id="customFile" lang="es">
-                                                <label class="custom-file-label" for="customFile">Seleccione archivo</label>
-                                            </div>
+                                            <img src="{{ product.imagen.url }}" class="img-fluid" alt="" height="100px" width="100px">
                                         </div>
 
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Capacidad</label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control" id="inputEmail3"
+                                            <input type="number" name="capacity_products" class="form-control" id="inputEmail3" value="{{ product.capacidad }}"
                                                    placeholder="500">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">ml</label>
 
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Precio</label>
+                                        <label for="inputEmail3"  class="col-sm-3 col-form-label">Precio</label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control" id="inputEmail3"
+                                            <input type="number" name="price_products" class="form-control" id="inputEmail3" value="{{ product.precio }}"
                                                    placeholder="20">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">cuc</label>
@@ -97,7 +217,8 @@
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Cantidad </label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control" id="inputEmail3"
+                                            <input type="number" name="count_products" class="form-control"
+                                                   id="inputEmail3" value="{{ product.cantidad_disponible }}"
                                                    placeholder="10">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">u</label>
@@ -114,9 +235,10 @@
 {#                                    </div>#}
 
                                     <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label form-control-label"></label>
-                                        <div class="col-lg-9">
-                                            <button type="submit"  style="margin-left: 10%" id="boton_formularios"class="btn btn-primary">Editar Producto</button>
+                                        <div class="col-sm-10">
+                                            <button type="submit" id="boton_formularios" class="btn btn-primary">
+                                                Editar Producto
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
