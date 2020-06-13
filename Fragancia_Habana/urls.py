@@ -49,7 +49,11 @@ urlpatterns = [
     # Gestionar Reservaciones
     path('reservations', views.reservations, name="reservations"),
     path('edit_reservation/<int:id_reservation>', views.edit_reservation, name="edit_reservation"),
-    path('delete_reservation/<int:id_reservation>', views.delete_reservation, name="delete_product"),
+    path('delete_reservation/<int:id_reservation>', views.delete_reservation, name="delete_reservation"),
+    path('change_state_reservation_init/<int:id_reservation>', views.change_state_reservation_init,
+         name="change_state_reservation_init"),
+    path('change_state_reservation/<int:id_reservation>', views.change_state_reservation,
+         name="change_state_reservation"),
 
     # Api
     path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),

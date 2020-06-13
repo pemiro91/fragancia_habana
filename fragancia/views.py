@@ -6,11 +6,13 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from datetime import datetime
 
-from fragancia.models import Product, Reservation, User
+from fragancia.models import Product, Reservation, User, Estado_Reservation
 
 import logging
 
@@ -82,16 +84,25 @@ def details_products(request, id_product=None):
         if count_booking:
             if int(count_booking) < product.cantidad_disponible:
                 value_real = product.cantidad_disponible - int(count_booking)
-                Reservation.objects.create(
-                    producto_id=id_product,
-                    cantidad_producto=count_booking,
-                    vendedor_id=request.user.id,
-                    nombre=name_service,
-                    direccion=address_service,
-                    telefono=phone_service,
-                    fecha_entrega=date_service,
-                    horario_entrega=time_service
-                )
+                with transaction.atomic():
+                    reservacion = Reservation(
+                        producto_id=id_product,
+                        cantidad_producto=count_booking,
+                        nombre=name_service,
+                        direccion=address_service,
+                        telefono=phone_service,
+                        fecha_entrega=date_service,
+                        horario_entrega=time_service
+                    )
+                    reservacion.save()
+                    estado_reservacion = Estado_Reservation(
+                        reservacion=reservacion,
+                        estado="Pendiente",
+                        fecha_estado=datetime.now(),
+                        vendedor_id=request.user.id,
+                    )
+                    estado_reservacion.save()
+
                 Product.objects.filter(pk=id_product).update(cantidad_disponible=value_real)
                 return HttpResponseRedirect(reverse('details_products', args=(id_product,)))
             else:
@@ -243,7 +254,7 @@ def assign_permissions(request):
 
 def reservations(request):
     if request.user.is_authenticated:
-        list_reservations = Reservation.objects.filter(vendedor=request.user.id)
+        list_reservations = Estado_Reservation.objects.filter(vendedor=request.user.id)
         context = {'list_reservations': list_reservations}
         return render(request, 'fragancia/listado_reservaciones.html', context)
     return redirect('login')
@@ -262,32 +273,55 @@ def edit_reservation(request, id_reservation=None):
             phone_service = request.POST.get('phone_service')
             date_service = request.POST.get('date_service')
             time_service = request.POST.get('time_service')
+
             if int(cantidad_reservada) == reservation.cantidad_producto:
-                Reservation.objects.filter(pk=id_reservation).update(
-                    cantidad_producto=cantidad_reservada,
-                    nombre=name_service,
-                    direccion=address_service,
-                    telefono=phone_service,
-                    fecha_entrega=date_service,
-                    horario_entrega=time_service
-                )
-                return redirect('reservations')
+                if request.POST.get('switchMessenger'):
+                    Reservation.objects.filter(pk=id_reservation).update(
+                        cantidad_producto=cantidad_reservada,
+                        nombre=name_service,
+                        direccion=address_service,
+                        telefono=phone_service,
+                        fecha_entrega=date_service,
+                        horario_entrega=time_service
+                    )
+                    return redirect('reservations')
+                else:
+                    Reservation.objects.filter(pk=id_reservation).update(
+                        cantidad_producto=cantidad_reservada,
+                        nombre="",
+                        direccion="",
+                        telefono="",
+                        fecha_entrega="",
+                        horario_entrega=""
+                    )
+                    return redirect('reservations')
 
             elif int(cantidad_reservada) <= reservation.producto.cantidad_disponible:
                 if int(cantidad_reservada) > reservation.cantidad_producto:
                     value_add = int(cantidad_reservada) - reservation.cantidad_producto
                     value_real = reservation.producto.cantidad_disponible - value_add
-                if int(cantidad_reservada) < reservation.cantidad_producto:
+                elif int(cantidad_reservada) < reservation.cantidad_producto:
                     value_sus = reservation.cantidad_producto - int(cantidad_reservada)
                     value_real = reservation.producto.cantidad_disponible + value_sus
-                Reservation.objects.filter(pk=id_reservation).update(
-                    cantidad_producto=cantidad_reservada,
-                    nombre=name_service,
-                    direccion=address_service,
-                    telefono=phone_service,
-                    fecha_entrega=date_service,
-                    horario_entrega=time_service
-                )
+                if request.POST.get('switchMessenger'):
+                    Reservation.objects.filter(pk=id_reservation).update(
+                        cantidad_producto=cantidad_reservada,
+                        nombre=name_service,
+                        direccion=address_service,
+                        telefono=phone_service,
+                        fecha_entrega=date_service,
+                        horario_entrega=time_service
+                    )
+                else:
+                    Reservation.objects.filter(pk=id_reservation).update(
+                        cantidad_producto=cantidad_reservada,
+                        nombre="",
+                        direccion="",
+                        telefono="",
+                        fecha_entrega="",
+                        horario_entrega=""
+                    )
+
                 Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
                 return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
 
@@ -307,5 +341,26 @@ def delete_reservation(request, id_reservation):
         value_real = product.cantidad_disponible + int(r.cantidad_producto)
         Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
         r.delete()
+        return redirect('reservations')
+    return redirect('login')
+
+
+# -------------- Change State reservation--------------#
+
+def change_state_reservation_init(request, id_reservation):
+    if request.user.is_authenticated:
+        reservation = get_object_or_404(Estado_Reservation, reservacion_id=id_reservation)
+        context = {'reservation': reservation}
+        return render(request, 'fragancia/editar_estado.html', context)
+    return redirect('login')
+
+
+def change_state_reservation(request, id_reservation):
+    if request.user.is_authenticated:
+        state_reservation = request.POST.get('state_reservation')
+        Estado_Reservation.objects.filter(reservacion_id=id_reservation).update(
+            estado=state_reservation,
+            fecha_estado=datetime.now()
+        )
         return redirect('reservations')
     return redirect('login')

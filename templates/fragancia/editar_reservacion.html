@@ -16,7 +16,7 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Editar Reservacion</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">Tableros de Control</li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
         <li class="breadcrumb-item"><a href="{% url 'reservations' %}">Reservaciones</a></li>
         <li class="breadcrumb-item active" aria-current="page">Editar reservacion</li>
     </ol>
@@ -92,8 +92,8 @@
                                                         <label>Mensajeria</label>
                                                         <div class="custom-control custom-switch">
                                                             <input type="checkbox" class="custom-control-input"
-                                                                   name="customSwitch1" id="customSwitch1" >
-                                                            <label class="custom-control-label" for="customSwitch1">¿Incluir
+                                                                   name="switchMessenger" id="switchMessenger" >
+                                                            <label class="custom-control-label" for="switchMessenger">¿Incluir
                                                                 Servicio
                                                                 de Mensajería?</label>
                                                         </div>
@@ -172,10 +172,10 @@
                                                         <label>Mensajeria</label>
                                                         <div class="custom-control custom-switch">
                                                             <input type="checkbox" class="custom-control-input"
-                                                                   name="customSwitch1"
+                                                                   name="switchMessenger"
                                                                    checked
-                                                                   id="customSwitch1">
-                                                            <label class="custom-control-label" for="customSwitch1">¿Incluir
+                                                                   id="switchMessenger">
+                                                            <label class="custom-control-label" for="switchMessenger">¿Incluir
                                                                 Servicio de Mensajería?</label>
                                                         </div>
 
