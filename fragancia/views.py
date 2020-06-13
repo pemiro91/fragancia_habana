@@ -323,6 +323,7 @@ def edit_user(request, id_user=None):
                     genero=genero
                 )
             user_custom.set_password(password1)
+            user_custom.save()
             return redirect('users')
         context = {'user': user}
         return render(request, 'fragancia/editar_usuario.html', context)

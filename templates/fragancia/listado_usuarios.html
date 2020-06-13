@@ -46,7 +46,11 @@
                                  <td>{{ user.username }}</td>
                                  <td>{{ user.email }}</td>
                                  <td>{{ user.telefono }}</td>
-                                 <td>{{ user.is_vendedor }}</td>
+                                 {% if user.is_vendedor %}
+                                     <td>Si</td>
+                                 {% else %}
+                                     <td>No</td>
+                                 {% endif %}
                                  <td>
                                      <a href="{% url 'assign_permissions' %}" title="Asignar otros permisos"><i  class="fas fa-fw fa-user-plus"></i></a>
                                      <a href="{% url 'edit_user' user.id %}" title="Modificar Usuario"><i class="fas fa-fw fa-edit"></i></a>
