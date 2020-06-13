@@ -25,18 +25,24 @@ TIPO_PERFUME = (
 )
 
 HORARIO_ENTREGA = (
-    ('8:00am-9:00am',   '8:00am-9:00am'),
-    ('9:00am-10:00am',  '9:00am-10:00am'),
+    ('8:00am-9:00am', '8:00am-9:00am'),
+    ('9:00am-10:00am', '9:00am-10:00am'),
     ('10:00am-11:00am', '10:00am-11:00am'),
-    ('11:00am-12:00m',  '11:00am-12:00m'),
-    ('12:00m-1:00pm',   '12:00m-1:00pm'),
-    ('1:00pm-2:00pm',   '1:00pm-2:00pm'),
-    ('2:00pm-3:00pm',   '2:00pm-3:00pm'),
-    ('3:00pm-4:00pm',   '3:00pm-4:00pm'),
-    ('4:00pm-5:00pm',   '4:00pm-5:00pm'),
-    ('5:00pm-6:00pm',   '5:00pm-6:00pm'),
-    ('6:00pm-7:00pm',   '6:00pm-7:00pm'),
-    ('7:00pm-8:00pm',   '7:00pm-8:00pm')
+    ('11:00am-12:00m', '11:00am-12:00m'),
+    ('12:00m-1:00pm', '12:00m-1:00pm'),
+    ('1:00pm-2:00pm', '1:00pm-2:00pm'),
+    ('2:00pm-3:00pm', '2:00pm-3:00pm'),
+    ('3:00pm-4:00pm', '3:00pm-4:00pm'),
+    ('4:00pm-5:00pm', '4:00pm-5:00pm'),
+    ('5:00pm-6:00pm', '5:00pm-6:00pm'),
+    ('6:00pm-7:00pm', '6:00pm-7:00pm'),
+    ('7:00pm-8:00pm', '7:00pm-8:00pm')
+)
+
+ESTADO_ENTREGA = (
+    ('Pendiente', 'Pendiente'),
+    ('Cancelado', 'Cancelado'),
+    ('Entregado', 'Entregado')
 )
 
 
@@ -68,36 +74,14 @@ class Product(models.Model):
     categoria = models.CharField(max_length=15, choices=CATEGORIA_PERFUME, name='categoria')
     tipo = models.CharField(max_length=30, choices=TIPO_PERFUME, name='tipo')
 
-    def __str__(self): return self.nombre
-
-    def remove_on_image_update(self):
-        try:
-            # is the object in the database yet?
-            obj = Product.objects.get(id=self.id)
-        except Product.DoesNotExist:
-            # object is not in db, nothing to worry about
-            return
-        # is the save due to an update of the actual image file?
-        if obj.imagen and self.imagen and obj.imagen != self.imagen:
-            # delete the old image file from the storage in favor of the new file
-            obj.imagen.delete()
-
-    def delete(self, *args, **kwargs):
-        # object is being removed from db, remove the file from storage first
-        self.imagen.delete()
-        return super(Product, self).delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        # object is possibly being updated, if so, clean up.
-        self.remove_on_image_update()
-        return super(Product, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.nombre
 
 
 class Reservation(models.Model):
     producto = models.ForeignKey(Product, on_delete=models.CASCADE, name='producto')
     cantidad_producto = models.IntegerField(name='cantidad_producto')
     fecha_reservacion = models.DateField(default=datetime.datetime.now, name='fecha_reservacion')
-    vendedor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, name='vendedor')
     nombre = models.CharField(max_length=50, name='nombre', null=True, blank=True)
     direccion = models.TextField(name='direccion', null=True, blank=True)
     telefono = models.CharField(max_length=10, name='telefono', null=True, blank=True)
@@ -106,3 +90,12 @@ class Reservation(models.Model):
                                        null=True, blank=True)
 
     def __str__(self): return str(self.producto)
+
+
+class Estado_Reservation(models.Model):
+    reservacion = models.ForeignKey(Reservation, on_delete=models.CASCADE, name='reservacion')
+    estado = models.CharField(max_length=50, choices=ESTADO_ENTREGA, name='estado')
+    fecha_estado = models.DateField()
+    vendedor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, name='vendedor')
+
+    def __str__(self): return str(self.reservacion)

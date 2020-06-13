@@ -28,9 +28,8 @@
                             <th>Cantidad</th>
                             <th>S.Mensajer&iacute;a</th>
                             <th>Fecha Reserva</th>
-                            <th>Precio(CUC)</th>
-                            <th>Tipo</th>
-                            <th>Capacidad(ml)</th>
+                            <th>Estado</th>
+                            <th>Fecha Cambio Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -39,39 +38,45 @@
                             <th>Nombre</th>
                             <th>Cantidad</th>
                             <th>S.Mensajer&iacute;a</th>
-                             <th>Fecha Reserva</th>
-                            <th>Precio(CUC)</th>
-                            <th>Tipo</th>
-                            <th>Capacidad(ml)</th>
+                            <th>Fecha Reserva</th>
+                            <th>Estado</th>
+                            <th>Fecha Cambio Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         {% for reservation in list_reservations  %}
                             <tr>
-                                <td>{{ reservation.producto.nombre }}</td>
-                                <td>{{ reservation.cantidad_producto }}</td>
-                                {% if reservation.nombre != "" %}
+                                <td>{{ reservation.reservacion.producto.nombre }}</td>
+                                <td>{{ reservation.reservacion.cantidad_producto }}</td>
+                                {% if reservation.reservacion.nombre != "" %}
                                     <td>Si</td>
                                 {% else %}
                                     <td>No</td>
                                 {% endif %}
-                                <td>{{ reservation.fecha_reservacion }}</td>
-                                <td>{{ reservation.producto.precio }}</td>
-                                <td>{{ reservation.producto.tipo }}</td>
-                                <td>{{ reservation.producto.capacidad }}</td>
+                                <td>{{ reservation.reservacion.fecha_reservacion }}</td>
+                                {% if reservation.estado == 'Pendiente' %}
+                                    <td><span class="badge badge-warning">{{ reservation.estado }}</span></td>
+                                {% elif reservation.estado == 'Cancelado' %}
+                                    <td><span class="badge badge-danger">{{ reservation.estado }}</span></td>
+                                {% else %}
+                                    <td><span class="badge badge-success">{{ reservation.estado }}</span></td>
+                                {% endif %}
+                                <td>{{ reservation.fecha_estado }}</td>
                                 <td>
-                                   <a href="/edit_reservation/{{ reservation.id }}" title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
-                                   <a href="#" data-href="/delete_reservation/{{ reservation.id }}" data-toggle="modal"
-                                    class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
-                                    data-target="#confirm-delete">
-                                     <i class="fas fa-fw fa-trash-alt"></i>
-                                 </a>
+                                   <a href="{% url 'change_state_reservation_init' reservation.id %}"
+                                      title="Cambiar estado reservacion"><i class="fas fa-fw fa-bell"></i></a>
+
+                                   <a href="{% url 'edit_reservation' reservation.id %}" title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
+                                   <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
+                                      data-toggle="modal"
+                                        class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
+                                        data-target="#confirm-delete">
+                                         <i class="fas fa-fw fa-trash-alt"></i>
+                                     </a>
                                 </td>
                             </tr>
                         {% endfor %}
-
-
                     </tbody>
                 </table>
             </div>
@@ -99,6 +104,49 @@
       </div>
     </div>
 
+    <div class="modal fade" id="change-state" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="item_update_form" class="form" role="form" method="post"
+                  action='/change_state_reservation/{{ reservation.id }}'>{% csrf_token %}
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Estados de la reservaci&oacute;n {{ item.id }}</h5>
+              </div>
+                  <div class="modal-body">
+                      <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="RadioPendiente"
+                                   name="state_reservation"
+                                   value="Pendiente"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="RadioPendiente">Pendiente</label>
+
+                        </div>
+                      <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="RadioCancelado" name="state_reservation"
+                                   value="Cancelado"
+                                   class="custom-control-input">
+                            <label class="custom-control-label"
+                                   for="RadioCancelado">Cancelado</label>
+                        </div>
+                      <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="RadioEntregado" name="state_reservation"
+                                   value="Entregado"
+                                   class="custom-control-input">
+                            <label class="custom-control-label"
+                                   for="RadioEntregado">Entregado</label>
+                        </div>
+                  </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+           </form>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}
 
 {% block plugin_section %}
@@ -106,6 +154,9 @@
     <!-- Page level plugins -->
     <script src="{% static 'fragancia/vendor/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'fragancia/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    <!-- You can alternatively load the minified version -->
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
     <!-- Page level custom scripts -->
     <script>
         $(document).ready(function () {
@@ -118,5 +169,38 @@
             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
     </script>
+    <script>
+        $('#change-state').on('show.bs.modal', function(e) {
+            var button = $(e.relatedTarget);
+            $('input[name="state_reservation"]:checked').prop('checked', false);
+            var ID = button.data('id');
+            $('input[name="state_reservation"][value="'+ID+'"]').prop('checked',true);
+
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".update").click(function () {
+                url = '/report/phone/update/' + $(this).attr('data-pk')
+                $.ajax({
+                    type: "POST",
+                    url: url
+                }).done(function (data, textStatus, jqXHR) {
+                    $("#update").find('.modal-body').children().html(data);
+                    $("#form_update").attr('action', url);
+                    $("input:not([type=submit], [type=reset], [type=file]),select, textarea, .diferente").addClass("form-control");
+                    $('select[name=owner], [name=area]').select2();
+                    $('span [id=select2-id_owner-container]').html('----------------------  Selecione  ----------------------').css('width', '354px');
+                    $('span [id=select2-id_area-container]').html('----------------------  Selecione  ----------------------').css('width', '354px');
+                    $("#update").modal('show');
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                });
+            });
+        })
+    </script>
+
 {% endblock %}
 

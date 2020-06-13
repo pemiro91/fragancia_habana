@@ -1,0 +1,88 @@
+{% extends "fragancia/base.html" %}
+{% load static %}
+{% block header_style %}
+
+
+    <link href="{% static 'fragancia/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block header_content %}
+    <h1 class="h5 mb-0 text-gray-800">Cambiar Estado de la Reservaci&oacute;n</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'reservations' %}">Reservaciones</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cambiar Estado</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="col-lg-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary"></h6>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class="col-xl-6 col-lg-8 col-md-5">
+                        <div class="card mb-8">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6  id="titulo_tablas_formularios"
+                                    class="m-0 font-weight-bold text-secondary">{{ reservation.reservacion.producto.nombre }}</h6>
+                            </div>
+                            <div class="card-body">
+                                <form method="post" class="justify-content-center"
+                                      action="{% url 'change_state_reservation' reservation.reservacion.id %}" >{% csrf_token %}
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="RadioPendiente"
+                                               name="state_reservation"
+                                               value="Pendiente"
+                                               {% if reservation.estado == 'Pendiente'%} checked{% endif %}
+                                               class="custom-control-input">
+                                        <label class="custom-control-label" for="RadioPendiente">Pendiente</label>
+
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="RadioCancelado" name="state_reservation"
+                                               value="Cancelado"
+                                               {% if reservation.estado == 'Cancelado'%} checked{% endif %}
+                                               class="custom-control-input">
+                                        <label class="custom-control-label"
+                                               for="RadioCancelado">Cancelado</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="RadioEntregado" name="state_reservation"
+                                               value="Entregado"
+                                               {% if reservation.estado == 'Entregado'%} checked{% endif %}
+                                               class="custom-control-input">
+                                        <label class="custom-control-label"
+                                               for="RadioEntregado">Entregado</label>
+                                    </div>
+                                    <br><br>
+                                    <div class="form-group row">
+                                        <div class="col-sm-10">
+                                            <button type="submit" id="boton_formularios" class="btn btn-primary">
+                                                Cambiar estado
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block plugin_section %}
+    <!-- Page level plugins -->
+    <script src="{% static 'fragancia/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'fragancia/vendor/datatables/dataTables.bootstrap4.min.css' %}"></script>
+
+
+{% endblock %}
+
