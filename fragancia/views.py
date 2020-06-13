@@ -239,11 +239,93 @@ def change_password(request):
 
 def add_user(request):
     if request.user.is_authenticated:
+        if request.method == "POST":
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            genero = request.POST.get('genero')
+            user_name = request.POST.get('user_name')
+            tipo_perfil = request.POST.get('tipo_perfil')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            if password1 != password2:
+                error = "Las Contraseñas No Coinciden."
+                return render(request, "fragancia/agregar_usuario.html", {'error': error})
+            else:
+                if tipo_perfil == 'vendedor':
+                    User.objects.create_user(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        password=password1,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=True,
+                        is_administrador=False,
+                        genero=genero
+                    )
+                else:
+                    User.objects.create_user(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        password=password1,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=False,
+                        is_administrador=True,
+                        genero=genero
+                    )
+                return redirect('users')
         # usuario = User.objects.get(pk=2)
         change_user = Permission.objects.get(codename='change_user')
         # permis = usuario.user_permissions.add(change_user)
         context = {}
         return render(request, 'fragancia/agregar_usuario.html', context)
+    return redirect('login')
+
+
+def edit_user(request, id_user=None):
+    if request.user.is_authenticated:
+        user = get_object_or_404(User, id=id_user)
+        if request.method == 'POST':
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            genero = request.POST.get('genero')
+            user_name = request.POST.get('user_name')
+            tipo_perfil = request.POST.get('tipo_perfil')
+            password1 = request.POST.get('password1')
+            user_custom = User.objects.get(id=id_user)
+            if tipo_perfil == 'vendedor':
+                User.objects.filter(id=id_user).update(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    telefono=phone,
+                    username=user_name,
+                    is_vendedor=True,
+                    is_administrador=False,
+                    genero=genero
+                )
+
+            else:
+                User.objects.filter(pk=id_user).update(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    telefono=phone,
+                    username=user_name,
+                    is_vendedor=False,
+                    is_administrador=True,
+                    genero=genero
+                )
+            user_custom.set_password(password1)
+            return redirect('users')
+        context = {'user': user}
+        return render(request, 'fragancia/editar_usuario.html', context)
     return redirect('login')
 
 

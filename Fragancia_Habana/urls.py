@@ -39,6 +39,7 @@ urlpatterns = [
     path('change_password', views.change_password, name="change_password"),
     path('assign_permissions', views.assign_permissions, name="assign_permissions"),
     path('add_user', views.add_user, name="add_user"),
+    path('edit_user/<int:id_user>', views.edit_user, name="edit_user"),
     path('delete_user/<int:id_user>', views.delete_user, name="delete_user"),
 
     # Gestionar Productos

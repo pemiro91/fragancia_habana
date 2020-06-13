@@ -1,0 +1,1 @@
+web: gunicorn Fragancia_Habana.wsgi --log-file -

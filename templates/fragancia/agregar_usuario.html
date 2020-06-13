@@ -9,7 +9,7 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Agregar Usuario</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Principal</a></li>
         <li class="breadcrumb-item active"><a href="{% url 'users' %}">Usuarios</a></li>
         <li class="breadcrumb-item active" aria-current="page">Agregar Usuario</li>
     </ol>
@@ -25,87 +25,127 @@
                     <div class="col-xl-6 col-lg-8 col-md-5">
                         <div class="card mb-8">
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6  id="titulo_tablas_formularios"
+                                <h6 id="titulo_tablas_formularios"
                                     class="m-0 font-weight-bold text-secondary">Agregar Usuario</h6>
                             </div>
                             <div class="card-body">
-                                <form>
-                                    <div class="form-group row">
-                                        <label for="inputNombre" class="col-sm-3 col-form-label">Usuario </label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="inputNombre">
-                                        </div>
-                                    </div>
+                                <form role="form" method="post">{% csrf_token %}
 
-                                    <div class="form-group row">
-                                        <label for="inputTipo" class="col-sm-3 col-form-label">Perfil</label>
-                                        <div class="col-sm-9">
-                                            <select id="inputTipo" class="form-control">
-                                                <option value="vendedor">Vendedor</option>
-                                                <option value="administrador">Administrador</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <fieldset class="form-group">
-                                        <div class="row">
-                                            <label class="col-form-label col-sm-3 pt-0">Género</label>
-                                            <div class="col-sm-9">
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="RadioMujer" name="customRadio"
-                                                           class="custom-control-input">
-                                                    <label class="custom-control-label" for="RadioMujer">Mujer</label>
-                                                </div>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="RadioHombre" checked="checked" name="customRadio"
-                                                           class="custom-control-input">
-                                                    <label class="custom-control-label" for="RadioHombre">Hombre</label>
-                                                </div>
+                                    <div class="tab-content py-4">
+                                        <div class="tab-pane active" id="datos_personales">
 
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Nombre(s)</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="first_name" placeholder="Esteban">
+
+                                                </div>
                                             </div>
-                                        </div>
-                                    </fieldset>
-{#                                    {% if 'fragancia' in perms %}#}
-{#                                        {% if 'fragancia.view_product' in perms %}#}
-{#                                            <p>In lookup works, too.</p>#}
-{#                                        {% endif %}#}
-{#                                    {% endif %}#}
-{#                                    {{ permis }}#}
-{#                                    {% for per in permis %}#}
-{#                                        <p>{{ per }}</p>#}
-{#                                    {% endfor %}#}
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Apellidos</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="last_name" placeholder="Martinez Diaz">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Correo*</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="email" name="email"
+                                                           required placeholder="esteban@example.com">
+                                                    <div class="invalid-feedback">
+                                                        Por favor, rellene el campo.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Teléfono</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="phone"
+                                                           maxlength="8" placeholder="55555555">
+                                                </div>
+                                            </div>
 
-{#                                    <div class="form-group row">#}
-{#                                        <div class="col-sm-3">Imagen </div>#}
-{#                                        <div class="col-sm-9">#}
-{#                                            <div class="custom-control custom-file">#}
-{#                                                <input type="file"  class="custom-file-input" id="customFile">#}
-{#                                                <label class="custom-file-label" for="customFile">Seleccione archivo</label>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{##}
-{#                                    </div>#}
-                                    <div class="form-group row">
-                                        <label for="idpassword" class="col-sm-3 col-form-label">Contraseña</label>
-                                        <div class="col-sm-8">
-                                            <input type="password" class="form-control" id="idpassword">
+                                            <div class="form-group row">
+                                                <label for="inputGenero" class="col-sm-3 col-form-label">Género</label>
+                                                <div class="col-sm-9">
+                                                    <select id="inputGenero" name="genero" class="form-control">
+                                                        <option value="Mujer">Mujer</option>
+                                                        <option value="Hombre">Hombre</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                         </div>
+                                        <div class="tab-pane active" id="datos_perfil">
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Usuario
+                                                    *</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="user_name"
+                                                           required placeholder="esteban">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <legend class="col-form-label col-sm-3 pt-0">Tipo</legend>
+                                                <div class="col-sm-9">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="RadioVendedor" name="tipo_perfil"
+                                                               checked="checked"
+                                                               value="vendedor"
+                                                               class="custom-control-input">
+                                                        <label class="custom-control-label"
+                                                               for="RadioVendedor">Vendedor</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="RadioAdministardor"
+                                                               name="tipo_perfil"
+                                                               value="admin"
+                                                               class="custom-control-input">
+                                                        <label class="custom-control-label"
+                                                               for="RadioAdministardor">Administrador</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Contraseña
+                                                    *</label>
+                                                <div class="col-lg-9">
+
+                                                    <input class="form-control" type="password" name="password1"
+                                                           required placeholder="especifique contraseña">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Confirmar
+                                                    Contraseña *</label>
+                                                <div class="col-lg-9">
+
+                                                    <input class="form-control" type="password" name="password2"
+                                                            required placeholder="especifique contraseña">
+
+                                                </div>
+                                            </div>
+
+                                            {% if error %}
+                                                <div class="col-lg-9">
+                                                    <div class="alert alert-danger">
+                                                        {{ error }}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                        </div>
+
 
                                     </div>
-
-{#                                    <div class="form-group row">#}
-{#                                        <div class="col-sm-3">Checkbox</div>#}
-{#                                        <div class="col-sm-9">#}
-{#                                            <div class="custom-control custom-checkbox">#}
-{#                                                <input type="checkbox" class="custom-control-input" id="customCheck1">#}
-{#                                                <label class="custom-control-label" for="customCheck1">Check this custom#}
-{#                                                    checkbox</label>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-
                                     <div class="form-group row">
-                                        <div class="col-sm-10">
-                                            <button type="submit" id="boton_formularios" class="btn btn-primary">Agregar Producto</button>
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <button style="margin-left: 10%" type="submit"
+                                                    id="boton_formularios" class="btn btn-primary">Agregar Usuario
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
