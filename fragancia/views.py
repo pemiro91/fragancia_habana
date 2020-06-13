@@ -189,8 +189,11 @@ def delete_product(request, id_product):
 # -------------- Gestionar usuarios--------------#
 
 def users(request):
-    context = {}
-    return render(request, 'fragancia/listado_usuarios.html', context)
+    if request.user.is_authenticated:
+        list_users = User.objects.all().exclude(is_superuser=True)
+        context = {'list_users': list_users}
+        return render(request, 'fragancia/listado_usuarios.html', context)
+    return redirect('login')
 
 
 def user_profile(request):
@@ -235,11 +238,21 @@ def change_password(request):
 
 
 def add_user(request):
-    usuario = User.objects.get(pk=2)
-    change_user = Permission.objects.get(codename='change_user')
-    permis = usuario.user_permissions.add(change_user)
-    context = {'permis': permis}
-    return render(request, 'fragancia/agregar_usuario.html', context)
+    if request.user.is_authenticated:
+        # usuario = User.objects.get(pk=2)
+        change_user = Permission.objects.get(codename='change_user')
+        # permis = usuario.user_permissions.add(change_user)
+        context = {}
+        return render(request, 'fragancia/agregar_usuario.html', context)
+    return redirect('login')
+
+
+def delete_user(request, id_user):
+    if request.user.is_authenticated:
+        p = User.objects.get(id=id_user)
+        p.delete()
+        return redirect('users')
+    return redirect('login')
 
 
 # -------------- Asignar otros permisos--------------#
