@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fragancia.apps.FraganciaConfig',
     'graphene_django',
-    'graphene_pacho.apps.GraphenePachoConfig',
+    'gra_pacho.apps.GraphenePachoConfig',
     'bootstrap_modal_forms',
 ]
 
@@ -132,7 +132,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 AUTH_USER_MODEL = 'fragancia.User'
 
 GRAPHENE = {
-    'SCHEMA': 'graphene_pacho.schema.schema',
+    'SCHEMA': 'gra_pacho.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
