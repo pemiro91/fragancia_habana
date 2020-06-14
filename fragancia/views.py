@@ -433,9 +433,6 @@ def edit_reservation(request, id_reservation=None):
 def delete_reservation(request, id_reservation):
     if request.user.is_authenticated:
         r = Reservation.objects.get(id=id_reservation)
-        product = Product.objects.get(pk=r.producto.id)
-        value_real = product.cantidad_disponible + int(r.cantidad_producto)
-        Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
         r.delete()
         return redirect('reservations')
     return redirect('login')
@@ -458,5 +455,11 @@ def change_state_reservation(request, id_reservation):
             estado=state_reservation,
             fecha_estado=datetime.now()
         )
+        if state_reservation == 'Cancelado':
+            r = Reservation.objects.get(id=id_reservation)
+            product = Product.objects.get(pk=r.producto.id)
+            value_real = product.cantidad_disponible + int(r.cantidad_producto)
+            Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
+
         return redirect('reservations')
     return redirect('login')
