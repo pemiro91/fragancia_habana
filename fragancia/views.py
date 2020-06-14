@@ -310,7 +310,6 @@ def edit_user(request, id_user=None):
                     is_administrador=False,
                     genero=genero
                 )
-
             else:
                 User.objects.filter(pk=id_user).update(
                     first_name=first_name,
