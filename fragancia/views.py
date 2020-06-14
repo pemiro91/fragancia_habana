@@ -1,4 +1,6 @@
+import logging
 import os
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -10,11 +12,8 @@ from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from datetime import datetime
 
 from fragancia.models import Product, Reservation, User, Estado_Reservation
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +55,46 @@ def base(request):
 @login_required(login_url='login')
 def index(request):
     if request.user.is_authenticated:
-        return render(request, "fragancia/index.html")
+        productos = Product.objects.all()
+        cant_prod = len(productos)
+        cant_prod_disp = 0
+        vendedores = User.objects.filter(is_vendedor=True)
+        cant_vendedores: int = len(vendedores)
+        estado_reservaciones = Estado_Reservation.objects.all()
+        cant_reservaciones: int = len(estado_reservaciones)
+        reservaciones_ordenadas = Estado_Reservation.objects.order_by('-fecha_estado')[:5]
+        cant_res_ord = len(reservaciones_ordenadas)
+        reservaciones_pendientes = []
+        reservaciones_entregadas = []
+        reservaciones_canceladas = []
+        if productos:
+            for p in productos:
+                cant_prod_disp += p.cantidad_disponible
+        if estado_reservaciones:
+            for r in estado_reservaciones:
+                if r.estado == 'Pendiente':
+                    reservacion = get_object_or_404(Reservation, pk=r.id)
+                    reservaciones_pendientes.append(reservacion)
+                elif r.estado == 'Entregado':
+                    reservacion = get_object_or_404(Reservation, pk=r.id)
+                    reservaciones_entregadas.append(reservacion)
+                else:
+                    reservacion = get_object_or_404(Reservation, pk=r.id)
+                    reservaciones_canceladas.append(reservacion)
+
+        cant_reserv_pend = len(reservaciones_pendientes)
+        cant_reserv_entreg = len(reservaciones_entregadas)
+        cant_reserv_canc = len(reservaciones_canceladas)
+
+        return render(request, "fragancia/index.html", {'cant_prod_sistema': cant_prod,
+                                                        'cant_reserv_pend': cant_reserv_pend,
+                                                        'cant_reserv_entreg': cant_reserv_entreg,
+                                                        'cant_reserv_canc': cant_reserv_canc,
+                                                        'cant_vendedores': cant_vendedores,
+                                                        'cant_prod_disp':cant_prod_disp,
+                                                        'cant_reservaciones':cant_reservaciones,
+                                                        'reservaciones_ordenadas':reservaciones_ordenadas,
+                                                        'cant_res_ord':cant_res_ord})
     return redirect('login')
 
 
