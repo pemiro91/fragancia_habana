@@ -85,16 +85,12 @@ def index(request):
         cant_reserv_pend = len(reservaciones_pendientes)
         cant_reserv_entreg = len(reservaciones_entregadas)
         cant_reserv_canc = len(reservaciones_canceladas)
-
-        return render(request, "fragancia/index.html", {'cant_prod_sistema': cant_prod,
-                                                        'cant_reserv_pend': cant_reserv_pend,
-                                                        'cant_reserv_entreg': cant_reserv_entreg,
-                                                        'cant_reserv_canc': cant_reserv_canc,
-                                                        'cant_vendedores': cant_vendedores,
-                                                        'cant_prod_disp':cant_prod_disp,
-                                                        'cant_reservaciones':cant_reservaciones,
-                                                        'reservaciones_ordenadas':reservaciones_ordenadas,
-                                                        'cant_res_ord':cant_res_ord})
+        context = {'cant_prod_sistema': cant_prod, 'cant_reserv_pend': cant_reserv_pend,
+                   'cant_reserv_entreg': cant_reserv_entreg, 'cant_reserv_canc': cant_reserv_canc,
+                   'cant_vendedores': cant_vendedores, 'cant_prod_disp': cant_prod_disp,
+                   'cant_reservaciones': cant_reservaciones, 'reservaciones_ordenadas': reservaciones_ordenadas,
+                   'cant_res_ord': cant_res_ord}
+        return render(request, "fragancia/index.html", context)
     return redirect('login')
 
 

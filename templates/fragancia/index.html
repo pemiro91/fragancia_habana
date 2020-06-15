@@ -1,4 +1,5 @@
 {% extends "fragancia/base.html" %}
+{% load static %}
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Estadísticas</h1>
     <ol class="breadcrumb">
@@ -62,12 +63,12 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800">{{ cant_reserv_pend }}</div>
                         <div class="mt-2 mb-0 text-muted text-xs">
                             <span>de</span>
-                            <span class="text-danger mr-2"><i class="fas fa-shopping-cart"></i> {{ cant_reservaciones }}</span>
+                            <span class="text-warning mr-2"><i class="fas fa-shopping-cart"></i> {{ cant_reservaciones }}</span>
                             <span>Reservaciones</span>
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-shopping-cart fa-2x text-danger"></i>
+                        <i class="fas fa-shopping-cart fa-2x text-warning"></i>
                     </div>
                 </div>
             </div>
@@ -83,13 +84,13 @@
                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ cant_reserv_canc }}</div>
                         <div class="mt-2 mb-0 text-muted text-xs">
                             <span>de </span>
-                            <span class="text-warning mr-2"><i
+                            <span class="text-danger mr-2"><i
                                     class="fa fa-cart-plus"></i> {{ cant_reservaciones }}</span>
                             <span>Reservaciones</span>
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-shopping-cart fa-2x text-warning"></i>
+                        <i class="fas fa-shopping-cart fa-2x text-danger"></i>
                     </div>
                 </div>
             </div>
@@ -188,40 +189,52 @@
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                     <tr>
-                        <th>Producto</th>
-                        <th>Realizada Por</th>
-                        <th>Mesajeria</th>
-                        <th>Fecha de Reservacion</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>S.Mensajer&iacute;a</th>
+                        <th>Fecha Reserva</th>
                         <th>Estado</th>
-                        {#                        <th>Acción</th>#}
+                        <th>Fecha Cambio Estado</th>
+                        {% if request.user.is_administrador or request.user.is_superuser %}
+                            <th>Vendedor</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
                     {% if reservaciones_ordenadas %}
                         {% for r in reservaciones_ordenadas %}
                             <tr>
-                                <td><a id="links"
-                                       href="catalogue/{{ r.reservacion.producto.id }}">{{ r.reservacion.producto }}</a>
-                                </td>
-                                <td>{{ r.vendedor.nombre }}</td>
-                                {% ifnotequal r.reservacion.direccion '' %}
-                                    <td>Si tiene</td>
-                                {% endifnotequal %}
-                                {% ifequal r.reservacion.direccion '' %}
-                                    <td>No tiene</td>
-                                {% endifequal %}
+                                <td>{{ r.reservacion.producto.nombre }}</td>
+                                <td>{{ r.reservacion.cantidad_producto }}</td>
+                                {% if r.reservacion.nombre != "" %}
+                                    <td>
+                                        <a href="#addBookDialog" data-href="#addBookDialog"
+                                          data-toggle="modal"
+                                            class="open-AddBookDialog" title="Servicio mensajeria"
+                                           data-name="{{ r.reservacion.nombre }}"
+                                           data-phone="{{ r.reservacion.telefono }}"
+                                           data-address="{{ r.reservacion.direccion }}"
+                                           data-date="{{ r.reservacion.fecha_entrega }}"
+                                           data-time="{{ r.reservacion.horario_entrega }}"
+                                            data-target="#addBookDialog">
+                                             <i class="fas fa-comment"></i>
+                                         </a>
+                                    </td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
                                 <td>{{ r.reservacion.fecha_reservacion }}</td>
-
-                                <td>
-                                    {% if r.estado == 'Pendiente' %}
-                                        <span class="badge badge-danger">{{ r.estado }}</span>
-                                    {% elif r.estado == 'Entregado' %}
-                                        <span class="badge badge-success">{{ r.estado }}</span>
-                                    {% else %}
-                                        <span class="badge badge-warning">{{ r.estado }}</span>
-                                    {% endif %}
-                                </td>
-                                {#                        <td><a href="#" class="btn btn-sm btn-primary">Detalles</a></td>#}
+                                {% if r.estado == 'Pendiente' %}
+                                    <td><span class="badge badge-warning">{{ r.estado }}</span></td>
+                                {% elif r.estado == 'Cancelado' %}
+                                    <td><span class="badge badge-danger">{{ r.estado }}</span></td>
+                                {% else %}
+                                    <td><span class="badge badge-success">{{ r.estado }}</span></td>
+                                {% endif %}
+                                <td>{{ r.fecha_estado }}</td>
+                                {% if request.user.is_administrador or request.user.is_superuser %}
+                                    <td>{{ r.vendedor.username }}</td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     {% endif %}
@@ -233,7 +246,90 @@
             <div class="card-footer"></div>
         </div>
     </div>
+     <div class="modal fade" id="addBookDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Servicio de mensajeria</h5>
+{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#              <span aria-hidden="true">&times;</span>#}
+{#            </button>#}
+          </div>
+            <div class="modal-body">
+
+                <div class="form-group row">
+                    <label for="pNombre" class="col-sm-5 col-form-label">Nombre(s) </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pNombre"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pTelefono" class="col-sm-5 col-form-label">Telefono </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pTelefono"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pDireccion"
+                           class="col-sm-5 col-form-label">Dirección </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pDireccion"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pFechaEntrega"
+                           class="col-sm-5 col-form-label">Fecha entrega </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pFechaEntrega"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pHorarioEntrega"
+                           class="col-sm-5 col-form-label">Horario </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pHorarioEntrega"></p>
+                    </div>
+
+                </div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
 {% endblock %}
+{% block plugin_section %}
+
+    <!-- Page level plugins -->
+    <script src="{% static 'fragancia/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'fragancia/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    <!-- You can alternatively load the minified version -->
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+    <!-- Page level custom scripts -->
+    <script>
+        $(document).ready(function () {
+            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+    <script>
+        $(document).on("click", ".open-AddBookDialog", function () {
+             var smName = $(this).data('name');
+             var smPhone = $(this).data('phone');
+             var smAddress = $(this).data('address');
+             var smDate = $(this).data('date');
+             var smTime = $(this).data('time');
+             $(".modal-body #pNombre").text( smName );
+             $(".modal-body #pTelefono").text( smPhone );
+             $(".modal-body #pDireccion").text( smAddress );
+             $(".modal-body #pFechaEntrega").text( smDate );
+             $(".modal-body #pHorarioEntrega").text( smTime );
+        });
+    </script>
+
+{% endblock %}
+
