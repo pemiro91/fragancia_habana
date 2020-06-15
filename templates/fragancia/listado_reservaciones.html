@@ -30,6 +30,9 @@
                             <th>Fecha Reserva</th>
                             <th>Estado</th>
                             <th>Fecha Cambio Estado</th>
+                            {% if request.user.is_administrador or request.user.is_superuser %}
+                                <th>Vendedor</th>
+                            {% endif %}
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -41,6 +44,7 @@
                             <th>Fecha Reserva</th>
                             <th>Estado</th>
                             <th>Fecha Cambio Estado</th>
+                            <th>Vendedor</th>
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
@@ -50,9 +54,21 @@
                                 <td>{{ reservation.reservacion.producto.nombre }}</td>
                                 <td>{{ reservation.reservacion.cantidad_producto }}</td>
                                 {% if reservation.reservacion.nombre != "" %}
-                                    <td>Si</td>
+                                    <td>
+                                        <a href="#addBookDialog" data-href="#addBookDialog"
+                                          data-toggle="modal"
+                                            class="open-AddBookDialog" title="Servicio mensajeria"
+                                           data-name="{{ reservation.reservacion.nombre }}"
+                                           data-phone="{{ reservation.reservacion.telefono }}"
+                                           data-address="{{ reservation.reservacion.direccion }}"
+                                           data-date="{{ reservation.reservacion.fecha_entrega }}"
+                                           data-time="{{ reservation.reservacion.horario_entrega }}"
+                                            data-target="#addBookDialog">
+                                             <i class="fas fa-comment"></i>
+                                         </a>
+                                    </td>
                                 {% else %}
-                                    <td>No</td>
+                                    <td></td>
                                 {% endif %}
                                 <td>{{ reservation.reservacion.fecha_reservacion }}</td>
                                 {% if reservation.estado == 'Pendiente' %}
@@ -63,17 +79,25 @@
                                     <td><span class="badge badge-success">{{ reservation.estado }}</span></td>
                                 {% endif %}
                                 <td>{{ reservation.fecha_estado }}</td>
-                                <td>
-                                   <a href="{% url 'change_state_reservation_init' reservation.id %}"
-                                      title="Cambiar estado reservacion"><i class="fas fa-fw fa-bell"></i></a>
+                                {% if request.user.is_administrador or request.user.is_superuser %}
+                                    <td>{{ reservation.vendedor.username }}</td>
+                                {% endif %}
 
-                                   <a href="{% url 'edit_reservation' reservation.id %}" title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
-                                   <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
-                                      data-toggle="modal"
-                                        class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
-                                        data-target="#confirm-delete">
-                                         <i class="fas fa-fw fa-trash-alt"></i>
-                                     </a>
+                                <td>
+                                    {% if reservation.estado == 'Pendiente' %}
+                                        <a href="{% url 'change_state_reservation_init' reservation.id %}"
+                                           title="Cambiar estado reservacion"><i class="fas fa-fw fa-bell"></i></a>
+                                        <a href="{% url 'edit_reservation' reservation.id %}"
+                                           title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
+                                    {% endif %}
+                                   {% if reservation.estado == 'Cancelado' %}
+                                       <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
+                                          data-toggle="modal"
+                                            class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
+                                            data-target="#confirm-delete">
+                                             <i class="fas fa-fw fa-trash-alt"></i>
+                                       </a>
+                                   {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -147,6 +171,59 @@
       </div>
     </div>
 
+    <div class="modal fade" id="addBookDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Servicio de mensajeria</h5>
+{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#              <span aria-hidden="true">&times;</span>#}
+{#            </button>#}
+          </div>
+            <div class="modal-body">
+
+                <div class="form-group row">
+                    <label for="pNombre" class="col-sm-5 col-form-label">Nombre(s) </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pNombre"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pTelefono" class="col-sm-5 col-form-label">Telefono </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pTelefono"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pDireccion"
+                           class="col-sm-5 col-form-label">Dirección </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pDireccion"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pFechaEntrega"
+                           class="col-sm-5 col-form-label">Fecha entrega </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pFechaEntrega"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pHorarioEntrega"
+                           class="col-sm-5 col-form-label">Horario </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pHorarioEntrega"></p>
+                    </div>
+
+                </div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}
 
 {% block plugin_section %}
@@ -170,6 +247,21 @@
         });
     </script>
     <script>
+        $(document).on("click", ".open-AddBookDialog", function () {
+             var smName = $(this).data('name');
+             var smPhone = $(this).data('phone');
+             var smAddress = $(this).data('address');
+             var smDate = $(this).data('date');
+             var smTime = $(this).data('time');
+             $(".modal-body #pNombre").text( smName );
+             $(".modal-body #pTelefono").text( smPhone );
+             $(".modal-body #pDireccion").text( smAddress );
+             $(".modal-body #pFechaEntrega").text( smDate );
+             $(".modal-body #pHorarioEntrega").text( smTime );
+
+        });
+    </script>
+    <script>
         $('#change-state').on('show.bs.modal', function(e) {
             var button = $(e.relatedTarget);
             $('input[name="state_reservation"]:checked').prop('checked', false);
@@ -178,28 +270,6 @@
 
             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(".update").click(function () {
-                url = '/report/phone/update/' + $(this).attr('data-pk')
-                $.ajax({
-                    type: "POST",
-                    url: url
-                }).done(function (data, textStatus, jqXHR) {
-                    $("#update").find('.modal-body').children().html(data);
-                    $("#form_update").attr('action', url);
-                    $("input:not([type=submit], [type=reset], [type=file]),select, textarea, .diferente").addClass("form-control");
-                    $('select[name=owner], [name=area]').select2();
-                    $('span [id=select2-id_owner-container]').html('----------------------  Selecione  ----------------------').css('width', '354px');
-                    $('span [id=select2-id_area-container]').html('----------------------  Selecione  ----------------------').css('width', '354px');
-                    $("#update").modal('show');
-
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(errorThrown);
-                });
-            });
-        })
     </script>
 
 {% endblock %}
