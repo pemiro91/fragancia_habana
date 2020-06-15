@@ -1,6 +1,7 @@
 {% extends "fragancia/base.html" %}
+{% load static %}
 {% block header_content %}
-    <h1 class="h3 mb-0 text-gray-800">Estadísticas</h1>
+    <h1 class="h5 mb-0 text-gray-800">Estadísticas</h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="../../admin">Principal</a></li>
         <li class="breadcrumb-item active" aria-current="page">Estadísticas</li>
@@ -8,28 +9,28 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Pending Requests Card Example -->
+    <!-- Productos  -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-uppercase mb-1">Productos Disponibles</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">9</div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">Disponibles</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ cant_prod_disp }}</div>
                         <div class="mt-2 mb-0 text-muted text-xs">
-                                            <span class="text-danger mr-2"><i
-                                                    class="fas fa-arrow-down"></i> 1.10%</span>
-                            <span>Since yesterday</span>
+                                            <span class="text-info mr-2"><i
+                                                    class="fas fa-arrow-up"></i> {{ cant_prod_sistema }}</span>
+                            <span>Productos en el sistema</span>
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-atlas fa-2x text-warning"></i>
+                        <i class="fas fa-table fa-2x text-info"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Earnings (Monthly) Card Example -->
+    <!-- Entregas -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-body">
@@ -37,30 +38,55 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-uppercase mb-1">Entregas
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ cant_reserv_entreg }}</div>
                         <div class="mt-2 mb-0 text-muted text-xs">
-                            <span class="text-success mr-2"><i class="fa fa-cart-plus"></i> 3.48%</span>
-                            <span>Since last month</span>
+                            <span>de </span>
+                            <span class="text-success mr-2"><i
+                                    class="fa fa-cart-plus"></i> {{ cant_reservaciones }}</span>
+                            <span>Reservaciones</span>
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-calendar fa-2x text-success"></i>
+                        <i class="fas fa-shopping-cart fa-2x text-success"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Earnings (Annual) Card Example -->
+    <!-- Pendientes -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-uppercase mb-1">Pendientes</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">2</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ cant_reserv_pend }}</div>
                         <div class="mt-2 mb-0 text-muted text-xs">
-                            <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                            <span>Since last years</span>
+                            <span>de</span>
+                            <span class="text-warning mr-2"><i class="fas fa-shopping-cart"></i> {{ cant_reservaciones }}</span>
+                            <span>Reservaciones</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-shopping-cart fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Canceladas -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">Canceladas</div>
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ cant_reserv_canc }}</div>
+                        <div class="mt-2 mb-0 text-muted text-xs">
+                            <span>de </span>
+                            <span class="text-danger mr-2"><i
+                                    class="fa fa-cart-plus"></i> {{ cant_reservaciones }}</span>
+                            <span>Reservaciones</span>
                         </div>
                     </div>
                     <div class="col-auto">
@@ -70,169 +96,149 @@
             </div>
         </div>
     </div>
-    <!-- New User Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-uppercase mb-1">Vendedores</div>
-                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">3</div>
-                        <div class="mt-2 mb-0 text-muted text-xs">
-                            <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20.4%</span>
-                            <span>Since last month</span>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-users fa-2x text-info"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-{#    <!-- Productos mas vendidos -->#}
-{#    <div class="col-xl-4 col-lg-5">#}
-{#        <div class="card mb-4">#}
-{#            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
-{#                <h6 id="titulo_tablas_formularios" class="m-0 font-weight-bold text-primary" >Productos más vendidos</h6>#}
-{#                <div class="dropdown no-arrow">#}
-{#                    <a class="dropdown-toggle btn btn-primary btn-sm" href="#" role="button"#}
-{#                       id="dropdownMenuLink"#}
-{#                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#                        Meses <i class="fas fa-chevron-down"></i>#}
-{#                    </a>#}
-{#                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"#}
-{#                         aria-labelledby="dropdownMenuLink">#}
-{#                        <div class="dropdown-header">Seleccione Mes</div>#}
-{#                        <a class="dropdown-item" href="#">Enero</a>#}
-{#                        <a class="dropdown-item" href="#">Febrero</a>#}
-{#                        <a class="dropdown-item active" href="#">Marzo</a>#}
-{#                        <a class="dropdown-item" href="#">Abril</a>#}
-{#                        <a class="dropdown-item" href="#">Mayo</a>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="card-body">#}
-{#                <div class="mb-3">#}
-{#                    <div class="small text-gray-500">Perfume1#}
-{#                        <div class="small float-right"><b>600 of 800 Items</b></div>#}
-{#                    </div>#}
-{#                    <div class="progress" style="height: 12px;">#}
-{#                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%"#}
-{#                             aria-valuenow="80"#}
-{#                             aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="mb-3">#}
-{#                    <div class="small text-gray-500">Perfume 2#}
-{#                        <div class="small float-right"><b>500 of 800 Items</b></div>#}
-{#                    </div>#}
-{#                    <div class="progress" style="height: 12px;">#}
-{#                        <div class="progress-bar bg-success" role="progressbar" style="width: 70%"#}
-{#                             aria-valuenow="70"#}
-{#                             aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="mb-3">#}
-{#                    <div class="small text-gray-500">Perfume 3#}
-{#                        <div class="small float-right"><b>455 of 800 Items</b></div>#}
-{#                    </div>#}
-{#                    <div class="progress" style="height: 12px;">#}
-{#                        <div class="progress-bar bg-danger" role="progressbar" style="width: 55%"#}
-{#                             aria-valuenow="55"#}
-{#                             aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="mb-3">#}
-{#                    <div class="small text-gray-500">Perfume 4#}
-{#                        <div class="small float-right"><b>400 of 800 Items</b></div>#}
-{#                    </div>#}
-{#                    <div class="progress" style="height: 12px;">#}
-{#                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%"#}
-{#                             aria-valuenow="50"#}
-{#                             aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="mb-3">#}
-{#                    <div class="small text-gray-500">Perfume 5#}
-{#                        <div class="small float-right"><b>200 of 800 Items</b></div>#}
-{#                    </div>#}
-{#                    <div class="progress" style="height: 12px;">#}
-{#                        <div class="progress-bar bg-success" role="progressbar" style="width: 30%"#}
-{#                             aria-valuenow="30"#}
-{#                             aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="card-footer text-center">#}
-{#                <a class="m-0 small text-primary card-link" href="#">Mostrar Más <i#}
-{#                        class="fas fa-chevron-right"></i></a>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+    {#    <!-- Productos mas vendidos -->#}
+    {#    <div class="col-xl-4 col-lg-5">#}
+    {#        <div class="card mb-4">#}
+    {#            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
+    {#                <h6 id="titulo_tablas_formularios" class="m-0 font-weight-bold text-primary" >Productos más vendidos</h6>#}
+    {#                <div class="dropdown no-arrow">#}
+    {#                    <a class="dropdown-toggle btn btn-primary btn-sm" href="#" role="button"#}
+    {#                       id="dropdownMenuLink"#}
+    {#                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+    {#                        Meses <i class="fas fa-chevron-down"></i>#}
+    {#                    </a>#}
+    {#                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"#}
+    {#                         aria-labelledby="dropdownMenuLink">#}
+    {#                        <div class="dropdown-header">Seleccione Mes</div>#}
+    {#                        <a class="dropdown-item" href="#">Enero</a>#}
+    {#                        <a class="dropdown-item" href="#">Febrero</a>#}
+    {#                        <a class="dropdown-item active" href="#">Marzo</a>#}
+    {#                        <a class="dropdown-item" href="#">Abril</a>#}
+    {#                        <a class="dropdown-item" href="#">Mayo</a>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#            <div class="card-body">#}
+    {#                <div class="mb-3">#}
+    {#                    <div class="small text-gray-500">Perfume1#}
+    {#                        <div class="small float-right"><b>600 of 800 Items</b></div>#}
+    {#                    </div>#}
+    {#                    <div class="progress" style="height: 12px;">#}
+    {#                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%"#}
+    {#                             aria-valuenow="80"#}
+    {#                             aria-valuemin="0" aria-valuemax="100"></div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <div class="mb-3">#}
+    {#                    <div class="small text-gray-500">Perfume 2#}
+    {#                        <div class="small float-right"><b>500 of 800 Items</b></div>#}
+    {#                    </div>#}
+    {#                    <div class="progress" style="height: 12px;">#}
+    {#                        <div class="progress-bar bg-success" role="progressbar" style="width: 70%"#}
+    {#                             aria-valuenow="70"#}
+    {#                             aria-valuemin="0" aria-valuemax="100"></div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <div class="mb-3">#}
+    {#                    <div class="small text-gray-500">Perfume 3#}
+    {#                        <div class="small float-right"><b>455 of 800 Items</b></div>#}
+    {#                    </div>#}
+    {#                    <div class="progress" style="height: 12px;">#}
+    {#                        <div class="progress-bar bg-danger" role="progressbar" style="width: 55%"#}
+    {#                             aria-valuenow="55"#}
+    {#                             aria-valuemin="0" aria-valuemax="100"></div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <div class="mb-3">#}
+    {#                    <div class="small text-gray-500">Perfume 4#}
+    {#                        <div class="small float-right"><b>400 of 800 Items</b></div>#}
+    {#                    </div>#}
+    {#                    <div class="progress" style="height: 12px;">#}
+    {#                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%"#}
+    {#                             aria-valuenow="50"#}
+    {#                             aria-valuemin="0" aria-valuemax="100"></div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <div class="mb-3">#}
+    {#                    <div class="small text-gray-500">Perfume 5#}
+    {#                        <div class="small float-right"><b>200 of 800 Items</b></div>#}
+    {#                    </div>#}
+    {#                    <div class="progress" style="height: 12px;">#}
+    {#                        <div class="progress-bar bg-success" role="progressbar" style="width: 30%"#}
+    {#                             aria-valuenow="30"#}
+    {#                             aria-valuemin="0" aria-valuemax="100"></div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#            <div class="card-footer text-center">#}
+    {#                <a class="m-0 small text-primary card-link" href="#">Mostrar Más <i#}
+    {#                        class="fas fa-chevron-right"></i></a>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
     <!-- Area de Estado de las Reservaciones -->
     <div class="col-xl-12 col-lg-6 mb-4">
         <div class="card">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Últimas 5 Reservaciones</h6>
-{#                <a class="m-0 float-right btn btn-danger btn-sm" href="#">Mostrar Más <i#}
-{#                        class="fas fa-chevron-right"></i></a>#}
+                <h6 class="m-0 font-weight-bold text-secondary">Últimas 5 Reservaciones </h6>
+                {#                <a class="m-0 float-right btn btn-danger btn-sm" href="#">Mostrar Más <i#}
+                {#                        class="fas fa-chevron-right"></i></a>#}
             </div>
             <div class="table-responsive">
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                     <tr>
-                        <th>Producto</th>
-                        <th>Realizada Por</th>
-                        <th>Mesajeria</th>
-                        <th>Fecha</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>S.Mensajer&iacute;a</th>
+                        <th>Fecha Reserva</th>
                         <th>Estado</th>
-{#                        <th>Acción</th>#}
+                        <th>Fecha Cambio Estado</th>
+                        {% if request.user.is_administrador or request.user.is_superuser %}
+                            <th>Vendedor</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Producto 4</td>
-                        <td>Jose Victor</td>
-                        <td>Si</td>
-                        <td>05/06/2020</td>
-                        <td><span class="badge badge-danger">Pendiente</span></td>
-{#                        <td><a href="#" class="btn btn-sm btn-primary">Detalles</a></td>#}
-                    </tr>
-                    <tr>
-                        <td>Producto 5</td>
-                        <td>Felipe</td>
-                        <td>Si</td>
-                        <td>04/06/2020</td>
-                        <td><span class="badge badge-danger">Pendiente</span></td>
-{#                        <td><a href="#" class="btn btn-sm btn-primary">Detalles</a></td>#}
-                    </tr>
+                    {% if reservaciones_ordenadas %}
+                        {% for r in reservaciones_ordenadas %}
+                            <tr>
+                                <td>{{ r.reservacion.producto.nombre }}</td>
+                                <td>{{ r.reservacion.cantidad_producto }}</td>
+                                {% if r.reservacion.nombre != "" %}
+                                    <td>
+                                        <a href="#addBookDialog" data-href="#addBookDialog"
+                                          data-toggle="modal"
+                                            class="open-AddBookDialog" title="Servicio mensajeria"
+                                           data-name="{{ r.reservacion.nombre }}"
+                                           data-phone="{{ r.reservacion.telefono }}"
+                                           data-address="{{ r.reservacion.direccion }}"
+                                           data-date="{{ r.reservacion.fecha_entrega }}"
+                                           data-time="{{ r.reservacion.horario_entrega }}"
+                                            data-target="#addBookDialog">
+                                             <i class="fas fa-comment"></i>
+                                         </a>
+                                    </td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{ r.reservacion.fecha_reservacion }}</td>
+                                {% if r.estado == 'Pendiente' %}
+                                    <td><span class="badge badge-warning">{{ r.estado }}</span></td>
+                                {% elif r.estado == 'Cancelado' %}
+                                    <td><span class="badge badge-danger">{{ r.estado }}</span></td>
+                                {% else %}
+                                    <td><span class="badge badge-success">{{ r.estado }}</span></td>
+                                {% endif %}
+                                <td>{{ r.fecha_estado }}</td>
+                                {% if request.user.is_administrador or request.user.is_superuser %}
+                                    <td>{{ r.vendedor.username }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
 
-                    <tr>
-                        <td>Producto 3</td>
-                        <td>Vanesa</td>
-                        <td>No</td>
-                        <td>30/05/2020</td>
-                        <td><span class="badge badge-success">Entregada</span></td>
-{#                        <td><a href="#" class="btn btn-sm btn-primary">Detalles</a></td>#}
-                    </tr>
-                    <tr>
-                        <td>Producto 2</td>
-                        <td>Felipe</td>
-                        <td>No</td>
-                        <td>27/05/2020</td>
-                        <td><span class="badge badge-success">Entregada</span></td>
-{#                        <td><a href="#" class="btn btn-sm btn-primary">Detalles</a></td>#}
-                    </tr>
-                    <tr>
-                        <td>Producto 1</td>
-                        <td>Gonzalo</td>
-                        <td>Si</td>
-                        <td>25/05/2020</td>
-                        <td><span class="badge badge-success">Entregada</span></td>
-{#                        <td><a href="#" class="btn btn-sm btn-primary">Detalles</a></td>#}
-                    </tr>
 
                     </tbody>
                 </table>
@@ -240,7 +246,90 @@
             <div class="card-footer"></div>
         </div>
     </div>
+     <div class="modal fade" id="addBookDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Servicio de mensajeria</h5>
+{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#              <span aria-hidden="true">&times;</span>#}
+{#            </button>#}
+          </div>
+            <div class="modal-body">
+
+                <div class="form-group row">
+                    <label for="pNombre" class="col-sm-5 col-form-label">Nombre(s) </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pNombre"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pTelefono" class="col-sm-5 col-form-label">Telefono </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pTelefono"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pDireccion"
+                           class="col-sm-5 col-form-label">Dirección </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pDireccion"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pFechaEntrega"
+                           class="col-sm-5 col-form-label">Fecha entrega </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pFechaEntrega"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="pHorarioEntrega"
+                           class="col-sm-5 col-form-label">Horario </label>
+                    <div class="col-sm-7">
+                        <p class="form-control" id="pHorarioEntrega"></p>
+                    </div>
+
+                </div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
 {% endblock %}
+{% block plugin_section %}
+
+    <!-- Page level plugins -->
+    <script src="{% static 'fragancia/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'fragancia/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    <!-- You can alternatively load the minified version -->
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+    <!-- Page level custom scripts -->
+    <script>
+        $(document).ready(function () {
+            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+    <script>
+        $(document).on("click", ".open-AddBookDialog", function () {
+             var smName = $(this).data('name');
+             var smPhone = $(this).data('phone');
+             var smAddress = $(this).data('address');
+             var smDate = $(this).data('date');
+             var smTime = $(this).data('time');
+             $(".modal-body #pNombre").text( smName );
+             $(".modal-body #pTelefono").text( smPhone );
+             $(".modal-body #pDireccion").text( smAddress );
+             $(".modal-body #pFechaEntrega").text( smDate );
+             $(".modal-body #pHorarioEntrega").text( smTime );
+        });
+    </script>
+
+{% endblock %}
+
