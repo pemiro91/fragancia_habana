@@ -47,6 +47,7 @@ urlpatterns = [
     path('add_product', views.add_product, name="add_product"),
     path('edit_product/<int:id_product>', views.edit_product, name="edit_product"),
     path('delete_product/<int:id_product>', views.delete_product, name="delete_product"),
+    path('add_type', views.add_type, name="add_type"),
 
     # Gestionar Reservaciones
     path('reservations', views.reservations, name="reservations"),

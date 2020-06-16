@@ -77,7 +77,7 @@ class Product(models.Model):
     capacidad = models.CharField(max_length=50, name='capacidad')
     cantidad_disponible = models.IntegerField(name='cantidad_disponible')
     categoria = models.CharField(max_length=15, choices=CATEGORIA_PERFUME, name='categoria')
-    tipo = models.CharField(max_length=30, choices=TIPO_PERFUME, name='tipo')
+    tipo = models.CharField(max_length=50, name='tipo')
 
     def __str__(self):
         return self.nombre
@@ -104,3 +104,10 @@ class Estado_Reservation(models.Model):
     vendedor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, name='vendedor')
 
     def __str__(self): return str(self.reservacion)
+
+
+class Tipo_Perfume(models.Model):
+    tipo = models.CharField(max_length=50)
+    descripcion = models.CharField(max_length=200)
+
+    def __str__(self): return self.tipo
