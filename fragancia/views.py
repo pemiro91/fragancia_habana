@@ -283,39 +283,31 @@ def add_user(request):
             user_name = request.POST.get('user_name')
             tipo_perfil = request.POST.get('tipo_perfil')
             password1 = request.POST.get('password1')
-            password2 = request.POST.get('password2')
-            if password1 != password2:
-                error = "Las Contraseñas No Coinciden."
-                return render(request, "fragancia/agregar_usuario.html", {'error': error})
+            if tipo_perfil == 'vendedor':
+                User.objects.create_user(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=password1,
+                    telefono=phone,
+                    username=user_name,
+                    is_vendedor=True,
+                    is_administrador=False,
+                    genero=genero
+                )
             else:
-                if tipo_perfil == 'vendedor':
-                    User.objects.create_user(
-                        first_name=first_name,
-                        last_name=last_name,
-                        email=email,
-                        password=password1,
-                        telefono=phone,
-                        username=user_name,
-                        is_vendedor=True,
-                        is_administrador=False,
-                        genero=genero
-                    )
-                else:
-                    User.objects.create_user(
-                        first_name=first_name,
-                        last_name=last_name,
-                        email=email,
-                        password=password1,
-                        telefono=phone,
-                        username=user_name,
-                        is_vendedor=False,
-                        is_administrador=True,
-                        genero=genero
-                    )
-                return redirect('users')
-        # usuario = User.objects.get(pk=2)
-        change_user = Permission.objects.get(codename='change_user')
-        # permis = usuario.user_permissions.add(change_user)
+                User.objects.create_user(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=password1,
+                    telefono=phone,
+                    username=user_name,
+                    is_vendedor=False,
+                    is_administrador=True,
+                    genero=genero
+                )
+            return redirect('users')
         context = {}
         return render(request, 'fragancia/agregar_usuario.html', context)
     return redirect('login')
@@ -541,7 +533,8 @@ def assign_permissions(request, id_user):
 def reservations(request):
     if request.user.is_authenticated:
         list_reservations = Estado_Reservation.objects.filter(vendedor=request.user.id)
-        context = {'list_reservations': list_reservations}
+        list_reservations_admin = Estado_Reservation.objects.all()
+        context = {'list_reservations': list_reservations, 'list_reservations_admin': list_reservations_admin}
         return render(request, 'fragancia/listado_reservaciones.html', context)
     return redirect('login')
 

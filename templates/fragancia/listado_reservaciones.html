@@ -49,8 +49,9 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        {% for reservation in list_reservations  %}
-                            <tr>
+                        {% if request.user.is_administrador %}
+                            {% for reservation in list_reservations_admin  %}
+                                <tr>
                                 <td>{{ reservation.reservacion.producto.nombre }}</td>
                                 <td>{{ reservation.reservacion.cantidad_producto }}</td>
                                 {% if reservation.reservacion.nombre != "" %}
@@ -79,7 +80,7 @@
                                     <td><span class="badge badge-success">{{ reservation.estado }}</span></td>
                                 {% endif %}
                                 <td>{{ reservation.fecha_estado }}</td>
-                                {% if request.user.is_administrador or request.user.is_superuser %}
+                                {% if request.user.is_administrador %}
                                     <td>{{ reservation.vendedor.username }}</td>
                                 {% endif %}
 
@@ -106,7 +107,68 @@
                                    {% endif %}
                                 </td>
                             </tr>
-                        {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            {% for reservation in list_reservations  %}
+                                <tr>
+                                <td>{{ reservation.reservacion.producto.nombre }}</td>
+                                <td>{{ reservation.reservacion.cantidad_producto }}</td>
+                                {% if reservation.reservacion.nombre != "" %}
+                                    <td>
+                                        <a href="#addBookDialog" data-href="#addBookDialog"
+                                          data-toggle="modal"
+                                            class="open-AddBookDialog" title="Servicio mensajeria"
+                                           data-name="{{ reservation.reservacion.nombre }}"
+                                           data-phone="{{ reservation.reservacion.telefono }}"
+                                           data-address="{{ reservation.reservacion.direccion }}"
+                                           data-date="{{ reservation.reservacion.fecha_entrega }}"
+                                           data-time="{{ reservation.reservacion.horario_entrega }}"
+                                            data-target="#addBookDialog">
+                                             <i class="fas fa-comment"></i>
+                                         </a>
+                                    </td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{ reservation.reservacion.fecha_reservacion }}</td>
+                                {% if reservation.estado == 'Pendiente' %}
+                                    <td><span class="badge badge-warning">{{ reservation.estado }}</span></td>
+                                {% elif reservation.estado == 'Cancelado' %}
+                                    <td><span class="badge badge-danger">{{ reservation.estado }}</span></td>
+                                {% else %}
+                                    <td><span class="badge badge-success">{{ reservation.estado }}</span></td>
+                                {% endif %}
+                                <td>{{ reservation.fecha_estado }}</td>
+                                {% if request.user.is_administrador %}
+                                    <td>{{ reservation.vendedor.username }}</td>
+                                {% endif %}
+
+                                <td>
+                                    {% if reservation.estado == 'Pendiente' %}
+                                        {% if perms.fragancia.view_estado_reservation or request.user.is_administrador %}
+                                             <a href="{% url 'change_state_reservation_init' reservation.id %}"
+                                           title="Cambiar estado reservacion"><i class="fas fa-fw fa-bell"></i></a>
+                                        {% endif %}
+                                        {% if perms.fragancia.change_reservation or request.user.is_administrador %}
+                                            <a href="{% url 'edit_reservation' reservation.id %}"
+                                           title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
+                                        {% endif %}
+                                    {% endif %}
+                                   {% if reservation.estado == 'Cancelado' %}
+                                       {% if perms.fragancia.delete_reservation or request.user.is_administrador %}
+                                           <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
+                                              data-toggle="modal"
+                                                class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
+                                                data-target="#confirm-delete">
+                                                 <i class="fas fa-fw fa-trash-alt"></i>
+                                           </a>
+                                       {% endif %}
+                                   {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+
                     </tbody>
                 </table>
             </div>
