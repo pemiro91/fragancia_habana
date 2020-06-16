@@ -16,6 +16,8 @@ from django.urls import reverse
 
 from fragancia.models import Product, Reservation, User, Estado_Reservation
 
+from django.contrib import messages
+
 logger = logging.getLogger(__name__)
 
 
@@ -99,7 +101,7 @@ def index(request):
 @login_required(login_url='login')
 def catalogue(request):
     if request.user.is_authenticated:
-        list_product = Product.objects.all()
+        list_product = Product.objects.all().exclude(cantidad_disponible=0)
         return render(request, "fragancia/catalogo_productos.html", {'list_product': list_product})
     return redirect('login')
 
@@ -117,7 +119,7 @@ def details_products(request, id_product=None):
         date_service = request.POST.get('date_service')
         time_service = request.POST.get('time_service')
         if count_booking:
-            if int(count_booking) < product.cantidad_disponible:
+            if int(count_booking) <= product.cantidad_disponible:
                 value_real = product.cantidad_disponible - int(count_booking)
                 with transaction.atomic():
                     reservacion = Reservation(
@@ -139,9 +141,10 @@ def details_products(request, id_product=None):
                     estado_reservacion.save()
 
                 Product.objects.filter(pk=id_product).update(cantidad_disponible=value_real)
-                return HttpResponseRedirect(reverse('details_products', args=(id_product,)))
+                messages.success(request, 'Reserva realizada satisfactoriamente')
+                return redirect(reverse('details_products', args=(id_product,)))
             else:
-                messages.error(request, 'La cantidad proporcionada es mayor que la disponible')
+                messages.warning(request, 'La cantidad proporcionada es mayor que la disponible.')
         context = {'product': product, 'value_real': value_real}
         return render(request, "fragancia/detalles_producto.html", context)
     return redirect('login')
@@ -422,7 +425,8 @@ def assign_permissions(request, id_user):
                                                                     content_type=content_type_estado_reservation)
             permission_c_state_reservation = Permission.objects.get(codename='change_estado_reservation',
                                                                     content_type=content_type_estado_reservation)
-            permission_a_permission = Permission.objects.get(codename='add_permission', content_type=content_type_permission)
+            permission_a_permission = Permission.objects.get(codename='add_permission',
+                                                             content_type=content_type_permission)
 
             permission_v_prod = Permission.objects.get(codename='view_product', content_type=content_type_product)
             permission_a_prod = Permission.objects.get(codename='add_product', content_type=content_type_product)

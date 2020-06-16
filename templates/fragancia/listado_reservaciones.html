@@ -49,7 +49,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        {% if request.user.is_administrador %}
+                        {% if request.user.is_administrador or request.user.is_superuser %}
                             {% for reservation in list_reservations_admin  %}
                                 <tr>
                                 <td>{{ reservation.reservacion.producto.nombre }}</td>
@@ -80,9 +80,7 @@
                                     <td><span class="badge badge-success">{{ reservation.estado }}</span></td>
                                 {% endif %}
                                 <td>{{ reservation.fecha_estado }}</td>
-                                {% if request.user.is_administrador %}
-                                    <td>{{ reservation.vendedor.username }}</td>
-                                {% endif %}
+                                <td>{{ reservation.vendedor.username }}</td>
 
                                 <td>
                                     {% if reservation.estado == 'Pendiente' %}
@@ -139,7 +137,7 @@
                                     <td><span class="badge badge-success">{{ reservation.estado }}</span></td>
                                 {% endif %}
                                 <td>{{ reservation.fecha_estado }}</td>
-                                {% if request.user.is_administrador %}
+                                {% if request.user.is_administrador or request.user.is_superuser %}
                                     <td>{{ reservation.vendedor.username }}</td>
                                 {% endif %}
 
