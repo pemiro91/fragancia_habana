@@ -29,7 +29,7 @@
                                     class="m-0 font-weight-bold text-secondary">Asignar otros permisos</h6>
                             </div>
                             <div class="card-body">
-                                <form>
+                                <form method="post">{% csrf_token %}
                                     <fieldset class="form-group">
                                         <legend class="col-form-label">Seleccione los Permisos que desee
                                             asignarle a este
@@ -38,51 +38,148 @@
 
                                         <div class="row">
                                             <div class="col-sm-12">
+                                                 <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="add_permission"
+                                                            {% if perm_a_permission %}checked{% endif %}
+                                                           id="add_permission">
+                                                    <label class="custom-control-label" for="add_permission">Asignar
+                                                        Permisos
+                                                    </label>
+                                                </div>
+
+                                                <hr id="nav_divider" class="sidebar-divider">
+
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="view_statistics"
+                                                            {% if perm_v_statistics %}checked{% endif %}
+                                                           id="view_statistics">
+                                                    <label class="custom-control-label" for="view_statistics">Mostrar
+                                                        Resumen Estadístico
+                                                    </label>
+                                                </div>
+
+                                                <hr id="nav_divider" class="sidebar-divider">
+
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="view_estado_reservation"
+                                                            {% if perm_v_state_reser %}checked{% endif %}
+                                                           id="view_estado_reservation">
+                                                    <label class="custom-control-label" for="view_estado_reservation">Mostrar
+                                                        Estados de Reservas
+                                                    </label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="change_estado_reservation"
+                                                            {% if perm_c_state_reser %}checked{% endif %}
+                                                           id="change_estado_reservation">
+                                                    <label class="custom-control-label" for="change_estado_reservation">Modificar
+                                                        Estados de Reservas
+                                                    </label>
+                                                </div>
+
+                                                <hr id="nav_divider" class="sidebar-divider">
 
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           id="customCheck2">
-                                                    <label class="custom-control-label" for="customCheck2">Mostrar
-                                                        Resumen Estadístico</label>
-                                                </div>
-                                                <hr id="nav_divider" class="sidebar-divider">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           id="customCheck3">
-                                                    <label class="custom-control-label" for="customCheck3">Mostrar
+                                                           name="view_product"
+                                                           {% if perm_v_prod %}checked{% endif %}
+                                                           id="view_product">
+                                                    <label class="custom-control-label" for="view_product">Mostrar
                                                         Listado de Productos</label>
                                                 </div>
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           id="customCheck4">
-                                                    <label class="custom-control-label" for="customCheck4">Editar
+                                                           name="add_product"
+                                                           {% if perm_a_prod %}checked{% endif %}
+                                                           id="add_product">
+                                                    <label class="custom-control-label" for="add_product">Agregar
                                                         Producto</label>
                                                 </div>
-                                                <hr id="nav_divider" class="sidebar-divider">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           id="customCheck5">
-                                                    <label class="custom-control-label" for="customCheck5">Mostrar
+                                                           name="change_product"
+                                                           {% if perm_c_prod %}checked{% endif %}
+                                                           id="change_product">
+                                                    <label class="custom-control-label" for="change_product">Editar
+                                                        Producto</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           name="delete_product"
+                                                            {% if perm_d_prod %}checked{% endif %}
+                                                           id="delete_product">
+                                                    <label class="custom-control-label" for="delete_product">Eliminar
+                                                        Producto</label>
+                                                </div>
+
+                                                <hr id="nav_divider" class="sidebar-divider">
+
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           name="view_user"
+                                                           {% if perm_v_user %}checked{% endif %}
+                                                           id="view_user">
+                                                    <label class="custom-control-label" for="view_user">Mostrar
                                                         Listado de Usuarios</label>
                                                 </div>
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           id="customCheck6">
-                                                    <label class="custom-control-label" for="customCheck6">Editar
+                                                           name="add_user"
+                                                           {% if perm_a_user %}checked{% endif %}
+                                                           id="add_user">
+                                                    <label class="custom-control-label" for="add_user">Agregar
                                                         Usuario</label>
                                                 </div>
-                                                <hr id="nav_divider" class="sidebar-divider">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           id="customCheck7">
-                                                    <label class="custom-control-label" for="customCheck7">Mostrar
+                                                           name="change_user"
+                                                           {% if perm_c_user %}checked{% endif %}
+                                                           id="change_user">
+                                                    <label class="custom-control-label" for="change_user">Modificar
+                                                        Usuario</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           name="delete_user"
+                                                           {% if perm_d_user %}checked{% endif %}
+                                                           id="delete_user">
+                                                    <label class="custom-control-label" for="delete_user">Eliminar
+                                                        Usuario</label>
+                                                </div>
+
+                                                <hr id="nav_divider" class="sidebar-divider">
+
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           name="view_reservation"
+                                                           {% if perm_v_reser %}checked{% endif %}
+                                                           id="view_reservation">
+                                                    <label class="custom-control-label" for="view_reservation">Mostrar
                                                         Listado de Reservaciones</label>
                                                 </div>
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           id="customCheck8">
-                                                    <label class="custom-control-label" for="customCheck8">Editar
-                                                        Reservacion</label>
+                                                           name="add_reservation"
+                                                           {% if perm_a_reser %}checked{% endif %}
+                                                           id="add_reservation">
+                                                    <label class="custom-control-label" for="add_reservation">Agregar
+                                                        Reservaci&oacute;n</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           name="change_reservation"
+                                                           {% if perm_c_reser %}checked{% endif %}
+                                                           id="change_reservation">
+                                                    <label class="custom-control-label" for="change_reservation">Modificar
+                                                        Reservaci&oacute;n</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           name="delete_reservation"
+                                                           {% if perm_d_reser %}checked{% endif %}
+                                                           id="delete_reservation">
+                                                    <label class="custom-control-label" for="delete_reservation">Eliminar
+                                                        Reservaci&oacute;n</label>
                                                 </div>
 
                                             </div>

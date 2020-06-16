@@ -64,6 +64,11 @@ class User(AbstractUser):
             perfil_administrador = self.perfiladministrador
         return perfil_administrador
 
+    class Meta:
+        permissions = (
+            ("view_statistics", "Can view statistics"),
+        )
+
 
 class Product(models.Model):
     imagen = models.ImageField(upload_to='product_images/', null=True, blank=True)
