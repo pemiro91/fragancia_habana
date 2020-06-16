@@ -85,18 +85,24 @@
 
                                 <td>
                                     {% if reservation.estado == 'Pendiente' %}
-                                        <a href="{% url 'change_state_reservation_init' reservation.id %}"
+                                        {% if perms.fragancia.view_estado_reservation or request.user.is_administrador %}
+                                             <a href="{% url 'change_state_reservation_init' reservation.id %}"
                                            title="Cambiar estado reservacion"><i class="fas fa-fw fa-bell"></i></a>
-                                        <a href="{% url 'edit_reservation' reservation.id %}"
+                                        {% endif %}
+                                        {% if perms.fragancia.change_reservation or request.user.is_administrador %}
+                                            <a href="{% url 'edit_reservation' reservation.id %}"
                                            title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
+                                        {% endif %}
                                     {% endif %}
                                    {% if reservation.estado == 'Cancelado' %}
-                                       <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
-                                          data-toggle="modal"
-                                            class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
-                                            data-target="#confirm-delete">
-                                             <i class="fas fa-fw fa-trash-alt"></i>
-                                       </a>
+                                       {% if perms.fragancia.delete_reservation or request.user.is_administrador %}
+                                           <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
+                                              data-toggle="modal"
+                                                class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
+                                                data-target="#confirm-delete">
+                                                 <i class="fas fa-fw fa-trash-alt"></i>
+                                           </a>
+                                       {% endif %}
                                    {% endif %}
                                 </td>
                             </tr>

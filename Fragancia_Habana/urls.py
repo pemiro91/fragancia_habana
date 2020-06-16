@@ -37,7 +37,7 @@ urlpatterns = [
     path('users', views.users, name="users"),
     path('user_profile', views.user_profile, name="user_profile"),
     path('change_password', views.change_password, name="change_password"),
-    path('assign_permissions', views.assign_permissions, name="assign_permissions"),
+    path('assign_permissions/<int:id_user>', views.assign_permissions, name="assign_permissions"),
     path('add_user', views.add_user, name="add_user"),
     path('edit_user/<int:id_user>', views.edit_user, name="edit_user"),
     path('delete_user/<int:id_user>', views.delete_user, name="delete_user"),
@@ -45,8 +45,8 @@ urlpatterns = [
     # Gestionar Productos
     path('products', views.products, name="products"),
     path('add_product', views.add_product, name="add_product"),
-    path('products/edit_product/<int:id_product>', views.edit_product, name="edit_product"),
-    path('products/delete_product/<int:id_product>', views.delete_product, name="delete_product"),
+    path('edit_product/<int:id_product>', views.edit_product, name="edit_product"),
+    path('delete_product/<int:id_product>', views.delete_product, name="delete_product"),
 
     # Gestionar Reservaciones
     path('reservations', views.reservations, name="reservations"),
