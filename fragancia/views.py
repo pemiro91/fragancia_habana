@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from fragancia.models import Product, Reservation, User, Estado_Reservation
+from fragancia.models import Product, Reservation, User, Estado_Reservation, Tipo_Perfume
 
 from django.contrib import messages
 
@@ -155,15 +155,35 @@ def details_products(request, id_product=None):
 
 def products(request):
     if request.user.is_authenticated:
+        list_type_p = Tipo_Perfume.objects.all()
         list_products = Product.objects.all()
-        return render(request, "fragancia/listado_productos.html", {'list_products': list_products})
+        return render(request, "fragancia/listado_productos.html",
+                      {'list_products': list_products, 'list_type_p': list_type_p})
+    return redirect('login')
+
+
+# -------------- Adicionar tipo de perfume--------------#
+def add_type(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            name_type = request.POST.get('name_type')
+            description_type = request.POST.get('description_type')
+            Tipo_Perfume.objects.create(
+                tipo=name_type,
+                descripcion=description_type
+            )
+            return redirect('add_product')
+        return render(request, 'fragancia/agregar_producto.html', {})
     return redirect('login')
 
 
 # -------------- Adicionar producto--------------#
-
 def add_product(request):
     if request.user.is_authenticated:
+        list_type_p = Tipo_Perfume.objects.all()
+        question_dict = {
+            'types_perfumes': list_type_p
+        }
         if request.method == 'POST':
             name_product = request.POST.get('name_product')
             type_product = request.POST.get('type_product')
@@ -182,8 +202,7 @@ def add_product(request):
                 tipo=type_product
             )
             return redirect('products')
-        context = {}
-        return render(request, 'fragancia/agregar_producto.html', context)
+        return render(request, 'fragancia/agregar_producto.html', question_dict)
     return redirect('login')
 
 
@@ -192,6 +211,7 @@ def add_product(request):
 def edit_product(request, id_product):
     if request.user.is_authenticated:
         product = Product.objects.get(id=id_product)
+        list_type_p = Tipo_Perfume.objects.all()
         if request.method == 'POST':
             name_products = request.POST.get('name_products')
             type_products = request.POST.get('type_products')
@@ -208,7 +228,7 @@ def edit_product(request, id_product):
                 tipo=type_products
             )
             return redirect('products')
-        context = {'product': product}
+        context = {'product': product, 'types_perfumes': list_type_p}
         return render(request, 'fragancia/editar_producto.html', context)
     return redirect('login')
 
