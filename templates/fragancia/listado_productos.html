@@ -17,8 +17,10 @@
         <div class="card mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 id="titulo_tablas_formularios" class="m-0 font-weight-bold text-primary"></h6>
-                <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar <i
+                {% if perms.fragancia.add_product or request.user.is_administrador %}
+                    <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar <i
                        class="fas fa-plus" ></i></a>
+                {% endif %}
             </div>
             <div class="table-responsive p-3">
                 <table class="table align-items-center table-flush table-hover" id="dataTableHover">
@@ -54,12 +56,16 @@
                              <td>{{ product.categoria }}</td>
                              <td>{{ product.tipo }}</td>
                              <td>
-                                 <a href="/products/edit_product/{{ product.id }}"> <i class="fas fa-fw fa-edit"></i></a>
-                                 <a href="#" data-href="/products/delete_product/{{ product.id }}" data-toggle="modal"
-                                    class="open-AddBookDialog" data-id="{{ product.id }}"
-                                    data-target="#confirm-delete">
-                                     <i class="fas fa-fw fa-trash-alt"></i>
-                                 </a>
+                                 {% if perms.fragancia.change_product or request.user.is_administrador %}
+                                     <a href="{% url 'edit_product' product.id %}"> <i class="fas fa-fw fa-edit"></i></a>
+                                 {% endif %}
+                                 {% if perms.fragancia.delete_product or request.user.is_administrador %}
+                                     <a href="#" data-href="{% url 'delete_product' product.id %}" data-toggle="modal"
+                                        class="open-AddBookDialog" data-id="{{ product.id }}"
+                                        data-target="#confirm-delete">
+                                         <i class="fas fa-fw fa-trash-alt"></i>
+                                     </a>
+                                 {% endif %}
                              </td>
                         </tr>
                     {% endfor %}

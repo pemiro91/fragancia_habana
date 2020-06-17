@@ -46,12 +46,14 @@
         <div class="sidebar-heading">
             Principal
         </div>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'index' %}">
-                <i class="fas fa-fw fa-check"></i>
-                <span>Estadisticas</span>
-            </a>
-        </li>
+        {% if perms.fragancia.view_statistics or request.user.is_administrador %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">
+                    <i class="fas fa-fw fa-check"></i>
+                    <span>Estadisticas</span>
+                </a>
+            </li>
+        {% endif %}
 
         <li class="nav-item">
             <a class="nav-link" href="{% url 'catalogue' %}">
@@ -60,27 +62,36 @@
             </a>
         </li>
         <hr id="nav_divider" class="sidebar-divider">
-        <div class="sidebar-heading">
-            Tableros de Control
-        </div>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users' %}">
-                <i class="fas fa-fw fa-users"></i>
-                <span>Usuarios</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'products' %}">
-                <i class="fas fa-fw fa-pager"></i>
-                <span>Productos</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'reservations' %}">
-                <i class="fas fa-fw fa-palette"></i>
-                <span>Reservaciones</span>
-            </a>
-        </li>
+        {% if perms.fragancia.view_reservation or perms.fragancia.view_user or perms.fragancia.view_product or request.user.is_administrador %}
+            <div class="sidebar-heading">
+                Tableros de Control
+            </div>
+        {% endif %}
+        {% if perms.fragancia.view_user or request.user.is_administrador %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users' %}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Usuarios</span>
+                </a>
+            </li>
+        {% endif %}
+        {% if perms.fragancia.view_product or request.user.is_administrador %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'products' %}">
+                    <i class="fas fa-fw fa-pager"></i>
+                    <span>Productos</span>
+                </a>
+            </li>
+        {% endif %}
+        {% if perms.fragancia.view_reservation or request.user.is_administrador %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'reservations' %}">
+                    <i class="fas fa-fw fa-palette"></i>
+                    <span>Reservaciones</span>
+                </a>
+            </li>
+        {% endif %}
+
 
         <hr id="nav_divider" class="sidebar-divider">
         <div class="sidebar-heading">

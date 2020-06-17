@@ -64,6 +64,11 @@ class User(AbstractUser):
             perfil_administrador = self.perfiladministrador
         return perfil_administrador
 
+    class Meta:
+        permissions = (
+            ("view_statistics", "Can view statistics"),
+        )
+
 
 class Product(models.Model):
     imagen = models.ImageField(upload_to='product_images/', null=True, blank=True)
@@ -72,7 +77,7 @@ class Product(models.Model):
     capacidad = models.CharField(max_length=50, name='capacidad')
     cantidad_disponible = models.IntegerField(name='cantidad_disponible')
     categoria = models.CharField(max_length=15, choices=CATEGORIA_PERFUME, name='categoria')
-    tipo = models.CharField(max_length=30, choices=TIPO_PERFUME, name='tipo')
+    tipo = models.CharField(max_length=50, name='tipo')
 
     def __str__(self):
         return self.nombre
@@ -101,14 +106,8 @@ class Estado_Reservation(models.Model):
     def __str__(self): return str(self.reservacion)
 
 
-class Notification(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    mensaje = models.CharField(max_length=300)
-    
+class Tipo_Perfume(models.Model):
+    tipo = models.CharField(max_length=50)
+    descripcion = models.CharField(max_length=200)
 
-class UserInfo(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    
-    def add_notification(message, self):
-        notification = Notification(usuario=self.usuario, mensaje=message)
-        notification.save()
+    def __str__(self): return self.tipo
