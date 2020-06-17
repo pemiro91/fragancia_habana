@@ -603,7 +603,7 @@ def edit_reservation(request, id_reservation=None):
                 if int(cantidad_reservada) > reservation.cantidad_producto:
                     value_add = int(cantidad_reservada) - reservation.cantidad_producto
                     value_real = reservation.producto.cantidad_disponible - value_add
-                elif int(cantidad_reservada) < reservation.cantidad_producto:
+                elif int(cantidad_reservada) <= reservation.cantidad_producto:
                     value_sus = reservation.cantidad_producto - int(cantidad_reservada)
                     value_real = reservation.producto.cantidad_disponible + value_sus
                 if request.POST.get('switchMessenger'):
@@ -626,10 +626,12 @@ def edit_reservation(request, id_reservation=None):
                     )
 
                 Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
+                messages.success(request, 'Reserva editada satisfactoriamente')
                 return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
 
-            elif int(cantidad_reservada) > reservation.producto.cantidad_disponible:
-                messages.error(request, 'La cantidad proporcionada es mayor que la disponible')
+            elif reservation.producto.cantidad_disponible == 0:
+                messages.warning(request, 'La cantidad proporcionada es mayor que la disponible')
+                return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
         context = {'reservation': reservation, 'value_real': value_real}
         return render(request, 'fragancia/editar_reservacion.html', context)
     return redirect('login')

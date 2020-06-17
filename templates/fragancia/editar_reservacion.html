@@ -57,13 +57,12 @@
 
                             </ul>
                             {% if messages %}
+                              <ul class="messages">
                                 {% for message in messages %}
-                                    <div class="alert alert-danger">
-                                        <a class="close" href="#" data-dismiss="alert">×</a>
-                                        No existe disponibilidad suficiente de este producto,
-                                        revise la cantidad especificada que sea menor a la disponibilidad
-                                    </div>
+                                  <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"
+                                         role="alert">{{ message }}</div>
                                 {% endfor %}
+                              </ul>
                             {% endif %}
                             <hr id="nav_divider" class="sidebar-divider">
                             <div class="card mb-4">
