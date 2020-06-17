@@ -99,3 +99,16 @@ class Estado_Reservation(models.Model):
     vendedor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, name='vendedor')
 
     def __str__(self): return str(self.reservacion)
+
+
+class Notification(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    mensaje = models.CharField(max_length=300)
+    
+
+class UserInfo(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    def add_notification(message, self):
+        notification = Notification(usuario=self.usuario, mensaje=message)
+        notification.save()

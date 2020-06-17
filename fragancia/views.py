@@ -1,6 +1,8 @@
 import logging
 import os
 from datetime import datetime
+from pyexpat.errors import messages
+from typing import re
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -13,7 +15,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from fragancia.models import Product, Reservation, User, Estado_Reservation
+from fragancia.models import *
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +49,8 @@ def logout(request):
 @login_required(login_url='login')
 def base(request):
     if request.user.is_authenticated:
-        return render(request, "fragancia/base.html")
+        notificaciones = Notification.objects.filter(usuario=request.user)
+        return render(request, "fragancia/base.html",{'notificaciones': notificaciones})
     return redirect('login')
 
 
@@ -115,6 +118,8 @@ def details_products(request, id_product=None):
         phone_service = request.POST.get('phone_service')
         date_service = request.POST.get('date_service')
         time_service = request.POST.get('time_service')
+        otros_usuarios = User.objects.exclude(username=request.user.username)
+
         if count_booking:
             if int(count_booking) < product.cantidad_disponible:
                 value_real = product.cantidad_disponible - int(count_booking)
@@ -137,7 +142,12 @@ def details_products(request, id_product=None):
                     )
                     estado_reservacion.save()
 
+                if otros_usuarios:
+                    for u in otros_usuarios:
+                        usuario = get_object_or_404(pk=u.id)
+                        usuario.userInfo.add_notification(request.user.first_name + 'Agregó una reservación de' + product.nombre)
                 Product.objects.filter(pk=id_product).update(cantidad_disponible=value_real)
+
                 return HttpResponseRedirect(reverse('details_products', args=(id_product,)))
             else:
                 messages.error(request, 'La cantidad proporcionada es mayor que la disponible')

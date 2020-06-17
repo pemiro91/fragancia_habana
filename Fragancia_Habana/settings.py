@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from django.contrib.messages import constants as message_constants
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,9 @@ SECRET_KEY = '2x@cb3^4by*ux9=j&0t(i#w^rfg+w(*51e193$7hx-kiuaok9q'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+SILENCED_SYSTEM_CHECKS=[
+    'admin.E404'
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +42,8 @@ INSTALLED_APPS = [
     'graphene_django',
     'gra_pacho.apps.GraphenePachoConfig',
     'bootstrap_modal_forms',
+
+
 ]
 
 MIDDLEWARE = [
@@ -69,6 +74,8 @@ TEMPLATES = [
         },
     },
 ]
+
+MESSAGE_LEVEL = message_constants.DEBUG
 
 WSGI_APPLICATION = 'Fragancia_Habana.wsgi.application'
 
