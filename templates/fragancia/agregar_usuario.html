@@ -20,6 +20,10 @@
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary"></h6>
             </div>
+        <div class="card mb-8">
+
+        </div>
+
             <div class="card-body">
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-5">
@@ -29,6 +33,14 @@
                                     class="m-0 font-weight-bold text-secondary">Agregar Usuario</h6>
                             </div>
                             <div class="card-body">
+                                {% if messages %}
+                                  <ul class="messages">
+                                    {% for message in messages %}
+                                      <div class="alert {% if message.tags %}alert-danger{% endif %}"
+                                             role="alert">{{ message }}</div>
+                                    {% endfor %}
+                                  </ul>
+                                {% endif %}
                                 <form role="form" method="post">{% csrf_token %}
 
                                     <div class="tab-content py-4">
@@ -51,7 +63,7 @@
                                                 <label class="col-lg-3 col-form-label form-control-label">Correo*</label>
                                                 <div class="col-lg-9">
                                                     <input class="form-control" type="email" name="email"
-                                                           required placeholder="esteban@example.com">
+                                                           placeholder="esteban@example.com">
                                                     <div class="invalid-feedback">
                                                         Por favor, rellene el campo.
                                                     </div>
@@ -61,7 +73,7 @@
                                                 <label class="col-lg-3 col-form-label form-control-label">Teléfono</label>
                                                 <div class="col-lg-9">
                                                     <input class="form-control" type="text" name="phone"
-                                                           maxlength="8" placeholder="55555555">
+                                                           maxlength="12" placeholder="55555555">
                                                 </div>
                                             </div>
 

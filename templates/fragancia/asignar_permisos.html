@@ -147,41 +147,6 @@
                                                         Usuario</label>
                                                 </div>
 
-                                                <hr id="nav_divider" class="sidebar-divider">
-
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           name="view_reservation"
-                                                           {% if perm_v_reser %}checked{% endif %}
-                                                           id="view_reservation">
-                                                    <label class="custom-control-label" for="view_reservation">Mostrar
-                                                        Listado de Reservaciones</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           name="add_reservation"
-                                                           {% if perm_a_reser %}checked{% endif %}
-                                                           id="add_reservation">
-                                                    <label class="custom-control-label" for="add_reservation">Agregar
-                                                        Reservaci&oacute;n</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           name="change_reservation"
-                                                           {% if perm_c_reser %}checked{% endif %}
-                                                           id="change_reservation">
-                                                    <label class="custom-control-label" for="change_reservation">Modificar
-                                                        Reservaci&oacute;n</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           name="delete_reservation"
-                                                           {% if perm_d_reser %}checked{% endif %}
-                                                           id="delete_reservation">
-                                                    <label class="custom-control-label" for="delete_reservation">Eliminar
-                                                        Reservaci&oacute;n</label>
-                                                </div>
-
                                             </div>
                                         </div>
                                     </fieldset>

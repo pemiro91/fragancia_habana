@@ -8,7 +8,9 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Listado de Reservaciones</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+        {% if perms.fragancia.view_statistics or request.user.is_administrador %}
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+        {% endif %}
         <li class="breadcrumb-item active" aria-current="page">Reservaciones</li>
     </ol>
 {% endblock %}
@@ -44,7 +46,9 @@
                             <th>Fecha Reserva</th>
                             <th>Estado</th>
                             <th>Fecha Cambio Estado</th>
-                            <th>Vendedor</th>
+                            {% if request.user.is_administrador or request.user.is_superuser %}
+                                <th>Vendedor</th>
+                            {% endif %}
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
@@ -84,24 +88,18 @@
 
                                 <td>
                                     {% if reservation.estado == 'Pendiente' %}
-                                        {% if perms.fragancia.view_estado_reservation or request.user.is_administrador %}
-                                             <a href="{% url 'change_state_reservation_init' reservation.id %}"
+                                        <a href="{% url 'change_state_reservation_init' reservation.id %}"
                                            title="Cambiar estado reservacion"><i class="fas fa-fw fa-bell"></i></a>
-                                        {% endif %}
-                                        {% if perms.fragancia.change_reservation or request.user.is_administrador %}
-                                            <a href="{% url 'edit_reservation' reservation.id %}"
+                                        <a href="{% url 'edit_reservation' reservation.id %}"
                                            title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
-                                        {% endif %}
                                     {% endif %}
                                    {% if reservation.estado == 'Cancelado' %}
-                                       {% if perms.fragancia.delete_reservation or request.user.is_administrador %}
-                                           <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
+                                       <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
                                               data-toggle="modal"
                                                 class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
                                                 data-target="#confirm-delete">
                                                  <i class="fas fa-fw fa-trash-alt"></i>
                                            </a>
-                                       {% endif %}
                                    {% endif %}
                                 </td>
                             </tr>
@@ -140,27 +138,20 @@
                                 {% if request.user.is_administrador or request.user.is_superuser %}
                                     <td>{{ reservation.vendedor.username }}</td>
                                 {% endif %}
-
                                 <td>
                                     {% if reservation.estado == 'Pendiente' %}
-                                        {% if perms.fragancia.view_estado_reservation or request.user.is_administrador %}
-                                             <a href="{% url 'change_state_reservation_init' reservation.id %}"
+                                        <a href="{% url 'change_state_reservation_init' reservation.id %}"
                                            title="Cambiar estado reservacion"><i class="fas fa-fw fa-bell"></i></a>
-                                        {% endif %}
-                                        {% if perms.fragancia.change_reservation or request.user.is_administrador %}
-                                            <a href="{% url 'edit_reservation' reservation.id %}"
+                                        <a href="{% url 'edit_reservation' reservation.id %}"
                                            title="Editar Reservacion"> <i class="fas fa-fw fa-edit"></i></a>
-                                        {% endif %}
                                     {% endif %}
                                    {% if reservation.estado == 'Cancelado' %}
-                                       {% if perms.fragancia.delete_reservation or request.user.is_administrador %}
-                                           <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
+                                       <a href="#" data-href="{% url 'delete_reservation' reservation.id %}"
                                               data-toggle="modal"
                                                 class="open-AddBookDialog" title="Eliminar Reservacion" data-id="{{ product.id }}"
                                                 data-target="#confirm-delete">
                                                  <i class="fas fa-fw fa-trash-alt"></i>
                                            </a>
-                                       {% endif %}
                                    {% endif %}
                                 </td>
                             </tr>

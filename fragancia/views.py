@@ -306,31 +306,35 @@ def add_user(request):
             user_name = request.POST.get('user_name')
             tipo_perfil = request.POST.get('tipo_perfil')
             password1 = request.POST.get('password1')
-            if tipo_perfil == 'vendedor':
-                User.objects.create_user(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    password=password1,
-                    telefono=phone,
-                    username=user_name,
-                    is_vendedor=True,
-                    is_administrador=False,
-                    genero=genero
-                )
+            if User.objects.filter(username=user_name).exists():
+                messages.warning(request, 'El nombre de usuario ya existe')
+                return redirect('add_user')
             else:
-                User.objects.create_user(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    password=password1,
-                    telefono=phone,
-                    username=user_name,
-                    is_vendedor=False,
-                    is_administrador=True,
-                    genero=genero
-                )
-            return redirect('users')
+                if tipo_perfil == 'vendedor':
+                    User.objects.create_user(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        password=password1,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=True,
+                        is_administrador=False,
+                        genero=genero
+                    )
+                else:
+                    User.objects.create_user(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        password=password1,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=False,
+                        is_administrador=True,
+                        genero=genero
+                    )
+                return redirect('users')
         context = {}
         return render(request, 'fragancia/agregar_usuario.html', context)
     return redirect('login')
@@ -408,10 +412,6 @@ def assign_permissions(request, id_user):
         perm_c_user = u.has_perm('fragancia.change_user')
         perm_d_user = u.has_perm('fragancia.delete_user')
 
-        perm_v_reser = u.has_perm('fragancia.view_reservation')
-        perm_a_reser = u.has_perm('fragancia.add_reservation')
-        perm_c_reser = u.has_perm('fragancia.change_reservation')
-        perm_d_reser = u.has_perm('fragancia.delete_reservation')
         # -----------------------------------------------------#
         content_type_product = ContentType.objects.get_for_model(Product)
         content_type_reservation = ContentType.objects.get_for_model(Reservation)
@@ -435,10 +435,6 @@ def assign_permissions(request, id_user):
             modificar_usuarios = request.POST.get('change_user', False)
             eliminar_usuarios = request.POST.get('delete_user', False)
 
-            ver_reservaciones = request.POST.get('view_reservation', False)
-            agregar_reservaciones = request.POST.get('add_reservation', False)
-            modificar_reservaciones = request.POST.get('change_reservation', False)
-            eliminar_reservaciones = request.POST.get('delete_reservation', False)
             # -----------------------------------------------------#
             permission_v_statis = Permission.objects.get(codename='view_statistics', content_type=content_type_user)
             permission_v_state_reservation = Permission.objects.get(codename='view_estado_reservation',
@@ -458,14 +454,6 @@ def assign_permissions(request, id_user):
             permission_c_user = Permission.objects.get(codename='change_user', content_type=content_type_user)
             permission_d_user = Permission.objects.get(codename='delete_user', content_type=content_type_user)
 
-            permission_v_reserv = Permission.objects.get(codename='view_reservation',
-                                                         content_type=content_type_reservation)
-            permission_a_reserv = Permission.objects.get(codename='add_reservation',
-                                                         content_type=content_type_reservation)
-            permission_c_reserv = Permission.objects.get(codename='change_reservation',
-                                                         content_type=content_type_reservation)
-            permission_d_reserv = Permission.objects.get(codename='delete_reservation',
-                                                         content_type=content_type_reservation)
             if agregar_permisos:
                 u.user_permissions.add(permission_a_permission)
             else:
@@ -519,23 +507,6 @@ def assign_permissions(request, id_user):
             else:
                 u.user_permissions.remove(permission_d_user)
             # -----------------------------------------------------#
-            if ver_reservaciones:
-                u.user_permissions.add(permission_v_reserv)
-            else:
-                u.user_permissions.remove(permission_v_reserv)
-            if agregar_reservaciones:
-                u.user_permissions.add(permission_a_reserv)
-            else:
-                u.user_permissions.remove(permission_a_reserv)
-            if modificar_reservaciones:
-                u.user_permissions.add(permission_c_reserv)
-            else:
-                u.user_permissions.remove(permission_c_reserv)
-            if eliminar_reservaciones:
-                u.user_permissions.add(permission_d_reserv)
-            else:
-                u.user_permissions.remove(permission_d_reserv)
-            # -----------------------------------------------------#
             return redirect('users')
         context = {'perm_v_statistics': perm_v_statistics,
                    'perm_v_state_reser': perm_v_state_reser, 'perm_c_state_reser': perm_c_state_reser,
@@ -543,9 +514,7 @@ def assign_permissions(request, id_user):
                    'perm_v_prod': perm_v_prod, 'perm_a_prod': perm_a_prod,
                    'perm_c_prod': perm_c_prod, 'perm_d_prod': perm_d_prod,
                    'perm_v_user': perm_v_user, 'perm_a_user': perm_a_user,
-                   'perm_c_user': perm_c_user, 'perm_d_user': perm_d_user,
-                   'perm_v_reser': perm_v_reser, 'perm_a_reser': perm_a_reser,
-                   'perm_c_reser': perm_c_reser, 'perm_d_reser': perm_d_reser,
+                   'perm_c_user': perm_c_user, 'perm_d_user': perm_d_user
                    }
         return render(request, 'fragancia/asignar_permisos.html', context)
     return redirect('login')
