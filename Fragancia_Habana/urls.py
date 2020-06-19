@@ -60,7 +60,7 @@ urlpatterns = [
 
     # Api
     path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),
-
+    path('delete_notification/<int:id_notification>', views.delete_notification, name="delete_notification"),
 
 
 ]

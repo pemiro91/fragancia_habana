@@ -18,6 +18,7 @@
     <link href="{% static 'fragancia/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/css/ruang-admin.min.css' %}" rel="stylesheet">
+    <link href="{% static 'fragancia/vendor/bootstrap/scss/_spinners.scss' %}" rel="stylesheet">
 
     {% block header_style %}
 
@@ -86,7 +87,7 @@
         {% if perms.fragancia.view_reservation or request.user.is_administrador %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'reservations' %}">
-                    <i class="fas fa-fw fa-palette"></i>
+                    <i class="fas fa-fw fa-shopping-cart"></i>
                     <span>Reservaciones</span>
                 </a>
             </li>
@@ -137,77 +138,61 @@
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-bell fa-fw"></i>
-                            <span class="badge badge-danger badge-counter">3+</span>
+                            <span class="badge badge-danger badge-counter">{{ cant_notificaciones }}</span>
                         </a>
-                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="alertsDropdown">
-                            <h5 id="encabezado_dropdown" class="dropdown-header">
-                                Alerts Center
-                            </h5>
-                            {% if notificaciones %}
-                                {% for n in notificaciones %}
+                        {% if not cant_notificaciones == 0 %}
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="alertsDropdown">
+                                <h5 id="encabezado_dropdown" class="dropdown-header">
+                                    Centro de Notificaciones
+                                </h5>
+
+                                {% for nr in notificaciones_reserv %}
                                     <a class="dropdown-item d-flex align-items-center" href="#">
                                         <div class="mr-3">
-                                            <div class="icon-circle bg-primary">
-                                                <i class="fas fa-file-alt text-white"></i>
+                                            <div class="icon-circle bg-warning">
+                                                <i class="fas fa-shopping-cart text-white"></i>
                                             </div>
                                         </div>
                                         <div>
-                                            {#                                            <div class="small text-gray-500">December 12, 2019</div>#}
-                                            <span class="font-weight-bold">{{ n.mensaje }}</span>
+                                            <div class="small text-gray-500">{{ nr.usuario }}</div>
+                                            {{ nr.mensaje }}
+                                            <div class="small text-gray-500">{{ nr.fecha }}</div>
                                         </div>
+
                                     </a>
                                 {% endfor %}
-                            {% else %}
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {#                                            <div class="small text-gray-500">December 12, 2019</div>#}
-                                        <span class="font-weight-bold">{{ n.mensaje }}</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {#                                            <div class="small text-gray-500">December 12, 2019</div>#}
-                                        <span class="font-weight-bold">{{ n.mensaje }}</span>
-                                    </div>
-                                </a>
-                            {% endif %}
 
-                            {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
-                            {#                                <div class="mr-3">#}
-                            {#                                    <div class="icon-circle bg-success">#}
-                            {#                                        <i class="fas fa-donate text-white"></i>#}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {#                                <div>#}
-                            {#                                    <div class="small text-gray-500">December 7, 2019</div>#}
-                            {#                                    $290.29 has been deposited into your account!#}
-                            {#                                </div>#}
-                            {#                            </a>#}
-                            {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
-                            {#                                <div class="mr-3">#}
-                            {#                                    <div class="icon-circle bg-warning">#}
-                            {#                                        <i class="fas fa-exclamation-triangle text-white"></i>#}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {#                                <div>#}
-                            {#                                    <div class="small text-gray-500">December 2, 2019</div>#}
-                            {#                                    Spending Alert: We've noticed unusually high spending for your account.#}
-                            {#                                </div>#}
-                            {#                            </a>#}
-                            {#                            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>#}
-                        </div>
+                                {% for np in notificaciones_prod %}
+                                    <a class="dropdown-item d-flex align-items-center" href="#"
+                                       data-href="{% url 'delete_notification' np.id %}" data-toggle="modal"
+                                       data-id="{{ np.id }}"
+                                       data-target="#confirm-delete">
+                                        <div class="mr-3">
+                                            <div class="icon-circle bg-info">
+                                                <i class="fas fa-table text-white"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small text-gray-500">{{ np.usuario }}</div>
+                                            {{ np.mensaje }}
+                                            <div class="small text-gray-500">{{ np.fecha }}</div>
+                                        </div>
+
+
+
+                                    </a>
+                                {% endfor %}
+
+
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar todas las notificaciones</a>
+                            </div>
+                        {% else %}
+                        {% endif %}
+
+
                     </li>
+
                     {#                    <li class="nav-item dropdown no-arrow mx-1">#}
                     {#                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"#}
                     {#                           data-toggle="dropdown"#}
@@ -373,13 +358,11 @@
             </div>
         </footer>
         <!-- Footer -->
+
+
     </div>
 </div>
 
-<!-- Scroll to top -->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
 
 <script src="{% static 'fragancia/vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'fragancia/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -393,6 +376,7 @@
 {% block plugin_section %}
 
 {% endblock %}
+
 </body>
 
 </html>

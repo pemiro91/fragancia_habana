@@ -111,3 +111,9 @@ class Tipo_Perfume(models.Model):
     descripcion = models.CharField(max_length=200)
 
     def __str__(self): return self.tipo
+
+
+class Notification(models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    mensaje = models.CharField(max_length=300)
+    fecha = models.DateField()

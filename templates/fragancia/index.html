@@ -63,7 +63,8 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800">{{ cant_reserv_pend }}</div>
                         <div class="mt-2 mb-0 text-muted text-xs">
                             <span>de</span>
-                            <span class="text-warning mr-2"><i class="fas fa-shopping-cart"></i> {{ cant_reservaciones }}</span>
+                            <span class="text-warning mr-2"><i
+                                    class="fas fa-shopping-cart"></i> {{ cant_reservaciones }}</span>
                             <span>Reservaciones</span>
                         </div>
                     </div>
@@ -209,16 +210,16 @@
                                 {% if r.reservacion.nombre != "" %}
                                     <td>
                                         <a href="#addBookDialog" data-href="#addBookDialog"
-                                          data-toggle="modal"
-                                            class="open-AddBookDialog" title="Servicio mensajeria"
+                                           data-toggle="modal"
+                                           class="open-AddBookDialog" title="Servicio mensajeria"
                                            data-name="{{ r.reservacion.nombre }}"
                                            data-phone="{{ r.reservacion.telefono }}"
                                            data-address="{{ r.reservacion.direccion }}"
                                            data-date="{{ r.reservacion.fecha_entrega }}"
                                            data-time="{{ r.reservacion.horario_entrega }}"
-                                            data-target="#addBookDialog">
-                                             <i class="fas fa-comment"></i>
-                                         </a>
+                                           data-target="#addBookDialog">
+                                            <i class="fas fa-comment"></i>
+                                        </a>
                                     </td>
                                 {% else %}
                                     <td></td>
@@ -246,58 +247,81 @@
             <div class="card-footer"></div>
         </div>
     </div>
-     <div class="modal fade" id="addBookDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Servicio de mensajeria</h5>
-{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#              <span aria-hidden="true">&times;</span>#}
-{#            </button>#}
-          </div>
-            <div class="modal-body">
+    <div class="modal fade" id="addBookDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Servicio de mensajeria</h5>
+                    {#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+                    {#              <span aria-hidden="true">&times;</span>#}
+                    {#            </button>#}
+                </div>
+                <div class="modal-body">
 
-                <div class="form-group row">
-                    <label for="pNombre" class="col-sm-5 col-form-label">Nombre(s) </label>
-                    <div class="col-sm-7">
-                        <p class="form-control" id="pNombre"></p>
+                    <div class="form-group row">
+                        <label for="pNombre" class="col-sm-5 col-form-label">Nombre(s) </label>
+                        <div class="col-sm-7">
+                            <p class="form-control" id="pNombre"></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="pTelefono" class="col-sm-5 col-form-label">Telefono </label>
-                    <div class="col-sm-7">
-                        <p class="form-control" id="pTelefono"></p>
+                    <div class="form-group row">
+                        <label for="pTelefono" class="col-sm-5 col-form-label">Telefono </label>
+                        <div class="col-sm-7">
+                            <p class="form-control" id="pTelefono"></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="pDireccion"
-                           class="col-sm-5 col-form-label">Dirección </label>
-                    <div class="col-sm-7">
-                        <p class="form-control" id="pDireccion"></p>
+                    <div class="form-group row">
+                        <label for="pDireccion"
+                               class="col-sm-5 col-form-label">Dirección </label>
+                        <div class="col-sm-7">
+                            <p class="form-control" id="pDireccion"></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="pFechaEntrega"
-                           class="col-sm-5 col-form-label">Fecha entrega </label>
-                    <div class="col-sm-7">
-                        <p class="form-control" id="pFechaEntrega"></p>
+                    <div class="form-group row">
+                        <label for="pFechaEntrega"
+                               class="col-sm-5 col-form-label">Fecha entrega </label>
+                        <div class="col-sm-7">
+                            <p class="form-control" id="pFechaEntrega"></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="pHorarioEntrega"
-                           class="col-sm-5 col-form-label">Horario </label>
-                    <div class="col-sm-7">
-                        <p class="form-control" id="pHorarioEntrega"></p>
-                    </div>
+                    <div class="form-group row">
+                        <label for="pHorarioEntrega"
+                               class="col-sm-5 col-form-label">Horario </label>
+                        <div class="col-sm-7">
+                            <p class="form-control" id="pHorarioEntrega"></p>
+                        </div>
 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          </div>
         </div>
-      </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Desea eliminar el producto?</h5>
+                    {#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+                    {#              <span aria-hidden="true">&times;</span>#}
+                    {#            </button>#}
+                </div>
+                {#          <div class="modal-body">#}
+                {##}
+                {#          </div>#}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <a class="btn btn-danger btn-ok">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -318,18 +342,24 @@
     </script>
     <script>
         $(document).on("click", ".open-AddBookDialog", function () {
-             var smName = $(this).data('name');
-             var smPhone = $(this).data('phone');
-             var smAddress = $(this).data('address');
-             var smDate = $(this).data('date');
-             var smTime = $(this).data('time');
-             $(".modal-body #pNombre").text( smName );
-             $(".modal-body #pTelefono").text( smPhone );
-             $(".modal-body #pDireccion").text( smAddress );
-             $(".modal-body #pFechaEntrega").text( smDate );
-             $(".modal-body #pHorarioEntrega").text( smTime );
+            var smName = $(this).data('name');
+            var smPhone = $(this).data('phone');
+            var smAddress = $(this).data('address');
+            var smDate = $(this).data('date');
+            var smTime = $(this).data('time');
+            $(".modal-body #pNombre").text(smName);
+            $(".modal-body #pTelefono").text(smPhone);
+            $(".modal-body #pDireccion").text(smAddress);
+            $(".modal-body #pFechaEntrega").text(smDate);
+            $(".modal-body #pHorarioEntrega").text(smTime);
         });
     </script>
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function (e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
+    </script>
+
 
 {% endblock %}
 
