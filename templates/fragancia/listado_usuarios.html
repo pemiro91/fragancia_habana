@@ -9,7 +9,7 @@
     <h1 class="h5 mb-0 text-gray-800">Listado de Usuarios</h1>
     <ol class="breadcrumb">
     {% if perms.fragancia.view_statistics or request.user.is_administrador %}
-        <li class="breadcrumb-item"><a href="{% url 'stadistic' %}">Tableros de Control</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
     {% endif %}
 
         <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
@@ -33,7 +33,9 @@
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Vendedor</th>
-                        <th>Acciones</th>
+                        {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
+                            <th>Acciones</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tfoot>
@@ -42,7 +44,9 @@
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Vendedor</th>
-                        <th>Acciones</th>
+                        {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
+                            <th>Acciones</th>
+                        {% endif %}
                     </tr>
                     </tfoot>
                     <tbody>
@@ -56,24 +60,25 @@
                                  {% else %}
                                      <td>No</td>
                                  {% endif %}
-                                 <td>
-                                     {% if perms.fragancia.add_permission %}
-                                         <a href="{% url 'assign_permissions' user.id %}" title="Asignar otros permisos"><i  class="fas fa-fw fa-user-plus"></i></a>
-                                     {% endif %}
-                                     {% if perms.fragancia.change_user or request.user.is_administrador %}
-                                         <a href="{% url 'edit_user' user.id %}" title="Modificar Usuario"><i class="fas fa-fw fa-edit"></i></a>
-                                     {% endif %}
-                                     {% if perms.fragancia.delete_user or request.user.is_administrador %}
-                                         <a href="#" data-href="{% url 'delete_user' user.id %}" data-toggle="modal"
-                                            class="open-AddBookDialog" data-id="{{ user.id }}"
-                                            title="Eliminar Usuario"
-                                            data-target="#confirm-delete">
-                                             <i class="fas fa-fw fa-trash-alt"></i>
-                                         </a>
-                                     {% endif %}
+                                {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
+                                    <td>
+                                         {% if perms.fragancia.assign_permissions_user %}
+                                             <a href="{% url 'assign_permissions' user.id %}" title="Asignar otros permisos"><i  class="fas fa-fw fa-user-plus"></i></a>
+                                         {% endif %}
+                                         {% if perms.fragancia.change_user or request.user.is_administrador %}
+                                             <a href="{% url 'edit_user' user.id %}" title="Modificar Usuario"><i class="fas fa-fw fa-edit"></i></a>
+                                         {% endif %}
+                                         {% if perms.fragancia.delete_user or request.user.is_administrador %}
+                                             <a href="#" data-href="{% url 'delete_user' user.id %}" data-toggle="modal"
+                                                class="open-AddBookDialog" data-id="{{ user.id }}"
+                                                title="Eliminar Usuario"
+                                                data-target="#confirm-delete">
+                                                 <i class="fas fa-fw fa-trash-alt"></i>
+                                             </a>
+                                         {% endif %}
+                                     </td>
+                                {% endif %}
 
-
-                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>

@@ -241,7 +241,7 @@ def delete_product(request, id_product):
 
 def users(request):
     if request.user.is_authenticated:
-        list_users = User.objects.all().exclude(is_superuser=True)
+        list_users = User.objects.all().exclude(is_superuser=True).exclude(username=request.user.username)
         context = {'list_users': list_users}
         return render(request, 'fragancia/listado_usuarios.html', context)
     return redirect('login')
@@ -396,7 +396,7 @@ def assign_permissions(request, id_user):
         perm_v_statistics = u.has_perm('fragancia.view_statistics')
         perm_v_state_reser = u.has_perm('fragancia.view_estado_reservation')
         perm_c_state_reser = u.has_perm('fragancia.change_estado_reservation')
-        perm_a_permission = u.has_perm('fragancia.add_permission')
+        perm_a_permission = u.has_perm('fragancia.assign_permissions_user')
 
         perm_v_prod = u.has_perm('fragancia.view_product')
         perm_a_prod = u.has_perm('fragancia.add_product')
@@ -413,13 +413,12 @@ def assign_permissions(request, id_user):
         content_type_reservation = ContentType.objects.get_for_model(Reservation)
         content_type_estado_reservation = ContentType.objects.get_for_model(Estado_Reservation)
         content_type_user = ContentType.objects.get_for_model(User)
-        content_type_permission = ContentType.objects.get_for_model(Permission)
         # -----------------------------------------------------#
         if request.method == 'POST':
             ver_estadisticas = request.POST.get('view_statistics', False)
             ver_estado_reservaciones = request.POST.get('view_estado_reservation', False)
             modificar_estado_reservaciones = request.POST.get('change_estado_reservation', False)
-            agregar_permisos = request.POST.get('add_permission', False)
+            agregar_permisos = request.POST.get('assign_permissions_user', False)
 
             ver_productos = request.POST.get('view_product', False)
             agregar_productos = request.POST.get('add_product', False)
@@ -437,8 +436,8 @@ def assign_permissions(request, id_user):
                                                                     content_type=content_type_estado_reservation)
             permission_c_state_reservation = Permission.objects.get(codename='change_estado_reservation',
                                                                     content_type=content_type_estado_reservation)
-            permission_a_permission = Permission.objects.get(codename='add_permission',
-                                                             content_type=content_type_permission)
+            permission_a_permission = Permission.objects.get(codename='assign_permissions_user',
+                                                             content_type=content_type_user)
 
             permission_v_prod = Permission.objects.get(codename='view_product', content_type=content_type_product)
             permission_a_prod = Permission.objects.get(codename='add_product', content_type=content_type_product)

@@ -39,13 +39,18 @@
                                             <div class="col-sm-12">
                                                 {% if not perm_a_permission %}
                                                     <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" name="add_permission"
+                                                        <input type="checkbox" class="custom-control-input" name="assign_permissions_user"
                                                                 {% if perm_a_permission %}checked{% endif %}
-                                                               id="add_permission">
-                                                        <label class="custom-control-label" for="add_permission">El usuario puede asignar
+                                                               id="assign_permissions_user">
+                                                        <label class="custom-control-label" for="assign_permissions_user">El usuario puede asignar
                                                             permisos a otros usuarios
                                                         </label>
                                                     </div>
+                                                {% else %}
+                                                    <div class="custom-control custom-checkbox">
+                                                        <h5 class="custom-control-label" >El usuario tiene todos los permisos asignados</h5>
+                                                    </div>
+
                                                 {% endif %}
 
                                                 {% if not usuario_select.is_administrador %}
