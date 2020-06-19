@@ -8,7 +8,10 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Listado de Usuarios</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+    {% if perms.fragancia.view_statistics or request.user.is_administrador %}
+        <li class="breadcrumb-item"><a href="{% url 'stadistic' %}">Tableros de Control</a></li>
+    {% endif %}
+
         <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
     </ol>
 {% endblock %}

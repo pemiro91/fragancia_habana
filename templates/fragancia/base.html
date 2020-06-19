@@ -45,14 +45,12 @@
         <div class="sidebar-heading">
             Principal
         </div>
-        {% if perms.fragancia.view_statistics or request.user.is_administrador %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">
-                    <i class="fas fa-fw fa-check"></i>
-                    <span>Estadisticas</span>
-                </a>
-            </li>
-        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">
+                <i class="fas fa-fw fa-check"></i>
+                <span>Estadisticas</span>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a class="nav-link" href="{% url 'catalogue' %}">

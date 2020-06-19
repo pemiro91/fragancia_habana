@@ -35,7 +35,7 @@ def login_user(request):
                 login(request, user)
                 return redirect('catalogue')
         else:
-            messages.error(request, 'username or password not correct')
+            messages.warning(request, 'username or password not correct')
             return redirect('login')
     else:
         form = AuthenticationForm()
@@ -45,13 +45,6 @@ def login_user(request):
 def logout(request):
     do_logout(request)
     return redirect('/')
-
-
-@login_required(login_url='login')
-def base(request):
-    if request.user.is_authenticated:
-        return render(request, "fragancia/base.html")
-    return redirect('login')
 
 
 # -------------- Index--------------#
@@ -261,16 +254,15 @@ def user_profile(request):
             apellidos = request.POST.get('last_name')
             correo = request.POST.get('email')
             telefono = request.POST.get('phone')
-            usuario = request.POST.get('username')
-            User.objects.filter(pk=request.user.id).update(
+            User.objects.filter(id=request.user.id).update(
                 first_name=nombre,
                 last_name=apellidos,
                 email=correo,
-                telefono=telefono,
-                username=usuario,
+                telefono=telefono
             )
+            messages.success(request, 'Perfil actualizado satisfactoriamente')
             return redirect('user_profile')
-        return render(request, "fragancia/perfil_usuario.html", {})
+        return render(request, "fragancia/editar_perfil_usuario.html", {})
     return redirect('login')
 
 
@@ -282,11 +274,11 @@ def change_password(request):
             confirmed_new_password = request.POST.get('confirmed_new_password')
             U = User.objects.get(username=request.user.username)
             if not U.check_password(old_password):
-                error = "Contraseña Incorrecta."
-                return render(request, "fragancia/cambiar_contrasena.html", {'error': error})
+                messages.warning(request, 'Contraseña Anterior Incorrecta.')
+                return render(request, "fragancia/cambiar_contrasena.html", {})
             if confirmed_new_password != new_password:
-                error = "Las Contraseñas No Coinciden."
-                return render(request, "fragancia/cambiar_contrasena.html", {'error': error})
+                messages.warning(request, 'Las Contraseñas No Coinciden.')
+                return render(request, "fragancia/cambiar_contrasena.html", {})
             U.set_password(new_password)
             U.save()
             return redirect('login')
@@ -306,8 +298,12 @@ def add_user(request):
             user_name = request.POST.get('user_name')
             tipo_perfil = request.POST.get('tipo_perfil')
             password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
             if User.objects.filter(username=user_name).exists():
                 messages.warning(request, 'El nombre de usuario ya existe')
+                return redirect('add_user')
+            elif password1 != password2:
+                messages.warning(request, 'Las contraseñas no existen')
                 return redirect('add_user')
             else:
                 if tipo_perfil == 'vendedor':
@@ -514,7 +510,8 @@ def assign_permissions(request, id_user):
                    'perm_v_prod': perm_v_prod, 'perm_a_prod': perm_a_prod,
                    'perm_c_prod': perm_c_prod, 'perm_d_prod': perm_d_prod,
                    'perm_v_user': perm_v_user, 'perm_a_user': perm_a_user,
-                   'perm_c_user': perm_c_user, 'perm_d_user': perm_d_user
+                   'perm_c_user': perm_c_user, 'perm_d_user': perm_d_user,
+                   'usuario_select': u
                    }
         return render(request, 'fragancia/asignar_permisos.html', context)
     return redirect('login')
