@@ -18,9 +18,8 @@
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 id="titulo_tablas_formularios" class="m-0 font-weight-bold text-primary"></h6>
                 {% if perms.fragancia.add_product or request.user.is_administrador %}
-                    <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar
-                        <i
-                                class="fas fa-plus"></i></a>
+                    <a  id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar
+                        <i class="fas fa-plus-circle"></i></a>
                 {% endif %}
             </div>
             <div class="table-responsive p-3">

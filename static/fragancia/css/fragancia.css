@@ -92,26 +92,46 @@ li a i:hover {
 .portfolio-details .portfolio-info ul #titulo_tablas_formularios {
     font-size: 16px;
 }
-li #detalles_producto{
+
+li #detalles_producto {
     font-size: 22px;
 }
-.btn-primary#boton_formularios,.btn-primary#boton_agregar {
+
+.btn-primary#boton_formularios, .btn-primary#boton_agregar, a#boton_tipo {
     color: #625e5e;
     background-color: rgb(253, 253, 150);
     border-color: rgb(253, 253, 150);
-    margin-left: 15%;
+    /*margin-left: 15%;*/
 
 }
 
-.btn-primary#boton_formularios:hover, .btn-primary#boton_formularios:checked{
+#boton_formularios:hover, #boton_agregar:hover, #boton_formularios:checked, #boton_agregar:checked {
     color: #625e5e;
     background-color: #ffff7e;
     border-color: #ffff7e;
+
+}
+
+a i#add_tipo {
+    color: #908c8c;
+
+}
+
+i#add_tipo:hover {
+    color: #edc240;
+    /*background-color: #eded70;*/
+    border-color: #2c240a;
+}
+input:checked{
+    color: #edc240;
+    /*!*background-color: #eded70;*!*/
+    /*border-color: #2c240a;*/
 }
 
 .custom-file-input:lang(es) ~ .custom-file-label::after {
-  content: "Elegir";
+    content: "Elegir";
 }
+
 /*td a#links{*/
 /*    color: #e0a800;*/
 

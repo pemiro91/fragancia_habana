@@ -19,7 +19,7 @@
                 <h6 id="" class="m-0 font-weight-bold text-primary"></h6>
                 {% if perms.fragancia.add_user or request.user.is_administrador %}
                     <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_user' %}">Agregar <i
-                       class="fas fa-plus" ></i></a>
+                       class="fas fa-plus-circle" ></i></a>
                 {% endif %}
             </div>
             <div class="table-responsive p-3">
@@ -94,7 +94,7 @@
 {#          </div>#}
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <a class="btn btn-danger btn-ok">Eliminar</a>
+            <a id="boton_agregar" class="btn btn-primary btn-ok">Eliminar</a>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Agregar Producto</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+        <li class="breadcrumb-item">Tableros de Control</li>
         <li class="breadcrumb-item active"><a href="{% url 'products' %}">Productos</a></li>
         <li class="breadcrumb-item active" aria-current="page">Agregar Producto</li>
     </ol>
@@ -24,8 +24,8 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-5">
                         <div class="card mb-8">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6  id="titulo_tablas_formularios"
+                            <div class="card-header py-3 d-flex justify-content-center">
+                                <h6 id="titulo_tablas_formularios"
                                     class="m-0 font-weight-bold text-secondary">Agregar Producto</h6>
                             </div>
                             <div class="card-body">
@@ -37,7 +37,6 @@
                                                    placeholder="Acqua d' Gio">
                                         </div>
                                     </div>
-
                                     <div class="form-group row">
                                         <label for="inputTipo" class="col-sm-3 col-form-label">Tipo</label>
                                         <div class="col-sm-8">
@@ -49,11 +48,12 @@
                                                 {% endif %}
                                             </select>
                                         </div>
+
                                         <a href="#" data-toggle="modal"
-                                            class="open-AddBookDialog"
-                                            data-target="#form-type">
-                                             <i class="fas fa-fw fa-ad"></i>
-                                         </a>
+                                           class="open-AddBookDialog"
+                                           data-target="#form-type">
+                                            <i id="add_tipo" class="fas fa-plus-circle "></i>
+                                        </a>
 
                                     </div>
                                     <fieldset class="form-group">
@@ -61,37 +61,41 @@
                                             <legend class="col-form-label col-sm-3 pt-0">Categoría</legend>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" id="RadioHombre" checked="checked" name="category_product"
+                                                    <input type="radio" id="RadioHombre" checked="checked"
+                                                           name="category_product"
                                                            class="custom-control-input" value="Hombre">
                                                     <label class="custom-control-label" for="RadioHombre">Hombre</label>
                                                 </div>
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" id="RadioMujer" name="category_product"
                                                            class="custom-control-input" value="Mujer">
-                                                    <label class="custom-control-label" for="RadioMujer">De Mujer</label>
+                                                    <label class="custom-control-label" for="RadioMujer">De
+                                                        Mujer</label>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </fieldset>
                                     <div class="form-group row">
-                                        <div class="col-sm-3">Imagen </div>
+                                        <div class="col-sm-3">Imagen</div>
                                         <div class="col-sm-9">
                                             <div class="form-group">
                                                 <label for="customFile">Seleccione archivo</label>
-                                                <input type="file" name="image_product" class="form-control-file" id="customFile">
-                                              </div>
-{#                                            <div class="custom-control custom-file">#}
-{#                                                <input type="file" name="image_product"  class="custom-file-input" id="customFile">#}
-{#                                                <label class="custom-file-label" for="customFile">Seleccione archivo</label>#}
-{#                                            </div>#}
+                                                <input type="file" name="image_product" class="form-control-file"
+                                                       id="customFile">
+                                            </div>
+                                            {#                                            <div class="custom-control custom-file">#}
+                                            {#                                                <input type="file" name="image_product"  class="custom-file-input" id="customFile">#}
+                                            {#                                                <label class="custom-file-label" for="customFile">Seleccione archivo</label>#}
+                                            {#                                            </div>#}
                                         </div>
 
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Capacidad</label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control" name="capacity_product" id="inputEmail3" placeholder="500">
+                                            <input type="number" class="form-control" name="capacity_product"
+                                                   id="inputEmail3" placeholder="500">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">ml</label>
 
@@ -99,7 +103,8 @@
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Precio</label>
                                         <div class="col-sm-8">
-                                            <input type="number" name="price_product" class="form-control" id="inputEmail3"
+                                            <input type="number" name="price_product" class="form-control"
+                                                   id="inputEmail3"
                                                    placeholder="20">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">cuc</label>
@@ -108,24 +113,28 @@
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Cantidad </label>
                                         <div class="col-sm-8">
-                                            <input type="number" name="count_product" class="form-control" id="inputEmail3" placeholder="10">
+                                            <input type="number" name="count_product" class="form-control"
+                                                   id="inputEmail3" placeholder="10">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">u</label>
                                     </div>
-{#                                    <div class="form-group row">#}
-{#                                        <div class="col-sm-3">Checkbox</div>#}
-{#                                        <div class="col-sm-9">#}
-{#                                            <div class="custom-control custom-checkbox">#}
-{#                                                <input type="checkbox" class="custom-control-input" id="customCheck1">#}
-{#                                                <label class="custom-control-label" for="customCheck1">Check this custom#}
-{#                                                    checkbox</label>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
+                                    {#                                    <div class="form-group row">#}
+                                    {#                                        <div class="col-sm-3">Checkbox</div>#}
+                                    {#                                        <div class="col-sm-9">#}
+                                    {#                                            <div class="custom-control custom-checkbox">#}
+                                    {#                                                <input type="checkbox" class="custom-control-input" id="customCheck1">#}
+                                    {#                                                <label class="custom-control-label" for="customCheck1">Check this custom#}
+                                    {#                                                    checkbox</label>#}
+                                    {#                                            </div>#}
+                                    {#                                        </div>#}
+                                    {#                                    </div>#}
 
                                     <div class="form-group row">
-                                        <div class="col-sm-10">
-                                            <button type="submit" id="boton_formularios"class="btn btn-primary">Agregar Producto</button>
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <button style="margin-left: 10%" type="submit"
+                                                    id="boton_agregar" class="btn btn-primary">Agregar Producto
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -142,37 +151,37 @@
 
     <div class="modal fade" id="form-type" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="item_update_form" class="form" role="form" method="post"
-                  action='{% url 'add_type' %}'>{% csrf_token %}
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Tipo de Perfume</h5>
-              </div>
-                  <div class="modal-body">
-                      <div class="form-group row">
-                        <label for="inputNombre" class="col-sm-3 col-form-label">Nombre* </label>
-                        <div class="col-sm-9">
-                            <input type="text" name="name_type" class="form-control" id="inputNombre"
-                                   placeholder="Floral" required>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="item_update_form" class="form" role="form" method="post"
+                      action='{% url 'add_type' %}'>{% csrf_token %}
+                    <div class="modal-header justify-content-center">
+                        <h5 class="modal-title " id="exampleModalLabel">Agregar Tipo de Perfume</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="inputNombre" class="col-sm-3 col-form-label">Nombre* </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="name_type" class="form-control" id="inputNombre"
+                                       placeholder="Floral" required>
+                            </div>
                         </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputNombre" class="col-sm-3 col-form-label">Descripci&oacute;n </label>
-                        <div class="col-sm-9">
+                        <div class="form-group row">
+                            <label for="inputNombre" class="col-sm-3 col-form-label">Descripci&oacute;n </label>
+                            <div class="col-sm-9">
                             <textarea type="text" name="description_type" class="form-control" id="inputNombre"
                                       placeholder="Descripci&oacute;n"></textarea>
+                            </div>
                         </div>
-                      </div>
-                  </div>
+                    </div>
 
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary" >Agregar</button>
-              </div>
-           </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" id="boton_agregar" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
         </div>
-      </div>
     </div>
 
 {% endblock %}

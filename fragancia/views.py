@@ -13,6 +13,7 @@ from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from rx.core.notification import Notification
 
 from fragancia.models import Product, Reservation, User, Estado_Reservation, Tipo_Perfume, Notification
 
@@ -90,7 +91,7 @@ def index(request):
                    'cant_reservaciones': cant_reservaciones, 'reservaciones_ordenadas': reservaciones_ordenadas,
                    'cant_res_ord': cant_res_ord,
                    'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod':notificaciones_prod,
+                   'notificaciones_prod': notificaciones_prod,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, "fragancia/index.html", context)
     return redirect('login')
@@ -155,6 +156,7 @@ def details_products(request, id_product=None):
                     estado_reservacion.save()
                     notificacion = Notification(mensaje=mensaje,
                                                 usuario=request.user,
+                                                estaddo='Nueva',
                                                 fecha=datetime.now())
                     notificacion.save()
 
@@ -795,6 +797,22 @@ def change_state_reservation(request, id_reservation):
             Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
 
         return redirect('reservations')
+    return redirect('login')
+
+
+def notifications(request):
+    if request.user.is_authenticated:
+        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
+            mensaje__contains='Agregó').order_by('-fecha')[:2]
+        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
+            mensaje__contains='Realizó').order_by('-fecha')[:2]
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)
+        cant_notificaciones = len(notificaciones)
+        context = {'notificaciones': notificaciones,
+                   'notificaciones_reserv': notificaciones_reserv,
+                   'notificaciones_prod': notificaciones_prod,
+                   'cant_notificaciones': cant_notificaciones}
+        return render(request, 'fragancia/listado_notificaciones.html', context)
     return redirect('login')
 
 

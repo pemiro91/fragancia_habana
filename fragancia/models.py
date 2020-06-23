@@ -44,6 +44,10 @@ ESTADO_ENTREGA = (
     ('Cancelado', 'Cancelado'),
     ('Entregado', 'Entregado')
 )
+ESTADO_NOTIFICATION = (
+    ('Nueva', 'Nueva'),
+    ('Leida', 'Leida'),
+)
 
 
 class User(AbstractUser):
@@ -116,4 +120,6 @@ class Tipo_Perfume(models.Model):
 class Notification(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     mensaje = models.CharField(max_length=300)
+    estado = models.CharField(max_length=50, choices=ESTADO_NOTIFICATION, name='estado')
     fecha = models.DateField()
+    hora = models.DateTimeField()
