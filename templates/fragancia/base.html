@@ -31,18 +31,13 @@
     <!-- Nav Izquierdo -->
     <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
         <a id="nav_izquierdo" class="sidebar-brand d-flex align-items-center justify-content-center"
-           href="{% url 'index' %}">
+           href="{% url 'catalogue' %}">
             <div class="sidebar-brand-icon">
                 <img src="{% static 'fragancia/img/logo/logo.png' %}">
             </div>
             <div class="sidebar-brand-text mx-2"><span id="texto_nav" class="">Fragancias/Habana</span></div>
         </a>
         <hr class="sidebar-divider my-0">
-        <li class="nav-item active">
-            <a class="nav-link" href="{% url 'index' %}">
-                <i class="fas fa-fw fa-home"></i>
-                <span>Aplicación Web</span></a>
-        </li>
         <hr id="nav_divider" class="sidebar-divider">
         <div class="sidebar-heading">
             Principal
@@ -63,11 +58,9 @@
             </a>
         </li>
         <hr id="nav_divider" class="sidebar-divider">
-        {% if perms.fragancia.view_reservation or perms.fragancia.view_user or perms.fragancia.view_product or request.user.is_administrador %}
-            <div class="sidebar-heading">
-                Tableros de Control
-            </div>
-        {% endif %}
+        <div class="sidebar-heading">
+            Tableros de Control
+        </div>
         {% if perms.fragancia.view_user or request.user.is_administrador %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'users' %}">
@@ -84,14 +77,12 @@
                 </a>
             </li>
         {% endif %}
-        {% if perms.fragancia.view_reservation or request.user.is_administrador %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'reservations' %}">
-                    <i class="fas fa-fw fa-shopping-cart"></i>
-                    <span>Reservaciones</span>
-                </a>
-            </li>
-        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'reservations' %}">
+                <i class="fas fa-fw fa-shopping-cart"></i>
+                <span>Reservaciones</span>
+            </a>
+        </li>
 
 
         <hr id="nav_divider" class="sidebar-divider">

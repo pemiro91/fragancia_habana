@@ -51,8 +51,13 @@
                       <button type="submit" class="btn btn-warning btn-block">Login</button>
                     </div>
                     <hr>
-                  {% if form.errors %}
-                        <p>username or password not correct</p>
+                  {% if messages %}
+                      <ul class="messages">
+                        {% for message in messages %}
+                          <div class="alert {% if message.tags %}alert-danger{% endif %}"
+                                 role="alert">{{ message }}</div>
+                        {% endfor %}
+                      </ul>
                     {% endif %}
                   </form>
                   <hr>

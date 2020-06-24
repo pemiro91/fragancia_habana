@@ -71,6 +71,7 @@ class User(AbstractUser):
     class Meta:
         permissions = (
             ("view_statistics", "Can view statistics"),
+            ("assign_permissions_user", "Can assign permissions user"),
         )
 
 

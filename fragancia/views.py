@@ -384,30 +384,38 @@ def add_user(request):
             user_name = request.POST.get('user_name')
             tipo_perfil = request.POST.get('tipo_perfil')
             password1 = request.POST.get('password1')
-            if tipo_perfil == 'vendedor':
-                User.objects.create_user(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    password=password1,
-                    telefono=phone,
-                    username=user_name,
-                    is_vendedor=True,
-                    is_administrador=False,
-                    genero=genero
-                )
+            password2 = request.POST.get('password2')
+            if User.objects.filter(username=user_name).exists():
+                messages.warning(request, 'El nombre de usuario ya existe')
+                return redirect('add_user')
+            elif password1 != password2:
+                messages.warning(request, 'Las contraseñas no existen')
+                return redirect('add_user')
             else:
-                User.objects.create_user(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    password=password1,
-                    telefono=phone,
-                    username=user_name,
-                    is_vendedor=False,
-                    is_administrador=True,
-                    genero=genero
-                )
+                if tipo_perfil == 'vendedor':
+                    User.objects.create_user(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        password=password1,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=True,
+                        is_administrador=False,
+                        genero=genero
+                    )
+                else:
+                    User.objects.create_user(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        password=password1,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=False,
+                        is_administrador=True,
+                        genero=genero
+                    )
             return redirect('users')
         context = {'notificaciones_reserv': notificaciones_reserv,
                    'notificaciones_prod': notificaciones_prod,
@@ -479,86 +487,22 @@ def delete_user(request, id_user):
 
 def assign_permissions(request, id_user):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
         u = User.objects.get(id=id_user)
         # -------------------Comprobar permiso----------------------------------#
         perm_v_statistics = u.has_perm('fragancia.view_statistics')
-        perm_v_state_reser = u.has_perm('fragancia.view_estado_reservation')
-        perm_c_state_reser = u.has_perm('fragancia.change_estado_reservation')
-        perm_a_permission = u.has_perm('fragancia.add_permission')
-
-        perm_v_prod = u.has_perm('fragancia.view_product')
-        perm_a_prod = u.has_perm('fragancia.add_product')
-        perm_c_prod = u.has_perm('fragancia.change_product')
-        perm_d_prod = u.has_perm('fragancia.delete_product')
-
-        perm_v_user = u.has_perm('fragancia.view_user')
-        perm_a_user = u.has_perm('fragancia.add_user')
-        perm_c_user = u.has_perm('fragancia.change_user')
-        perm_d_user = u.has_perm('fragancia.delete_user')
-
-        perm_v_reser = u.has_perm('fragancia.view_reservation')
-        perm_a_reser = u.has_perm('fragancia.add_reservation')
-        perm_c_reser = u.has_perm('fragancia.change_reservation')
-        perm_d_reser = u.has_perm('fragancia.delete_reservation')
+        perm_a_permission = u.has_perm('fragancia.assign_permissions_user')
         # -----------------------------------------------------#
-        content_type_product = ContentType.objects.get_for_model(Product)
-        content_type_reservation = ContentType.objects.get_for_model(Reservation)
-        content_type_estado_reservation = ContentType.objects.get_for_model(Estado_Reservation)
         content_type_user = ContentType.objects.get_for_model(User)
-        content_type_permission = ContentType.objects.get_for_model(Permission)
         # -----------------------------------------------------#
         if request.method == 'POST':
             ver_estadisticas = request.POST.get('view_statistics', False)
-            ver_estado_reservaciones = request.POST.get('view_estado_reservation', False)
-            modificar_estado_reservaciones = request.POST.get('change_estado_reservation', False)
-            agregar_permisos = request.POST.get('add_permission', False)
+            agregar_permisos = request.POST.get('assign_permissions_user', False)
 
-            ver_productos = request.POST.get('view_product', False)
-            agregar_productos = request.POST.get('add_product', False)
-            modificar_productos = request.POST.get('change_product', False)
-            eliminar_productos = request.POST.get('delete_product', False)
-
-            ver_usuarios = request.POST.get('view_user', False)
-            agregar_usuarios = request.POST.get('add_user', False)
-            modificar_usuarios = request.POST.get('change_user', False)
-            eliminar_usuarios = request.POST.get('delete_user', False)
-
-            ver_reservaciones = request.POST.get('view_reservation', False)
-            agregar_reservaciones = request.POST.get('add_reservation', False)
-            modificar_reservaciones = request.POST.get('change_reservation', False)
-            eliminar_reservaciones = request.POST.get('delete_reservation', False)
             # -----------------------------------------------------#
             permission_v_statis = Permission.objects.get(codename='view_statistics', content_type=content_type_user)
-            permission_v_state_reservation = Permission.objects.get(codename='view_estado_reservation',
-                                                                    content_type=content_type_estado_reservation)
-            permission_c_state_reservation = Permission.objects.get(codename='change_estado_reservation',
-                                                                    content_type=content_type_estado_reservation)
-            permission_a_permission = Permission.objects.get(codename='add_permission',
-                                                             content_type=content_type_permission)
+            permission_a_permission = Permission.objects.get(codename='assign_permissions_user',
+                                                             content_type=content_type_user)
 
-            permission_v_prod = Permission.objects.get(codename='view_product', content_type=content_type_product)
-            permission_a_prod = Permission.objects.get(codename='add_product', content_type=content_type_product)
-            permission_c_prod = Permission.objects.get(codename='change_product', content_type=content_type_product)
-            permission_d_prod = Permission.objects.get(codename='delete_product', content_type=content_type_product)
-
-            permission_v_user = Permission.objects.get(codename='view_user', content_type=content_type_user)
-            permission_a_user = Permission.objects.get(codename='add_user', content_type=content_type_user)
-            permission_c_user = Permission.objects.get(codename='change_user', content_type=content_type_user)
-            permission_d_user = Permission.objects.get(codename='delete_user', content_type=content_type_user)
-
-            permission_v_reserv = Permission.objects.get(codename='view_reservation',
-                                                         content_type=content_type_reservation)
-            permission_a_reserv = Permission.objects.get(codename='add_reservation',
-                                                         content_type=content_type_reservation)
-            permission_c_reserv = Permission.objects.get(codename='change_reservation',
-                                                         content_type=content_type_reservation)
-            permission_d_reserv = Permission.objects.get(codename='delete_reservation',
-                                                         content_type=content_type_reservation)
             if agregar_permisos:
                 u.user_permissions.add(permission_a_permission)
             else:
@@ -569,79 +513,10 @@ def assign_permissions(request, id_user):
             else:
                 u.user_permissions.remove(permission_v_statis)
             # -----------------------------------------------------#
-            if ver_estado_reservaciones:
-                u.user_permissions.add(permission_v_state_reservation)
-            else:
-                u.user_permissions.remove(permission_v_state_reservation)
-            if modificar_estado_reservaciones:
-                u.user_permissions.add(permission_c_state_reservation)
-            else:
-                u.user_permissions.remove(permission_c_state_reservation)
-            # -----------------------------------------------------#
-            if ver_productos:
-                u.user_permissions.add(permission_v_prod)
-            else:
-                u.user_permissions.remove(permission_v_prod)
-            if agregar_productos:
-                u.user_permissions.add(permission_a_prod)
-            else:
-                u.user_permissions.remove(permission_a_prod)
-            if modificar_productos:
-                u.user_permissions.add(permission_c_prod)
-            else:
-                u.user_permissions.remove(permission_c_prod)
-            if eliminar_productos:
-                u.user_permissions.add(permission_d_prod)
-            else:
-                u.user_permissions.remove(permission_d_prod)
-            # -----------------------------------------------------#
-            if ver_usuarios:
-                u.user_permissions.add(permission_v_user)
-            else:
-                u.user_permissions.remove(permission_v_user)
-            if agregar_usuarios:
-                u.user_permissions.add(permission_a_user)
-            else:
-                u.user_permissions.remove(permission_a_user)
-            if modificar_usuarios:
-                u.user_permissions.add(permission_c_user)
-            else:
-                u.user_permissions.remove(permission_c_user)
-            if eliminar_usuarios:
-                u.user_permissions.add(permission_d_user)
-            else:
-                u.user_permissions.remove(permission_d_user)
-            # -----------------------------------------------------#
-            if ver_reservaciones:
-                u.user_permissions.add(permission_v_reserv)
-            else:
-                u.user_permissions.remove(permission_v_reserv)
-            if agregar_reservaciones:
-                u.user_permissions.add(permission_a_reserv)
-            else:
-                u.user_permissions.remove(permission_a_reserv)
-            if modificar_reservaciones:
-                u.user_permissions.add(permission_c_reserv)
-            else:
-                u.user_permissions.remove(permission_c_reserv)
-            if eliminar_reservaciones:
-                u.user_permissions.add(permission_d_reserv)
-            else:
-                u.user_permissions.remove(permission_d_reserv)
-            # -----------------------------------------------------#
             return redirect('users')
         context = {'perm_v_statistics': perm_v_statistics,
-                   'perm_v_state_reser': perm_v_state_reser, 'perm_c_state_reser': perm_c_state_reser,
                    'perm_a_permission': perm_a_permission,
-                   'perm_v_prod': perm_v_prod, 'perm_a_prod': perm_a_prod,
-                   'perm_c_prod': perm_c_prod, 'perm_d_prod': perm_d_prod,
-                   'perm_v_user': perm_v_user, 'perm_a_user': perm_a_user,
-                   'perm_c_user': perm_c_user, 'perm_d_user': perm_d_user,
-                   'perm_v_reser': perm_v_reser, 'perm_a_reser': perm_a_reser,
-                   'perm_c_reser': perm_c_reser, 'perm_d_reser': perm_d_reser,
-                   'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod,
-                   'cant_notificaciones': cant_notificaciones
+                   'usuario_select': u
                    }
         return render(request, 'fragancia/asignar_permisos.html', context)
     return redirect('login')

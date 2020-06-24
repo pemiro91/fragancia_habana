@@ -3,7 +3,7 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Estadísticas</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../../admin">Principal</a></li>
+        <li class="breadcrumb-item"><a href="#">Principal</a></li>
         <li class="breadcrumb-item active" aria-current="page">Estadísticas</li>
     </ol>
 {% endblock %}
@@ -36,7 +36,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-uppercase mb-1">Entregas
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">Entregadas
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">{{ cant_reserv_entreg }}</div>
                         <div class="mt-2 mb-0 text-muted text-xs">
@@ -197,7 +197,7 @@
                         <th>Estado</th>
                         <th>Fecha Cambio Estado</th>
                         {% if request.user.is_administrador or request.user.is_superuser %}
-                            <th>Vendedor</th>
+                            <th>Usuario</th>
                         {% endif %}
                     </tr>
                     </thead>
