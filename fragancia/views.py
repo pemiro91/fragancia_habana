@@ -237,7 +237,7 @@ def add_product(request):
             price_product = request.POST.get('price_product')
             count_product = request.POST.get('count_product')
 
-            producto = Product(
+            producto = Product.objects.create(
                 imagen=image_product,
                 nombre=name_product,
                 precio=price_product,
@@ -246,7 +246,6 @@ def add_product(request):
                 categoria=category_product,
                 tipo=type_product
             )
-            producto.save()
             mensaje = 'Agregó el producto: ' + producto.nombre
             notificacion = Notification(mensaje=mensaje, usuario=request.user, fecha=datetime.now())
             notificacion.save()
