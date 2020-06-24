@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'fragancia.apps.FraganciaConfig',
     'graphene_django',
     'gra_pacho.apps.GraphenePachoConfig',
-    'bootstrap_modal_forms',
 ]
 
 MIDDLEWARE = [
