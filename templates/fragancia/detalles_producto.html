@@ -6,16 +6,19 @@
     <link href="{% static 'fragancia/catalogo/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
 
     <link href="{% static 'fragancia/catalogo/vendor/venobox/venobox.css' %}" rel="stylesheet">
-    <link href="{% static 'fragancia/catalogo/vendor/animate.css/animate.min.css' %}" rel="stylesheet"
-          type="text/css">
-    <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">
+
+{#    <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">#}
     <link href="{% static 'fragancia/catalogo/css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'fragancia/dataspicker/css/datespicker.min.css' %}" rel="stylesheet">
+{#    <link href="{% static 'fragancia/dataspicker/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>#}
+
+     <link href="{% static 'fragancia/dataspicker/css/datepicker.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'fragancia/dataspicker/css/gijgo.min.css' %}" rel="stylesheet" type="text/css"/>
+
 
 {% endblock %}
 
 {% block header_content %}
-    <h1 class="h3 mb-0 text-gray-800">Detalles del Producto</h1>
+    <h1 class="h5 mb-0 text-gray-800">Detalles del Producto</h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Principal</a></li>
         <li class="breadcrumb-item"><a href="{% url 'catalogue' %}">Catálogo de Productos</a></li>
@@ -56,17 +59,17 @@
                                 </li>
                             </ul>
                             {% if messages %}
-                              <ul class="messages">
-                                {% for message in messages %}
-                                  <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"
-                                         role="alert">{{ message }}</div>
-                                {% endfor %}
-                              </ul>
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"
+                                             role="alert">{{ message }}</div>
+                                    {% endfor %}
+                                </ul>
                             {% endif %}
 
                             <hr id="nav_divider" class="sidebar-divider">
                             <div class="card mb-4">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
                                     <h6 style="color: #5a5c69!important;" id="titulo_tablas_formularios"
                                         class="m-0 font-weight-bold text-primary">Reservacion</h6><br>
 
@@ -76,7 +79,8 @@
                                         <div class="form-group row">
                                             <label for="inputCantidad" class="col-sm-5 col-form-label">Cantidad </label>
                                             <div class="col-sm-7">
-                                                <input type="number" name="count_booking" class="form-control" id="inputCantidad"
+                                                <input type="number" name="count_booking" class="form-control"
+                                                       id="inputCantidad"
                                                        placeholder="1" required>
                                                 <div class="invalid-feedback">
                                                     Por favor, rellene el campo.
@@ -135,18 +139,20 @@
                                                                class="col-sm-5 col-form-label">Fecha entrega </label>
                                                         <div class="col-sm-7">
                                                             <div class="input-group date">
-                                                                <input id="datepicker"  name="date_service"
-                                                                   placeholder="2020-06-16" />
+                                                                <input id="datepicker" name="date_service"
+                                                                       placeholder="2020-06-16"/>
 
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="inputHorarioEntrega"
                                                                class="col-sm-5 col-form-label">Horario </label>
                                                         <div class="col-sm-7">
-                                                            <select class="form-control" name="time_service" id="inputHorarioEntrega">
-                                                                <option value="--">---</option>
+                                                            <select class="form-control" name="time_service"
+                                                                    id="inputHorarioEntrega">
+                                                                <option value="--">Seleccione</option>
                                                                 <option value="8:00am-9:00am">8:00am-9:00am</option>
                                                                 <option value="9:00am-10:00am">9:00am-10:00am</option>
                                                                 <option value="10:00am-11:00am">10:00am-11:00am</option>
@@ -167,9 +173,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-sm-10">
-                                                <button type="submit" id="boton_formularios" class="btn btn-primary">
-                                                    Reservar
+                                            <label class="col-lg-3 col-form-label form-control-label"></label>
+                                            <div class="col-lg-9">
+                                                <button style="margin-left: 15%" type="submit"
+                                                        id="boton_formularios" class="btn btn-primary">Reservar
                                                 </button>
                                             </div>
                                         </div>
@@ -187,8 +194,6 @@
 
 {% block plugin_section %}
 
-    <script src="{% static 'fragancia/catalogo/php-email-form/validate.js' %}"></script>
-    <script src="{% static 'fragancia/catalogo/waypoints/jquery.waypoints.min.js' %}"></script>
 
     <script src="{% static 'fragancia/catalogo/vendor/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
@@ -196,7 +201,9 @@
     <script src="{% static 'fragancia/catalogo/vendor/venobox/venobox.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/aos/aos.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/js/main.js' %}"></script>
-    <script src="{% static 'fragancia/dataspicker/js/datespicker.min.js' %}"></script>
+
+
+    <script src="{% static 'fragancia/dataspicker/js/gijgo.min.js' %}"></script>
 
     <script>
         $('#datepicker').datepicker({
@@ -204,8 +211,10 @@
             startView: 2,
             todayBtn: "linked",
             language: "es",
-            format:"yyyy-mm-dd"
+            format: "yyyy-mm-dd",
+
         });
+
     </script>
 
 
@@ -227,22 +236,22 @@
     </script>
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function() {
-          'use strict';
-          window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-              }, false);
-            });
-          }, false);
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
         })();
     </script>
 {% endblock %}

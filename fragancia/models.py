@@ -122,4 +122,4 @@ class Notification(models.Model):
     mensaje = models.CharField(max_length=300)
     estado = models.CharField(max_length=50, choices=ESTADO_NOTIFICATION, name='estado')
     fecha = models.DateField()
-    hora = models.DateTimeField()
+

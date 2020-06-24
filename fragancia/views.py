@@ -155,8 +155,9 @@ def details_products(request, id_product=None):
                     )
                     estado_reservacion.save()
                     notificacion = Notification(mensaje=mensaje,
+
                                                 usuario=request.user,
-                                                estaddo='Nueva',
+                                                estado='Nueva',
                                                 fecha=datetime.now())
                     notificacion.save()
 

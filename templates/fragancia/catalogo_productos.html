@@ -3,11 +3,11 @@
 {% block header_style %}
     <link href="{% static 'fragancia/catalogo/vendor/icofont/icofont.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/catalogo/vendor/remixicon/remixicon.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fragancia/catalogo/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/catalogo/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
 
     <link href="{% static 'fragancia/catalogo/vendor/venobox/venobox.css' %}" rel="stylesheet">
-    <link href="{% static 'fragancia/catalogo/vendor/animate.css/animate.min.css' %}" rel="stylesheet"
-          type="text/css">
+
     <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/catalogo/css/style.css' %}" rel="stylesheet">
 
@@ -46,10 +46,10 @@
                                         <h4>{{ product.tipo }}</h4>
                                         <p>{{ product.cantidad_disponible }} U</p>
                                         <div class="portfolio-links">
-                                            <a href="" data-gall="portfolioGallery"
-                                               class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>
-                                            <a href="catalogue/{{ product.id }}" title="More Details">
-                                                <i id="iconos_catalogo" class="fas fa-fw fa-eye"></i></a>
+{#                                            <a href="" data-gall="portfolioGallery"#}
+{#                                               class="venobox" title="Web 3"><i class="bx bx-plus"></i></a>#}
+                                            <a href="catalogue/{{ product.id }}" title="Más detalles">
+                                                <i class="bx bx-link"></i></a>
                                         </div>
                                     </div>
                                 </div>
