@@ -8,7 +8,7 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Listado de Usuarios</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+        <li class="breadcrumb-item">Tableros de Control</li>
         <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
     </ol>
 {% endblock %}
@@ -29,7 +29,7 @@
                         <th>Usuario</th>
                         <th>Correo</th>
                         <th>Teléfono</th>
-                        <th>Vendedor</th>
+                        <th>Tipo</th>
 	                    {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
                             <th>Acciones</th>
                         {% endif %}
@@ -40,7 +40,7 @@
                         <th>Usuario</th>
                         <th>Correo</th>
                         <th>Teléfono</th>
-                        <th>Vendedor</th>
+                        <th>Tipo</th>
                         {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
                             <th>Acciones</th>
                         {% endif %}
@@ -53,9 +53,9 @@
                                  <td>{{ user.email }}</td>
                                  <td>{{ user.telefono }}</td>
                                  {% if user.is_vendedor %}
-                                     <td>Si</td>
+                                     <td>Vendedor</td>
                                  {% else %}
-                                     <td>No</td>
+                                     <td>Administrador</td>
                                  {% endif %}
                                  <td>
                                      {% if perms.fragancia.add_permission %}

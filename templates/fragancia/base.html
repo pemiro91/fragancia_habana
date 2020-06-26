@@ -38,33 +38,32 @@
             <div class="sidebar-brand-text mx-2"><span id="texto_nav" class="">Fragancias/Habana</span></div>
         </a>
         <hr class="sidebar-divider my-0">
-        <hr id="nav_divider" class="sidebar-divider">
-        <div class="sidebar-heading">
-            Principal
-        </div>
         {% if perms.fragancia.view_statistics or request.user.is_administrador %}
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="{% url 'index' %}">
-                    <i class="fas fa-fw fa-check"></i>
+                    <i class="fas fa-fw fa-check" title="Estadísticas"></i>
                     <span>Estadisticas</span>
                 </a>
             </li>
         {% endif %}
-
+        <hr id="nav_divider" class="sidebar-divider">
+        <div class="sidebar-heading">
+            PRINCIPAL
+        </div>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'catalogue' %}">
-                <i class="fab fa-fw fa-product-hunt"></i>
+                <i class="fab fa-fw fa-product-hunt" title="Catálogo de Productos"></i>
                 <span>Catálogo de Productos</span>
             </a>
         </li>
         <hr id="nav_divider" class="sidebar-divider">
         <div class="sidebar-heading">
-            Tableros de Control
+            TABLEROS DE CONTROL
         </div>
         {% if perms.fragancia.view_user or request.user.is_administrador %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'users' %}">
-                    <i class="fas fa-fw fa-users"></i>
+                    <i class="fas fa-fw fa-users" title="Gestión de Usuarios"></i>
                     <span>Usuarios</span>
                 </a>
             </li>
@@ -72,14 +71,14 @@
         {% if perms.fragancia.view_product or request.user.is_administrador %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'products' %}">
-                    <i class="fas fa-fw fa-pager"></i>
+                    <i class="fas fa-fw fa-archive" title="Gestión de Productos"></i>
                     <span>Productos</span>
                 </a>
             </li>
         {% endif %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'reservations' %}">
-                <i class="fas fa-fw fa-shopping-cart"></i>
+                <i class="fas fa-fw fa-shopping-cart" title="Gestión de Reservaciones"></i>
                 <span>Reservaciones</span>
             </a>
         </li>
@@ -100,189 +99,102 @@
                     <i class="fa fa-bars"></i>
                 </button>
                 <ul class="navbar-nav ml-auto">
-                    {#                    <li class="nav-item dropdown no-arrow">#}
-                    {#                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"#}
-                    {#                           data-toggle="dropdown"#}
-                    {#                           aria-haspopup="true" aria-expanded="false">#}
-                    {#                            <i class="fas fa-search fa-fw"></i>#}
-                    {#                        </a>#}
-                    {#                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"#}
-                    {#                             aria-labelledby="searchDropdown">#}
-                    {#                            <form class="navbar-search">#}
-                    {#                                <div class="input-group">#}
-                    {#                                    <input type="text" class="form-control bg-light border-1 small"#}
-                    {#                                           placeholder="What do you want to look for?"#}
-                    {#                                           aria-label="Search" aria-describedby="basic-addon2"#}
-                    {#                                           style="border-color: #3f51b5;">#}
-                    {#                                    <div class="input-group-append">#}
-                    {#                                        <button style="color: #625e5e;background-color: #ffff7e;#}
-                    {#                                                    border-color: #ffff7e;" class="btn btn-primary" type="button">#}
-                    {#                                            <i class="fas fa-search fa-sm"></i>#}
-                    {#                                        </button>#}
-                    {#                                    </div>#}
-                    {#                                </div>#}
-                    {#                            </form>#}
-                    {#                        </div>#}
-                    {#                    </li>#}
+
                     <li class="nav-item dropdown no-arrow mx-1">
                         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-bell fa-fw"></i>
-                            <span class="badge badge-danger badge-counter">{{ cant_notificaciones }}</span>
+                            <span class="badge badge-danger badge-counter">{{ lista_mensajes|length }}</span>
                         </a>
-                        {% if not cant_notificaciones == 0 %}
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="alertsDropdown">
-                                <h5 id="encabezado_dropdown" class="dropdown-header">
-                                    Centro de Notificaciones
-                                </h5>
 
-                                {% for nr in notificaciones_reserv %}
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-warning">
-                                                <i class="fas fa-shopping-cart text-white"></i>
-                                            </div>
+                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="alertsDropdown">
+                            <h5 id="encabezado_dropdown" class="dropdown-header">
+                                Centro de Notificaciones
+                            </h5>
+
+                            {% for ms in messages %}
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-shopping-cart text-white"></i>
                                         </div>
-                                        <div>
-                                            <div class="small text-gray-600">{{ nr.usuario }}</div>
-                                            <div class="large text-gray-700">{{ nr.mensaje }}</div>
-                                            <div class="small text-gray-600">{{ nr.fecha }}</div>
-                                        </div>
-{#                                        <div class="mr-1">#}
-{#                                            <div class="icon-circle bg-light">#}
-{#                                                <i class="fas fa-ellipsis-h text-gray-700"></i>#}
-{#                                            </div>#}
-{#                                        </div>#}
+                                    </div>
+                                    <div>
 
-                                    </a>
-                                {% endfor %}
+                                        <div class="large text-gray-700">{{ ms }}</div>
 
-                                {% for np in notificaciones_prod %}
-                                    <a class="dropdown-item d-flex align-items-center" href="#"
-                                       data-href="{% url 'delete_notification' np.id %}" data-toggle="modal"
-                                       data-id="{{ np.id }}"
-                                       data-target="#confirm-delete">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-info">
-                                                <i class="fas fa-table text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">{{ np.usuario }}</div>
-                                            {{ np.mensaje }}
-                                            <div class="small text-gray-500">{{ np.fecha }}</div>
-                                        </div>
+                                    </div>
+
+                                </a>
+                            {% endfor %}
 
 
 
-                                    </a>
-                                {% endfor %}
 
-
-                                <a class="dropdown-item text-center small text-gray-500" href="{% url 'notifications' %}">Mostrar todas las notificaciones</a>
-                            </div>
-                        {% else %}
-                        {% endif %}
+                            <a class="dropdown-item text-center small text-gray-500"
+                               href="{% url 'notifications' %}">Mostrar todas las notificaciones</a>
+                        </div>
 
 
                     </li>
 
-                    {#                    <li class="nav-item dropdown no-arrow mx-1">#}
-                    {#                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"#}
-                    {#                           data-toggle="dropdown"#}
-                    {#                           aria-haspopup="true" aria-expanded="false">#}
-                    {#                            <i class="fas fa-envelope fa-fw"></i>#}
-                    {#                            <span class="badge badge-warning badge-counter">2</span>#}
-                    {#                        </a>#}
-                    {#                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"#}
-                    {#                             aria-labelledby="messagesDropdown">#}
-                    {#                            <h5 id="encabezado_dropdown" class="dropdown-header">#}
-                    {#                                Message Center#}
-                    {#                            </h5>#}
-                    {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
-                    {#                                <div class="dropdown-list-image mr-3">#}
-                    {#                                    <img class="rounded-circle" src="../../centro/static/centro/img/man.png"#}
-                    {#                                         style="max-width: 60px" alt="">#}
-                    {#                                    <div class="status-indicator bg-success"></div>#}
-                    {#                                </div>#}
-                    {#                                <div class="font-weight-bold">#}
-                    {#                                    <div class="text-truncate">Hi there! I am wondering if you can help me with a#}
-                    {#                                        problem I've been#}
-                    {#                                        having.#}
-                    {#                                    </div>#}
-                    {#                                    <div class="small text-gray-500">Udin Cilok · 58m</div>#}
-                    {#                                </div>#}
-                    {#                            </a>#}
-                    {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
-                    {#                                <div class="dropdown-list-image mr-3">#}
-                    {#                                    <img class="rounded-circle" src="../../centro/static/centro/img/girl.png"#}
-                    {#                                         style="max-width: 60px" alt="">#}
-                    {#                                    <div class="status-indicator bg-default"></div>#}
-                    {#                                </div>#}
-                    {#                                <div>#}
-                    {#                                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone told#}
-                    {#                                        me that people#}
-                    {#                                        say this to all dogs, even if they aren't good...#}
-                    {#                                    </div>#}
-                    {#                                    <div class="small text-gray-500">Jaenab · 2w</div>#}
-                    {#                                </div>#}
-                    {#                            </a>#}
-                    {#                            <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>#}
-                    {#                        </div>#}
-                    {#                    </li>#}
-                    {#                    <li class="nav-item dropdown no-arrow mx-1">#}
-                    {#                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"#}
-                    {#                           data-toggle="dropdown"#}
-                    {#                           aria-haspopup="true" aria-expanded="false">#}
-                    {#                            <i class="fas fa-tasks fa-fw"></i>#}
-                    {#                            <span class="badge badge-success badge-counter">3</span>#}
-                    {#                        </a>#}
-                    {#                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"#}
-                    {#                             aria-labelledby="messagesDropdown">#}
-                    {#                            <h5 id="encabezado_dropdown" class="dropdown-header">#}
-                    {#                                Task#}
-                    {#                            </h5>#}
-                    {#                            <a class="dropdown-item align-items-center" href="#">#}
-                    {#                                <div class="mb-3">#}
-                    {#                                    <div class="small text-gray-500">Design Button#}
-                    {#                                        <div class="small float-right"><b>50%</b></div>#}
-                    {#                                    </div>#}
-                    {#                                    <div class="progress" style="height: 12px;">#}
-                    {#                                        <div class="progress-bar bg-success" role="progressbar" style="width: 50%"#}
-                    {#                                             aria-valuenow="50"#}
-                    {#                                             aria-valuemin="0" aria-valuemax="100"></div>#}
-                    {#                                    </div>#}
-                    {#                                </div>#}
-                    {#                            </a>#}
-                    {#                            <a class="dropdown-item align-items-center" href="#">#}
-                    {#                                <div class="mb-3">#}
-                    {#                                    <div class="small text-gray-500">Make Beautiful Transitions#}
-                    {#                                        <div class="small float-right"><b>30%</b></div>#}
-                    {#                                    </div>#}
-                    {#                                    <div class="progress" style="height: 12px;">#}
-                    {#                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 30%"#}
-                    {#                                             aria-valuenow="30"#}
-                    {#                                             aria-valuemin="0" aria-valuemax="100"></div>#}
-                    {#                                    </div>#}
-                    {#                                </div>#}
-                    {#                            </a>#}
-                    {#                            <a class="dropdown-item align-items-center" href="#">#}
-                    {#                                <div class="mb-3">#}
-                    {#                                    <div class="small text-gray-500">Create Pie Chart#}
-                    {#                                        <div class="small float-right"><b>75%</b></div>#}
-                    {#                                    </div>#}
-                    {#                                    <div class="progress" style="height: 12px;">#}
-                    {#                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 75%"#}
-                    {#                                             aria-valuenow="75"#}
-                    {#                                             aria-valuemin="0" aria-valuemax="100"></div>#}
-                    {#                                    </div>#}
-                    {#                                </div>#}
-                    {#                            </a>#}
-                    {#                            <a class="dropdown-item text-center small text-gray-500" href="#">View All Taks</a>#}
-                    {#                        </div>#}
-                    {#                    </li>#}
+                    {% if request.user.is_administrador or request.user.is_superuser %}
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                               data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-envelope fa-fw"></i>
+
+                                <span class="badge badge-info badge-counter">{{ cant_notificaciones }}</span>
+                            </a>
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="messagesDropdown">
+                                <h5 id="encabezado_dropdown" class="dropdown-header">
+                                    Últimos Mensajes
+                                </h5>
+                                {% if notificaciones_reserv %}
+                                    {% for nr in notificaciones_reserv %}
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="dropdown-list-image mr-3">
+                                                {% ifequal nr.usuario.genero 'Mujer' %}
+                                                    <img class="rounded-circle"
+                                                         src="{% static 'fragancia/img/girl.png' %}"
+                                                         style="max-width: 60px" alt="">
+                                                    <div class="status-indicator bg-success"></div>
+                                                {% else %}
+                                                    <img class="rounded-circle"
+                                                         src="{% static 'fragancia/img/man.png' %}"
+                                                         style="max-width: 60px" alt="">
+                                                    <div class="status-indicator bg-success"></div>
+                                                {% endifequal %}
+                                            </div>
+                                            <div class="font-weight-bold">
+                                                <div class="small text-gray-800">{{ nr.usuario }}</div>
+                                                <div class="text-truncate">{{ nr.mensaje }}
+                                                </div>
+                                                <div class="small text-gray-500">{{ nr.fecha }}</div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                    <a class="dropdown-item text-center small text-gray-500"
+                                       href="{% url 'notifications' %}">Mostrar todos los
+                                        mensajes</a>
+                                {% else %}
+                                    <a class="dropdown-item d-flex align-items-center justify-content-center" href="#">
+                                        <div class="small text-gray-700 ">
+                                            No existen mensajes
+                                        </div>
+                                    </a>
+
+                                {% endif %}
+
+
+                            </div>
+                        </li>
+                    {% endif %}
+
                     <div id="div_nav_izq" class="topbar-divider d-none d-sm-block"></div>
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -347,7 +259,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - Desarrollado por
+            <span>Todos los Derechos Reservados &copy; <script> document.write(new Date().getFullYear()); </script> - Desarrollado por
               <b><a href="https://habanatrans.com/" target="_blank">Equipo HabanaTrans</a></b>
             </span>
                 </div>
