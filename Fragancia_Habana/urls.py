@@ -60,10 +60,11 @@ urlpatterns = [
 
     # Api
     path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),
-    path('delete_notification/<int:id_notification>', views.delete_notification, name="delete_notification"),
+
 
     # Gestionar Notificaciones
-    path('notifications', views.notifications, name="notifications"),
+    path('messages_center', views.messages_center, name="messages_center"),
+    path('delete_message/<int:id_message>', views.delete_message, name="delete_message"),
 
 ]
 if settings.DEBUG:

@@ -17,8 +17,6 @@ from rx.core.notification import Notification
 
 from fragancia.models import Product, Reservation, User, Estado_Reservation, Tipo_Perfume, Notification
 
-from django.contrib.messages import get_messages
-
 logger = logging.getLogger(__name__)
 
 
@@ -48,24 +46,6 @@ def logout(request):
     return redirect('/')
 
 
-def add_notification(request, mensaje):
-
-    notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user)[:3]
-    cant_notificaciones = len(notificaciones_reserv)
-    lista_mensajes = []
-
-    if mensaje != '':
-        notificacion = Notification(mensaje=mensaje, usuario=request.user, fecha=datetime.now())
-        notificacion.save()
-
-        storage = get_messages(request)
-        for message in storage:
-            lista_mensajes.append(message)
-        storage.used = False
-
-    return HttpResponseRedirect("some html here")
-
-
 # -------------- Index--------------#
 @login_required(login_url='login')
 def index(request):
@@ -82,7 +62,8 @@ def index(request):
         reservaciones_pendientes = []
         reservaciones_entregadas = []
         reservaciones_canceladas = []
-        mensaje = ''
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
 
         if productos:
             for p in productos:
@@ -102,12 +83,13 @@ def index(request):
         cant_reserv_pend = len(reservaciones_pendientes)
         cant_reserv_entreg = len(reservaciones_entregadas)
         cant_reserv_canc = len(reservaciones_canceladas)
-        add_notification(request,mensaje)
+
         context = {'cant_prod_sistema': cant_prod, 'cant_reserv_pend': cant_reserv_pend,
                    'cant_reserv_entreg': cant_reserv_entreg, 'cant_reserv_canc': cant_reserv_canc,
                    'cant_vendedores': cant_vendedores, 'cant_prod_disp': cant_prod_disp,
                    'cant_reservaciones': cant_reservaciones, 'reservaciones_ordenadas': reservaciones_ordenadas,
-                   'cant_res_ord': cant_res_ord,
+                   'cant_res_ord': cant_res_ord, 'notificaciones': notificaciones,
+                   'cant_notificaciones': cant_notificaciones
                    }
         return render(request, "fragancia/index.html", context)
     return redirect('login')
@@ -118,9 +100,12 @@ def index(request):
 def catalogue(request):
     if request.user.is_authenticated:
         list_product = Product.objects.all().exclude(cantidad_disponible=0)
+        notificaciones = Notification.objects.all().order_by('-fecha').exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
 
         return render(request, "fragancia/catalogo_productos.html",
-                      {'list_product': list_product})
+                      {'list_product': list_product,
+                       'notificaciones': notificaciones, 'cant_notificaciones': cant_notificaciones})
     return redirect('login')
 
 
@@ -136,6 +121,9 @@ def details_products(request, id_product=None):
         phone_service = request.POST.get('phone_service')
         date_service = request.POST.get('date_service')
         time_service = request.POST.get('time_service')
+
+        notificaciones = Notification.objects.all().order_by('-fecha').exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
 
         if count_booking:
             if int(count_booking) <= product.cantidad_disponible:
@@ -158,17 +146,22 @@ def details_products(request, id_product=None):
                         vendedor_id=request.user.id,
                     )
                     estado_reservacion.save()
-                    mensaje = 'Reservó' + count_booking + 'unidades del producto: ' + product.nombre
 
                 Product.objects.filter(pk=id_product).update(cantidad_disponible=value_real)
                 messages.success(request, 'Reserva realizada satisfactoriamente')
 
-                add_notification(request, mensaje)
+                # Agregando el mensaje de notificacion en la base de datos
+                mensaje_notificacion = 'Reservó ' + count_booking + ' unidad(es) del producto: ' + product.nombre
+                if mensaje_notificacion != '':
+                    notificacion = Notification(mensaje=mensaje_notificacion, usuario=request.user,
+                                                estado='No-Leido', tipo='Reservacion')
+                    notificacion.save()
                 return redirect(reverse('details_products', args=(id_product,)))
             else:
                 messages.warning(request, 'La cantidad proporcionada es mayor que la disponible.')
 
-        context = {'product': product, 'value_real': value_real}
+        context = {'product': product, 'value_real': value_real, 'notificaciones': notificaciones,
+                   'cant_notificaciones': cant_notificaciones}
         return render(request, "fragancia/detalles_producto.html", context)
     return redirect('login')
 
@@ -180,20 +173,20 @@ def products(request):
     if request.user.is_authenticated:
         list_type_p = Tipo_Perfume.objects.all()
         list_products = Product.objects.all()
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
 
         return render(request, "fragancia/listado_productos.html",
-                      {'list_products': list_products, 'list_type_p': list_type_p})
+                      {'list_products': list_products, 'list_type_p': list_type_p,
+                       'notificaciones': notificaciones, 'cant_notificaciones': cant_notificaciones})
     return redirect('login')
 
 
 # -------------- Adicionar tipo de perfume--------------#
 def add_type(request):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         if request.method == 'POST':
             name_type = request.POST.get('name_type')
             description_type = request.POST.get('description_type')
@@ -202,8 +195,7 @@ def add_type(request):
                 descripcion=description_type
             )
             return redirect('add_product')
-        return render(request, 'fragancia/agregar_producto.html', {'notificaciones_reserv': notificaciones_reserv,
-                                                                   'notificaciones_prod': notificaciones_prod,
+        return render(request, 'fragancia/agregar_producto.html', {'notificaciones': notificaciones,
                                                                    'cant_notificaciones': cant_notificaciones})
     return redirect('login')
 
@@ -212,13 +204,14 @@ def add_type(request):
 def add_product(request):
     if request.user.is_authenticated:
         list_type_p = Tipo_Perfume.objects.all()
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user)[:3]
-        cant_notificaciones = len(notificaciones_reserv)
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         lista_mensajes = []
         question_dict = {
             'types_perfumes': list_type_p,
-            'notificaciones_reserv': notificaciones_reserv,
-            'cant_notificaciones': cant_notificaciones
+            'notificaciones': notificaciones,
+            'cant_notificaciones': cant_notificaciones,
+            'lista_mensajes': lista_mensajes
         }
         if request.method == 'POST':
             name_product = request.POST.get('name_product')
@@ -238,10 +231,14 @@ def add_product(request):
                 categoria=category_product,
                 tipo=type_product
             )
-
             messages.success(request, 'Producto agregado satisfactoriamente')
-            mensaje = 'Agregó el producto: ' + producto.nombre
-            add_notification(request, messages, mensaje)
+
+            # Agregando el mensaje de notificacion en la base de datos
+            mensaje_notificacion = 'Agregó ' + count_product + ' unidad(es) del producto: ' + producto.nombre
+            if mensaje_notificacion != '':
+                notificacion = Notification(mensaje=mensaje_notificacion, usuario=request.user,
+                                            estado='No-Leido', tipo='Producto')
+                notificacion.save()
             return redirect('products')
         return render(request, 'fragancia/agregar_producto.html', question_dict)
     return redirect('login')
@@ -253,7 +250,9 @@ def edit_product(request, id_product):
     if request.user.is_authenticated:
         product = Product.objects.get(id=id_product)
         list_type_p = Tipo_Perfume.objects.all()
-        mensaje =''
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
+        lista_mensajes = []
         if request.method == 'POST':
             name_products = request.POST.get('name_products')
             type_products = request.POST.get('type_products')
@@ -271,9 +270,12 @@ def edit_product(request, id_product):
             )
             messages.success(request, 'Producto modificado satisfactoriamente')
 
-            add_notification(request,mensaje)
             return redirect('products')
-        context = {'product': product, 'types_perfumes': list_type_p}
+        context = {'product': product, 'types_perfumes': list_type_p,
+                   'notificaciones': notificaciones,
+                   'cant_notificaciones': cant_notificaciones,
+                   'lista_mensajes': lista_mensajes
+                   }
         return render(request, 'fragancia/editar_producto.html', context)
     return redirect('login')
 
@@ -294,20 +296,20 @@ def delete_product(request, id_product):
 def users(request):
     if request.user.is_authenticated:
         list_users = User.objects.all().exclude(is_superuser=True)
-        mensaje = ''
-        add_notification(request,mensaje)
-        context = {'list_users': list_users}
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
+        context = {'list_users': list_users,
+                   'notificaciones': notificaciones,
+                   'cant_notificaciones': cant_notificaciones,
+                   }
         return render(request, 'fragancia/listado_usuarios.html', context)
     return redirect('login')
 
 
 def user_profile(request):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         if request.method == "POST":
             nombre = request.POST.get('first_name')
             apellidos = request.POST.get('last_name')
@@ -322,19 +324,15 @@ def user_profile(request):
                 username=usuario,
             )
             return redirect('user_profile')
-        return render(request, "fragancia/editar_perfil_usuario.html", {'notificaciones_reserv': notificaciones_reserv,
-                                                                        'notificaciones_prod': notificaciones_prod,
-                                                                        'cant_notificaciones': cant_notificaciones})
+        return render(request, "fragancia/editar_perfil_usuario.html",
+                      {'notificaciones': notificaciones, 'cant_notificaciones': cant_notificaciones})
     return redirect('login')
 
 
 def change_password(request):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         if request.method == "POST":
             old_password = request.POST.get('old_password')
             new_password = request.POST.get('new_password')
@@ -349,19 +347,16 @@ def change_password(request):
             U.set_password(new_password)
             U.save()
             return redirect('login')
-        context = {'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod, 'cant_notificaciones': cant_notificaciones}
+        context = {'notificaciones': notificaciones, 'cant_notificaciones': cant_notificaciones, }
         return render(request, "fragancia/cambiar_contrasena.html", context)
     return redirect('login')
 
 
 def add_user(request):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().order_by('-fecha').exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
+
         if request.method == "POST":
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
@@ -372,6 +367,7 @@ def add_user(request):
             tipo_perfil = request.POST.get('tipo_perfil')
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
+
             if User.objects.filter(username=user_name).exists():
                 messages.warning(request, 'El nombre de usuario ya existe')
                 return redirect('add_user')
@@ -380,7 +376,7 @@ def add_user(request):
                 return redirect('add_user')
             else:
                 if tipo_perfil == 'vendedor':
-                    User.objects.create_user(
+                    user = User.objects.create_user(
                         first_name=first_name,
                         last_name=last_name,
                         email=email,
@@ -391,8 +387,9 @@ def add_user(request):
                         is_administrador=False,
                         genero=genero
                     )
+
                 else:
-                    User.objects.create_user(
+                    user = User.objects.create_user(
                         first_name=first_name,
                         last_name=last_name,
                         email=email,
@@ -403,9 +400,17 @@ def add_user(request):
                         is_administrador=True,
                         genero=genero
                     )
+
+            messages.success(request, 'Usuario agregado satisfactoriamente')
+
+            # Agregando el mensaje de notificacion en la base de datos
+            mensaje_notificacion = 'Agregó al usuario: ' + user.username+ ' al sistema'
+            if mensaje_notificacion != '':
+                notificacion = Notification(mensaje=mensaje_notificacion, usuario=request.user,
+                                            estado='No-Leido', tipo='Usuario')
+                notificacion.save()
             return redirect('users')
-        context = {'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod,
+        context = {'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, 'fragancia/agregar_usuario.html', context)
     return redirect('login')
@@ -414,11 +419,8 @@ def add_user(request):
 def edit_user(request, id_user=None):
     if request.user.is_authenticated:
         user = get_object_or_404(User, id=id_user)
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         if request.method == 'POST':
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
@@ -455,8 +457,7 @@ def edit_user(request, id_user=None):
             user_custom.save()
             return redirect('users')
         context = {'user': user,
-                   'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod,
+                   'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, 'fragancia/editar_usuario.html', context)
     return redirect('login')
@@ -516,15 +517,11 @@ def reservations(request):
     if request.user.is_authenticated:
         list_reservations = Estado_Reservation.objects.filter(vendedor=request.user.id)
         list_reservations_admin = Estado_Reservation.objects.all()
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         context = {'list_reservations': list_reservations,
                    'list_reservations_admin': list_reservations_admin,
-                   'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod,
+                   'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, 'fragancia/listado_reservaciones.html', context)
     return redirect('login')
@@ -535,11 +532,8 @@ def reservations(request):
 def edit_reservation(request, id_reservation=None):
     value_real = 0
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().order_by('-fecha').exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         reservation = get_object_or_404(Reservation, id=id_reservation)
         if request.method == "POST":
             cantidad_reservada = request.POST.get('cantidad_reservada')
@@ -598,15 +592,14 @@ def edit_reservation(request, id_reservation=None):
                     )
 
                 Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
-                messages.success(request, 'Reserva editada satisfactoriamente')
+                messages.success(request, 'Reserva modificada satisfactoriamente')
                 return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
 
             elif reservation.producto.cantidad_disponible == 0:
                 messages.warning(request, 'La cantidad proporcionada es mayor que la disponible')
                 return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
         context = {'reservation': reservation, 'value_real': value_real,
-                   'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod,
+                   'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, 'fragancia/editar_reservacion.html', context)
     return redirect('login')
@@ -626,15 +619,11 @@ def delete_reservation(request, id_reservation):
 
 def change_state_reservation_init(request, id_reservation):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        notificaciones = Notification.objects.all().order_by('-fecha').exclude(usuario=request.user)[:3]
+        cant_notificaciones = len(notificaciones)
         reservation = get_object_or_404(Estado_Reservation, reservacion_id=id_reservation)
         context = {'reservation': reservation,
-                   'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod,
+                   'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, 'fragancia/editar_estado.html', context)
     return redirect('login')
@@ -642,11 +631,6 @@ def change_state_reservation_init(request, id_reservation):
 
 def change_state_reservation(request, id_reservation):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó')
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó')
-        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
         state_reservation = request.POST.get('state_reservation')
         Estado_Reservation.objects.filter(reservacion_id=id_reservation).update(
             estado=state_reservation,
@@ -662,25 +646,21 @@ def change_state_reservation(request, id_reservation):
     return redirect('login')
 
 
-def notifications(request):
+def messages_center(request):
     if request.user.is_authenticated:
-        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Agregó').order_by('-fecha')[:2]
-        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
-            mensaje__contains='Realizó').order_by('-fecha')[:2]
-        notificaciones = Notification.objects.all().exclude(usuario=request.user)
+        notificaciones = Notification.objects.all().order_by('-fecha').exclude(usuario=request.user)[:3]
         cant_notificaciones = len(notificaciones)
-        context = {'notificaciones': notificaciones,
-                   'notificaciones_reserv': notificaciones_reserv,
-                   'notificaciones_prod': notificaciones_prod,
+        todas_notificaciones = Notification.objects.all()
+
+        context = {'notificaciones': notificaciones, 'todas_notificaciones': todas_notificaciones,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, 'fragancia/listado_notificaciones.html', context)
     return redirect('login')
 
 
-def delete_notification(request, id_notification):
+def delete_message(request, id_message):
     if request.user.is_authenticated:
-        n = Notification.objects.get(id=id_notification)
+        n = Notification.objects.get(id=id_message)
         n.delete()
-
+        return redirect('messages_center')
     return redirect('login')

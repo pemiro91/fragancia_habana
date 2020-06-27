@@ -104,8 +104,12 @@
                         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-bell fa-fw"></i>
-                            <span class="badge badge-danger badge-counter">{{ lista_mensajes|length }}</span>
+                            {% if notificaciones %}
+                                <i class="fas fa-bell fa-fw"></i>
+                                <span class="badge badge-info badge-counter">{{ cant_notificaciones }}</span>
+                            {% else %}
+                                <i class="fas fa-bell-slash fa-fw"></i>
+                            {% endif %}
                         </a>
 
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -113,87 +117,138 @@
                             <h5 id="encabezado_dropdown" class="dropdown-header">
                                 Centro de Notificaciones
                             </h5>
+                            {% if notificaciones %}
+                                {% for notificacion in notificaciones %}
+                                    {% if request.user.is_vendedor %}
 
-                            {% for ms in messages %}
+                                        {% if notificacion.tipo == 'Producto' or notificacion.tipo == 'Reservacion' %}
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="mr-3">
+                                                    <div class="icon-circle bg-info">
+                                                        {% if notificacion.tipo == 'Producto' %}
+                                                            <i class="fas fa-archive text-white"></i>
+                                                        {% elif notificacion.tipo == 'Reservacion' %}
+                                                            <i class="fas fa-shopping-cart text-white"></i>
+                                                        {% else %}
+                                                            <i class="fas fa-users text-white"></i>
+
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="font-weight-bold">
+                                                    <div class="small text-gray-800">{{ notificacion.usuario }}</div>
+                                                    <div class="text-truncate">{{ notificacion.mensaje }}
+                                                    </div>
+                                                    <div class="small text-gray-500">{{ notificacion.fecha }}</div>
+                                                </div>
+
+                                            </a>
+                                        {% else %}
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="large text-gray-700">
+                                                    No tienes nuevas notificaciones
+                                                </div>
+                                            </a>
+
+                                        {% endif %}
+                                    {% else %}
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="mr-3">
+                                                <div class="icon-circle bg-info">
+                                                    {% if notificacion.tipo == 'Producto' %}
+                                                        <i class="fas fa-archive text-white"></i>
+                                                    {% elif notificacion.tipo == 'Reservacion' %}
+                                                        <i class="fas fa-shopping-cart text-white"></i>
+                                                    {% else %}
+                                                        <i class="fas fa-users text-white"></i>
+
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="font-weight-bold">
+                                                <div class="small text-gray-800">{{ notificacion.usuario }}</div>
+                                                <div class="text-truncate">{{ notificacion.mensaje }}
+                                                </div>
+                                                <div class="small text-gray-500">{{ notificacion.fecha }}</div>
+                                            </div>
+
+                                        </a>
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            {% else %}
                                 <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-shopping-cart text-white"></i>
-                                        </div>
+                                    <div class="large text-gray-700">
+                                        No tienes nuevas notificaciones
                                     </div>
-                                    <div>
-
-                                        <div class="large text-gray-700">{{ ms }}</div>
-
-                                    </div>
-
                                 </a>
-                            {% endfor %}
-
-
-
-
+                            {% endif %}
                             <a class="dropdown-item text-center small text-gray-500"
-                               href="{% url 'notifications' %}">Mostrar todas las notificaciones</a>
+                               href="{% url 'messages_center' %}">Mostrar todas las notificaciones</a>
                         </div>
 
 
                     </li>
-
-                    {% if request.user.is_administrador or request.user.is_superuser %}
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                               data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-
-                                <span class="badge badge-info badge-counter">{{ cant_notificaciones }}</span>
-                            </a>
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="messagesDropdown">
-                                <h5 id="encabezado_dropdown" class="dropdown-header">
-                                    Últimos Mensajes
-                                </h5>
-                                {% if notificaciones_reserv %}
-                                    {% for nr in notificaciones_reserv %}
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                {% ifequal nr.usuario.genero 'Mujer' %}
-                                                    <img class="rounded-circle"
-                                                         src="{% static 'fragancia/img/girl.png' %}"
-                                                         style="max-width: 60px" alt="">
-                                                    <div class="status-indicator bg-success"></div>
-                                                {% else %}
-                                                    <img class="rounded-circle"
-                                                         src="{% static 'fragancia/img/man.png' %}"
-                                                         style="max-width: 60px" alt="">
-                                                    <div class="status-indicator bg-success"></div>
-                                                {% endifequal %}
-                                            </div>
-                                            <div class="font-weight-bold">
-                                                <div class="small text-gray-800">{{ nr.usuario }}</div>
-                                                <div class="text-truncate">{{ nr.mensaje }}
-                                                </div>
-                                                <div class="small text-gray-500">{{ nr.fecha }}</div>
-                                            </div>
-                                        </a>
-                                    {% endfor %}
-                                    <a class="dropdown-item text-center small text-gray-500"
-                                       href="{% url 'notifications' %}">Mostrar todos los
-                                        mensajes</a>
-                                {% else %}
-                                    <a class="dropdown-item d-flex align-items-center justify-content-center" href="#">
-                                        <div class="small text-gray-700 ">
-                                            No existen mensajes
-                                        </div>
-                                    </a>
-
-                                {% endif %}
-
-
-                            </div>
-                        </li>
-                    {% endif %}
+                    {##}
+                    {#                    {% if request.user.is_administrador or request.user.is_superuser %}#}
+                    {#                        <li class="nav-item dropdown no-arrow mx-1">#}
+                    {#                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"#}
+                    {#                               data-toggle="dropdown"#}
+                    {#                               aria-haspopup="true" aria-expanded="false">#}
+                    {#                                {% if notificaciones %}#}
+                    {#                                    <i class="fas fa-envelope-open-text fa-fw"></i>#}
+                    {##}
+                    {#                                    <span class="badge badge-info badge-counter">{{ cant_notificaciones }}</span>#}
+                    {#                                {% else %}#}
+                    {#                                    <i class="fas fa-envelope fa-fw"></i>#}
+                    {#                                {% endif %}#}
+                    {#                            </a>#}
+                    {#                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"#}
+                    {#                                 aria-labelledby="messagesDropdown">#}
+                    {#                                <h5 id="encabezado_dropdown" class="dropdown-header">#}
+                    {#                                    Últimos Mensajes#}
+                    {#                                </h5>#}
+                    {#                                {% if notificaciones %}#}
+                    {#                                    {% for notificacion in notificaciones %}#}
+                    {#                                        <a class="dropdown-item d-flex align-items-center" href="#">#}
+                    {#                                            <div class="dropdown-list-image mr-3">#}
+                    {#                                                {% ifequal notificacion.usuario.genero 'Mujer' %}#}
+                    {#                                                    <img class="rounded-circle"#}
+                    {#                                                         src="{% static 'fragancia/img/girl.png' %}"#}
+                    {#                                                         style="max-width: 60px" alt="">#}
+                    {#                                                    <div class="status-indicator bg-success"></div>#}
+                    {#                                                {% else %}#}
+                    {#                                                    <img class="rounded-circle"#}
+                    {#                                                         src="{% static 'fragancia/img/man.png' %}"#}
+                    {#                                                         style="max-width: 60px" alt="">#}
+                    {#                                                    <div class="status-indicator bg-success"></div>#}
+                    {#                                                {% endifequal %}#}
+                    {#                                            </div>#}
+                    {#                                            <div class="font-weight-bold">#}
+                    {#                                                <div class="small text-gray-800">{{ notificacion.usuario }}</div>#}
+                    {#                                                <div class="text-truncate">{{ notificacion.mensaje }}#}
+                    {#                                                </div>#}
+                    {#                                                <div class="small text-gray-500">{{ notificacion.fecha }}</div>#}
+                    {#                                            </div>#}
+                    {#                                        </a>#}
+                    {#                                    {% endfor %}#}
+                    {#                                    <a class="dropdown-item text-center small text-gray-500"#}
+                    {#                                       href="{% url 'messages_center' %}">Mostrar todos tus#}
+                    {#                                        mensajes</a>#}
+                    {#                                {% else %}#}
+                    {#                                    <a class="dropdown-item d-flex align-items-center justify-content-center" href="#">#}
+                    {#                                        <div class="small text-gray-700 ">#}
+                    {#                                            No tienes mensajes#}
+                    {#                                        </div>#}
+                    {#                                    </a>#}
+                    {##}
+                    {#                                {% endif %}#}
+                    {##}
+                    {##}
+                    {#                            </div>#}
+                    {#                        </li>#}
+                    {#                    {% endif %}#}
 
                     <div id="div_nav_izq" class="topbar-divider d-none d-sm-block"></div>
                     <li class="nav-item dropdown no-arrow">
