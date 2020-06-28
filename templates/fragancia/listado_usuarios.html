@@ -18,25 +18,28 @@
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 id="" class="m-0 font-weight-bold text-primary"></h6>
                 {% if perms.fragancia.add_user or request.user.is_administrador %}
-                    <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_user' %}">Agregar <i
-                       class="fas fa-plus-circle" ></i></a>
+                    <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_user' %}">Agregar
+                        <i
+                                class="fas fa-plus-circle"></i></a>
                 {% endif %}
             </div>
             <div class="table-responsive p-3">
                 <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                     <tr>
+                        <th>Nombre Completo</th>
                         <th>Usuario</th>
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Tipo</th>
-	                    {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
+                        {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
                             <th>Acciones</th>
                         {% endif %}
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
+                        <th>Nombre Completo</th>
                         <th>Usuario</th>
                         <th>Correo</th>
                         <th>Teléfono</th>
@@ -47,36 +50,39 @@
                     </tr>
                     </tfoot>
                     <tbody>
-                        {% for user in list_users  %}
-                            <tr>
-                                 <td>{{ user.username }}</td>
-                                 <td>{{ user.email }}</td>
-                                 <td>{{ user.telefono }}</td>
-                                 {% if user.is_vendedor %}
-                                     <td>Vendedor</td>
-                                 {% else %}
-                                     <td>Administrador</td>
-                                 {% endif %}
-                                 <td>
-                                     {% if perms.fragancia.add_permission %}
-                                         <a href="{% url 'assign_permissions' user.id %}" title="Asignar otros permisos"><i  class="fas fa-fw fa-user-plus"></i></a>
-                                     {% endif %}
-                                     {% if perms.fragancia.change_user or request.user.is_administrador %}
-                                         <a href="{% url 'edit_user' user.id %}" title="Modificar Usuario"><i class="fas fa-fw fa-edit"></i></a>
-                                     {% endif %}
-                                     {% if perms.fragancia.delete_user or request.user.is_administrador %}
-                                         <a href="#" data-href="{% url 'delete_user' user.id %}" data-toggle="modal"
-                                            class="open-AddBookDialog" data-id="{{ user.id }}"
-                                            title="Eliminar Usuario"
-                                            data-target="#confirm-delete">
-                                             <i class="fas fa-fw fa-trash-alt"></i>
-                                         </a>
-                                     {% endif %}
+                    {% for user in list_users %}
+                        <tr>
+                            <td>{{ user.first_name }} {{ user.last_name}}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.telefono }}</td>
+                            {% if user.is_vendedor %}
+                                <td>Vendedor</td>
+                            {% else %}
+                                <td>Administrador</td>
+                            {% endif %}
+                            <td>
+                                {% if perms.fragancia.add_permission %}
+                                    <a href="{% url 'assign_permissions' user.id %}" title="Asignar otros permisos"><i
+                                            class="fas fa-fw fa-user-plus"></i></a>
+                                {% endif %}
+                                {% if perms.fragancia.change_user or request.user.is_administrador %}
+                                    <a href="{% url 'edit_user' user.id %}" title="Modificar Usuario"><i
+                                            class="fas fa-fw fa-edit"></i></a>
+                                {% endif %}
+                                {% if perms.fragancia.delete_user or request.user.is_administrador %}
+                                    <a href="#" data-href="{% url 'delete_user' user.id %}" data-toggle="modal"
+                                       class="open-AddBookDialog" data-id="{{ user.id }}"
+                                       title="Eliminar Usuario"
+                                       data-target="#confirm-delete">
+                                        <i class="fas fa-fw fa-trash-alt"></i>
+                                    </a>
+                                {% endif %}
 
 
-                                 </td>
-                            </tr>
-                        {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -84,24 +90,25 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Desea eliminar el usuario?</h5>
-{#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#              <span aria-hidden="true">&times;</span>#}
-{#            </button>#}
-          </div>
-{#          <div class="modal-body">#}
-{##}
-{#          </div>#}
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <a id="boton_agregar" class="btn btn-primary btn-ok">Eliminar</a>
-          </div>
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Desea eliminar el usuario?</h5>
+                    {#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+                    {#              <span aria-hidden="true">&times;</span>#}
+                    {#            </button>#}
+                </div>
+                {#          <div class="modal-body">#}
+                {##}
+                {#          </div>#}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <a id="boton_agregar" class="btn btn-primary btn-ok">Eliminar</a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
 {% endblock %}
@@ -119,7 +126,7 @@
         });
     </script>
     <script>
-        $('#confirm-delete').on('show.bs.modal', function(e) {
+        $('#confirm-delete').on('show.bs.modal', function (e) {
             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
     </script>

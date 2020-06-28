@@ -404,14 +404,13 @@ def add_user(request):
                         genero=genero
                     )
 
-                messages.success(request, 'Usuario registrado satisfactoriamente')
-
             # Agregando el mensaje de notificacion en la base de datos
             mensaje_notificacion = 'Agregó al usuario: ' + user.username+ ' al sistema'
             if mensaje_notificacion != '':
                 notificacion = Notification(mensaje=mensaje_notificacion, usuario=request.user,
                                             estado='No-Leido', tipo='Usuario')
                 notificacion.save()
+            messages.success(request, 'Usuario registrado satisfactoriamente')
             return redirect('users')
         context = {'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}
