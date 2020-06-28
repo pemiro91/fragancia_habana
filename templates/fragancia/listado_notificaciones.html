@@ -54,20 +54,28 @@
                             <td>{{ n.usuario.username }}</td>
                             <td>{{ n.fecha }}</td>
                             <td>
-                                {% if request.user.is_administrador or request.user.is_superuser %}
-                                    {% ifnotequal n.usuario request.user %}
-{#                                        {% if n.usuario.is_administrador or n.usuario.is_vendedor %}#}
+                                {% if request.user.is_administrador %}
+                                    {#                                    {% ifnotequal n.usuario request.user %}#}
+                                    {% if n.usuario.is_administrador or n.usuario.is_vendedor %}
 
-                                            <a href="#" data-href="{% url 'delete_message' n.id %}"
-                                               data-toggle="modal"
-                                               class="open-AddBookDialog" title="Eliminar Mensaje" data-id="{{ n.id }}"
-                                               data-target="#confirm-delete">
-                                                <i class="fas fa-fw fa-trash-alt"></i>
-                                            </a>
-{#                                        {% endif %}#}
-                                    {% endifnotequal %}
+                                        <a href="#" data-href="{% url 'delete_message' n.id %}"
+                                           data-toggle="modal"
+                                           class="open-AddBookDialog" title="Eliminar Mensaje" data-id="{{ n.id }}"
+                                           data-target="#confirm-delete">
+                                            <i class="fas fa-fw fa-trash-alt"></i>
+                                        </a>
+                                    {% endif %}
+                                    {#                                    {% endifnotequal %}#}
                                 {% endif %}
+                                {% if request.user.is_superuser %}
+                                    <a href="#" data-href="{% url 'delete_message' n.id %}"
+                                       data-toggle="modal"
+                                       class="open-AddBookDialog" title="Eliminar Mensaje" data-id="{{ n.id }}"
+                                       data-target="#confirm-delete">
+                                        <i class="fas fa-fw fa-trash-alt"></i>
+                                    </a>
 
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

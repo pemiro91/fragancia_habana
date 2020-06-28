@@ -7,11 +7,11 @@
 
     <link href="{% static 'fragancia/catalogo/vendor/venobox/venobox.css' %}" rel="stylesheet">
 
-{#    <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">#}
+    {#    <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">#}
     <link href="{% static 'fragancia/catalogo/css/style.css' %}" rel="stylesheet">
-{#    <link href="{% static 'fragancia/dataspicker/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>#}
+    {#    <link href="{% static 'fragancia/dataspicker/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>#}
 
-     <link href="{% static 'fragancia/dataspicker/css/datepicker.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'fragancia/dataspicker/css/datepicker.min.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'fragancia/dataspicker/css/gijgo.min.css' %}" rel="stylesheet" type="text/css"/>
 
 
@@ -25,6 +25,7 @@
         <li class="breadcrumb-item active" aria-current="page">Detalles del Producto</li>
     </ol>
 {% endblock %}
+
 {% block content %}
     <div class="col-xl-12">
         <div class="card mb-4">
@@ -58,14 +59,6 @@
                                     {% endif %}
                                 </li>
                             </ul>
-                            {% if messages %}
-                                <ul class="messages">
-                                    {% for message in messages %}
-                                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"
-                                             role="alert">{{ message }}</div>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
 
                             <hr id="nav_divider" class="sidebar-divider">
                             <div class="card mb-4">

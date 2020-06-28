@@ -194,6 +194,7 @@ def add_type(request):
                 tipo=name_type,
                 descripcion=description_type
             )
+            messages.success(request,"Tipo de producto registrado satisfactoriamente")
             return redirect('add_product')
         return render(request, 'fragancia/agregar_producto.html', {'notificaciones': notificaciones,
                                                                    'cant_notificaciones': cant_notificaciones})
@@ -231,7 +232,7 @@ def add_product(request):
                 categoria=category_product,
                 tipo=type_product
             )
-            messages.success(request, 'Producto agregado satisfactoriamente')
+
 
             # Agregando el mensaje de notificacion en la base de datos
             mensaje_notificacion = 'Agregó ' + count_product + ' unidad(es) del producto: ' + producto.nombre
@@ -239,6 +240,7 @@ def add_product(request):
                 notificacion = Notification(mensaje=mensaje_notificacion, usuario=request.user,
                                             estado='No-Leido', tipo='Producto')
                 notificacion.save()
+            messages.success(request, 'Producto agregado satisfactoriamente')
             return redirect('products')
         return render(request, 'fragancia/agregar_producto.html', question_dict)
     return redirect('login')
@@ -346,6 +348,7 @@ def change_password(request):
                 return render(request, "fragancia/cambiar_contrasena.html", {'error': error})
             U.set_password(new_password)
             U.save()
+            messages.success(request,'Se cambió la contraseña satisfactoriamente')
             return redirect('login')
         context = {'notificaciones': notificaciones, 'cant_notificaciones': cant_notificaciones, }
         return render(request, "fragancia/cambiar_contrasena.html", context)
@@ -401,7 +404,7 @@ def add_user(request):
                         genero=genero
                     )
 
-            messages.success(request, 'Usuario agregado satisfactoriamente')
+                messages.success(request, 'Usuario registrado satisfactoriamente')
 
             # Agregando el mensaje de notificacion en la base de datos
             mensaje_notificacion = 'Agregó al usuario: ' + user.username+ ' al sistema'
@@ -455,6 +458,7 @@ def edit_user(request, id_user=None):
                 )
             user_custom.set_password(password1)
             user_custom.save()
+            messages.success(request,'Datos de usuario actualizado satisfactoriamente')
             return redirect('users')
         context = {'user': user,
                    'notificaciones': notificaciones,
@@ -501,6 +505,7 @@ def assign_permissions(request, id_user):
             else:
                 u.user_permissions.remove(permission_v_statis)
             # -----------------------------------------------------#
+            messages.success(request,'Permisos asignados satisfactoriamnete')
             return redirect('users')
         context = {'perm_v_statistics': perm_v_statistics,
                    'perm_a_permission': perm_a_permission,
@@ -641,7 +646,7 @@ def change_state_reservation(request, id_reservation):
             product = Product.objects.get(pk=r.producto.id)
             value_real = product.cantidad_disponible + int(r.cantidad_producto)
             Product.objects.filter(pk=r.producto.id).update(cantidad_disponible=value_real)
-
+        messages.success(request,'El estado de la Reservación se ha cambiado satisfactoriamente')
         return redirect('reservations')
     return redirect('login')
 
