@@ -34,7 +34,7 @@ def login_user(request):
                 login(request, user)
                 return redirect('catalogue')
         else:
-            messages.error(request, 'username or password not correct')
+            messages.error(request, 'Usuario o contraseña incorrecto')
             return redirect('login')
     else:
         form = AuthenticationForm()
