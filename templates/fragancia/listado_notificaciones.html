@@ -27,7 +27,6 @@
                 <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                     <tr>
-
                         <th>Notificación</th>
                         <th>Tipo</th>
                         <th>Autor</th>
@@ -37,7 +36,6 @@
                     </thead>
                     <tfoot>
                     <tr>
-
                         <th>Notificación</th>
                         <th>Tipo</th>
                         <th>Autor</th>
@@ -54,28 +52,24 @@
                             <td>{{ n.usuario.username }}</td>
                             <td>{{ n.fecha }}</td>
                             <td>
-                                {% if request.user.is_administrador %}
+{#                                {% if request.user.is_administrador %}#}
                                     {#                                    {% ifnotequal n.usuario request.user %}#}
-                                    {% if n.usuario.is_administrador or n.usuario.is_vendedor %}
-
-                                        <a href="#" data-href="{% url 'delete_message' n.id %}"
-                                           data-toggle="modal"
-                                           class="open-AddBookDialog" title="Eliminar Mensaje" data-id="{{ n.id }}"
-                                           data-target="#confirm-delete">
-                                            <i class="fas fa-fw fa-trash-alt"></i>
-                                        </a>
-                                    {% endif %}
+{#                                    {% if n.usuario.is_administrador or n.usuario.is_vendedor %}#}
+{##}
+{#                                        <a href="#" data-href="{% url 'delete_message' n.id %}"#}
+{#                                           data-toggle="modal"#}
+{#                                           class="open-AddBookDialog" title="Eliminar Mensaje" data-id="{{ n.id }}"#}
+{#                                           data-target="#confirm-delete">#}
+{#                                            <i class="fas fa-fw fa-trash-alt"></i>#}
+{#                                        </a>#}
+{#                                    {% endif %}#}
                                     {#                                    {% endifnotequal %}#}
-                                {% endif %}
-                                {% if request.user.is_superuser %}
-                                    <a href="#" data-href="{% url 'delete_message' n.id %}"
-                                       data-toggle="modal"
-                                       class="open-AddBookDialog" title="Eliminar Mensaje" data-id="{{ n.id }}"
+{#                                {% endif %}#}
+                                <a href="#" data-href="{% url 'delete_message' n.id %}" data-toggle="modal"
+                                       class="open-AddBookDialog" data-id="{{ n.id }}"
                                        data-target="#confirm-delete">
                                         <i class="fas fa-fw fa-trash-alt"></i>
                                     </a>
-
-                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -93,13 +87,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Desea eliminar el mensaje?</h5>
-                    {#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-                    {#              <span aria-hidden="true">&times;</span>#}
-                    {#            </button>#}
                 </div>
-                {#          <div class="modal-body">#}
-                {##}
-                {#          </div>#}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <a id="boton_agregar" class="btn btn-primary btn-ok">Eliminar</a>
@@ -120,6 +108,11 @@
         $(document).ready(function () {
 
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
     </script>
 

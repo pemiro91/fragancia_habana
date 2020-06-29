@@ -33,14 +33,14 @@
                                     class="m-0 font-weight-bold text-secondary">Agregar Usuario</h6>
                             </div>
                             <div class="card-body">
-                                {% if messages %}
-                                    <ul class="messages">
-                                        {% for message in messages %}
-                                            <div class="alert {% if message.tags %}alert-danger{% endif %}"
-                                                 role="alert">{{ message }}</div>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
+{#                                {% if messages %}#}
+{#                                    <ul class="messages">#}
+{#                                        {% for message in messages %}#}
+{#                                            <div class="alert {% if message.tags %}alert-danger{% endif %}"#}
+{#                                                 role="alert">{{ message }}</div>#}
+{#                                        {% endfor %}#}
+{#                                    </ul>#}
+{#                                {% endif %}#}
                                 <form role="form" method="post">{% csrf_token %}
 
                                     <div class="tab-content py-4">

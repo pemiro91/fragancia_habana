@@ -10,6 +10,9 @@
     <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/catalogo/css/style.css' %}" rel="stylesheet">
 
+    <link href="{% static 'fragancia/dataspicker/css/datepicker.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'fragancia/dataspicker/css/gijgo.min.css' %}" rel="stylesheet" type="text/css"/>
+
 {% endblock %}
 
 {% block header_content %}
@@ -131,14 +134,15 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label for="inputFechaEntrega"
-                                                                   class="col-sm-5 col-form-label">Fecha
-                                                                entrega </label>
+                                                            <label for="datepicker"
+                                                                   class="col-sm-5 col-form-label">Fecha entrega </label>
                                                             <div class="col-sm-7">
-                                                                <input type="tel" class="form-control"
-                                                                       id="inputFechaEntrega"
-                                                                       name="date_service"
-                                                                       placeholder="2020-06-16">
+                                                                <div class="input-group date">
+                                                                    <input id="datepicker" name="date_service"
+                                                                           placeholder="2020-06-16"/>
+
+                                                                </div>
+
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -220,15 +224,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label for="inputFechaEntrega"
-                                                                   class="col-sm-5 col-form-label">Fecha
-                                                                entrega </label>
+                                                            <label for="datepicker"
+                                                                   class="col-sm-5 col-form-label">Fecha entrega </label>
                                                             <div class="col-sm-7">
-                                                                <input type="tel" class="form-control"
-                                                                       id="inputFechaEntrega"
-                                                                       name="date_service"
-                                                                       value="{{ reservation.fecha_entrega }}"
-                                                                       placeholder="2020-06-16">
+                                                                <div class="input-group date">
+                                                                    <input id="datepicker" name="date_service"
+                                                                           value="{{ reservation.fecha_entrega }}"
+                                                                           placeholder="2020-06-16"/>
+
+                                                                </div>
+
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -618,15 +623,26 @@
 
 {% block plugin_section %}
 
-    <script src="{% static 'fragancia/catalogo/php-email-form/validate.js' %}"></script>
-    <script src="{% static 'fragancia/catalogo/waypoints/jquery.waypoints.min.js' %}"></script>
-
     <script src="{% static 'fragancia/catalogo/vendor/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/venobox/venobox.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/aos/aos.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/js/main.js' %}"></script>
+
+    <script src="{% static 'fragancia/dataspicker/js/gijgo.min.js' %}"></script>
+
+    <script>
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            startView: 2,
+            todayBtn: "linked",
+            language: "es",
+            format: "yyyy-mm-dd",
+
+        });
+
+    </script>
 
     <script>
         $(function () {
