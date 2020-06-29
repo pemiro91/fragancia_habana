@@ -9,9 +9,9 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Editar Producto</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">Tableros de Control</li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
         <li class="breadcrumb-item active"><a href="{% url 'products' %}">Productos</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Modificar Producto</li>
+        <li class="breadcrumb-item active" aria-current="page">Editar Producto</li>
     </ol>
 {% endblock %}
 {% block content %}
@@ -24,34 +24,36 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-5">
                         <div class="card mb-8">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
-                                <h6 id="titulo_tablas_formularios"
-                                    class="m-0 font-weight-bold text-secondary">Modificar un Producto</h6>
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6  id="titulo_tablas_formularios"
+                                    class="m-0 font-weight-bold text-secondary">Editar un Producto</h6>
                             </div>
                             <div class="card-body">
                                 <form method="post" enctype="multipart/form-data">{% csrf_token %}
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Nombre </label>
                                         <div class="col-sm-9">
-                                            <input type="text" name="name_products" class="form-control"
-                                                   value="{{ product.nombre }}" id="inputEmail3"
+                                            <input type="text" name="name_products" class="form-control" value="{{ product.nombre }}" id="inputEmail3"
                                                    placeholder="Acqua d' Gio">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="inputState" class="col-sm-3 col-form-label">Tipo</label>
-                                        <div class="col-sm-9">
-                                            <select id="inputTipo" name="type_products" class="form-control">
+                                        <label for="inputTipo" class="col-sm-3 col-form-label">Tipo</label>
+                                        <div class="col-sm-8">
+                                            <select id="inputTipo"  name="type_products" class="form-control">
                                                 {% if types_perfumes %}
                                                     {% for type in types_perfumes %}
-                                                        <option value="{{ type.tipo }}"
-                                                                {% if product.tipo == type.tipo %}
-                                                                selected{% endif %}>{{ type.tipo }}</option>
+                                                        <option value="{{ type.tipo }}" {% if product.tipo == type.tipo %} selected{% endif %}>{{ type.tipo }}</option>
                                                     {% endfor %}
                                                 {% endif %}
                                             </select>
                                         </div>
+                                        <a href="#" data-toggle="modal"
+                                               class="open-AddBookDialog"
+                                               data-target="#form-type">
+                                                <i id="add_tipo" class="fas fa-plus-circle "></i>
+                                        </a>
                                     </div>
                                     <fieldset class="form-group">
                                         <div class="row">
@@ -60,48 +62,43 @@
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" id="customRadio1"
                                                            value="Hombre"
-                                                            {% if product.categoria == 'Hombre' %} checked{% endif %}
+                                                            {% if product.categoria == 'Hombre'%} checked{% endif %}
                                                            name="category_products"
                                                            class="custom-control-input">
-                                                    <label class="custom-control-label" for="customRadio1">De
-                                                        Hombre</label>
+                                                    <label class="custom-control-label" for="customRadio1">De Hombre</label>
                                                 </div>
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" id="customRadio2"
                                                            value="Mujer"
-                                                            {% if product.categoria == 'Mujer' %} checked{% endif %}
-                                                           name="category_products"
+                                                           {% if product.categoria == 'Mujer' %} checked{% endif %}
+                                                            name="category_products"
                                                            class="custom-control-input">
-                                                    <label class="custom-control-label" for="customRadio2">De
-                                                        Mujer</label>
+                                                    <label class="custom-control-label" for="customRadio2">De Mujer</label>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </fieldset>
                                     <div class="form-group row">
-                                        <div class="col-sm-3">Imagen</div>
+                                        <div class="col-sm-3">Imagen </div>
                                         <div class="col-sm-9">
-                                            <img src="{{ product.imagen.url }}" class="img-fluid" alt="" height="100px"
-                                                 width="100px">
+                                            <img src="{{ product.imagen.url }}" class="img-fluid" alt="" height="100px" width="100px">
                                         </div>
 
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-3 col-form-label">Capacidad</label>
                                         <div class="col-sm-8">
-                                            <input type="number" name="capacity_products" class="form-control"
-                                                   id="inputEmail3" value="{{ product.capacidad }}"
+                                            <input type="number" name="capacity_products" class="form-control" id="inputEmail3" value="{{ product.capacidad }}"
                                                    placeholder="500">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">ml</label>
 
                                     </div>
                                     <div class="form-group row">
-                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Precio</label>
+                                        <label for="inputEmail3"  class="col-sm-3 col-form-label">Precio</label>
                                         <div class="col-sm-8">
-                                            <input type="number" name="price_products" class="form-control"
-                                                   id="inputEmail3" value="{{ product.precio }}"
+                                            <input type="number" name="price_products" class="form-control" id="inputEmail3" value="{{ product.precio }}"
                                                    placeholder="20">
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">cuc</label>
@@ -116,22 +113,24 @@
                                         </div>
                                         <label for="inputEmail3" class="col-form-label">u</label>
                                     </div>
-                                    {#                                    <div class="form-group row">#}
-                                    {#                                        <div class="col-sm-3">Checkbox</div>#}
-                                    {#                                        <div class="col-sm-9">#}
-                                    {#                                            <div class="custom-control custom-checkbox">#}
-                                    {#                                                <input type="checkbox" class="custom-control-input" id="customCheck1">#}
-                                    {#                                                <label class="custom-control-label" for="customCheck1">Check this custom#}
-                                    {#                                                    checkbox</label>#}
-                                    {#                                            </div>#}
-                                    {#                                        </div>#}
-                                    {#                                    </div>#}
+{#                                    <div class="form-group row">#}
+{#                                        <div class="col-sm-3">Checkbox</div>#}
+{#                                        <div class="col-sm-9">#}
+{#                                            <div class="custom-control custom-checkbox">#}
+{#                                                <input type="checkbox" class="custom-control-input" id="customCheck1">#}
+{#                                                <label class="custom-control-label" for="customCheck1">Check this custom#}
+{#                                                    checkbox</label>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
 
-                                    <div class="form-group row" style="padding:0.5em 0.5em 0 0.5em">
-
-                                        <button type="submit" id="boton_formularios"
-                                                class="btn btn-warning btn-block">Modificar
-                                        </button>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <button style="margin-left: 10%" type="submit"
+                                                    id="boton_formularios" class="btn btn-primary">Editar Producto
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -141,6 +140,41 @@
 
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="form-type" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="item_update_form" class="form" role="form" method="post"
+                      action='{% url 'add_type_edit' product.id %}'>{% csrf_token %}
+                    <div class="modal-header justify-content-center">
+                        <h5 class="modal-title " id="exampleModalLabel">Agregar Tipo de Perfume</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="inputNombre" class="col-sm-3 col-form-label">Nombre* </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="name_type" class="form-control" id="inputNombre"
+                                       placeholder="Floral" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputNombre" class="col-sm-3 col-form-label">Descripci&oacute;n </label>
+                            <div class="col-sm-9">
+                            <textarea type="text" name="description_type" class="form-control" id="inputNombre"
+                                      placeholder="Descripci&oacute;n"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" id="boton_agregar" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

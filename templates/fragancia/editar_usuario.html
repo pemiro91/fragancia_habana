@@ -7,7 +7,7 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Modificar Usuario</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">Tableros de Control</li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
         <li class="breadcrumb-item active"><a href="{% url 'users' %}">Usuarios</a></li>
         <li class="breadcrumb-item active" aria-current="page">Modificar Usuario</li>
     </ol>
@@ -22,7 +22,7 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-5">
                         <div class="card mb-8">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 id="titulo_tablas_formularios"
                                     class="m-0 font-weight-bold text-secondary">Modificar Usuario</h6>
                             </div>
@@ -30,98 +30,107 @@
                                 <form role="form" method="post">{% csrf_token %}
 
                                     <div class="tab-content py-4">
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label form-control-label">Nombre(s)</label>
-                                            <div class="col-lg-9">
-                                                <input class="form-control" type="text" name="first_name"
-                                                       value="{{ user.first_name }}" placeholder="Esteban">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label form-control-label">Apellidos</label>
-                                            <div class="col-lg-9">
-                                                <input class="form-control" type="text" name="last_name"
-                                                       value="{{ user.last_name }}" placeholder="Martinez Diaz">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label form-control-label">Correo</label>
-                                            <div class="col-lg-9">
-                                                <input class="form-control" type="email" name="email"
-                                                       value="{{ user.email }}" placeholder="esteban@example.com">
-                                                <div class="invalid-feedback">
-                                                    Por favor, rellene el campo.
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Nombre(s)</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="first_name"
+                                                           value="{{ user.first_name }}" placeholder="Esteban">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label form-control-label">Teléfono</label>
-                                            <div class="col-lg-9">
-                                                <input class="form-control" type="text" name="phone"
-                                                       value="{{ user.telefono }}" maxlength="8" placeholder="55555555">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputGenero" class="col-sm-3 col-form-label">Género</label>
-                                            <div class="col-sm-9">
-                                                <select id="inputGenero" name="genero" class="form-control">
-                                                    {% if user.genero == 'Mujer' %}
-                                                        <option value="Mujer" selected>Mujer</option>
-                                                        <option value="Hombre">Hombre</option>
-                                                    {% else %}
-                                                        <option value="Mujer">Mujer</option>
-                                                        <option value="Hombre" selected>Hombre</option>
-                                                    {% endif %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label form-control-label">Usuario*</label>
-                                            <div class="col-lg-9">
-                                                <input class="form-control" type="text" name="user_name"
-                                                       value="{{ user.username }}" required placeholder="esteban">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <legend class="col-form-label col-sm-3 pt-0">Tipo</legend>
-                                            <div class="col-sm-9">
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" id="RadioVendedor" name="tipo_perfil"
-                                                            {% if user.is_vendedor %} checked{% endif %}
-                                                           value="vendedor"
-                                                           class="custom-control-input">
-                                                    <label class="custom-control-label"
-                                                           for="RadioVendedor">Vendedor</label>
-                                                </div>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" id="RadioAdministardor"
-                                                           name="tipo_perfil"
-                                                           value="admin"
-                                                            {% if user.is_administrador %} checked{% endif %}
-                                                           class="custom-control-input">
-                                                    <label class="custom-control-label"
-                                                           for="RadioAdministardor">Administrador</label>
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Apellidos</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="last_name"
+                                                           value="{{ user.last_name }}" placeholder="Martinez Diaz">
                                                 </div>
                                             </div>
-                                        </div>
-                                        {#                                            <div class="form-group row">#}
-                                        {#                                                    <label class="col-lg-3 col-form-label form-control-label">Contraseña#}
-                                        {#                                                        *</label>#}
-                                        {#                                                    <div class="col-lg-9">#}
-                                        {##}
-                                        {#                                                        <input class="form-control" type="password" name="password1"#}
-                                        {#                                                               value="{{ user.password }}" required placeholder="especifique contraseña">#}
-                                        {##}
-                                        {#                                                    </div>#}
-                                        {#                                                </div>#}
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Correo*</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="email" name="email"
+                                                           value="{{ user.email }}" required placeholder="esteban@example.com">
+                                                    <div class="invalid-feedback">
+                                                        Por favor, rellene el campo.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label form-control-label">Teléfono</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="phone"
+                                                           value="{{ user.telefono }}" maxlength="8" placeholder="55555555">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputGenero" class="col-sm-3 col-form-label">Género</label>
+                                                <div class="col-sm-9">
+                                                    <select id="inputGenero" name="genero" class="form-control">
+                                                        {% if user.genero == 'Mujer' %}
+                                                            <option value="Mujer" selected>Mujer</option>
+                                                            <option value="Hombre">Hombre</option>
+                                                        {% else %}
+                                                            <option value="Mujer">Mujer</option>
+                                                            <option value="Hombre" selected>Hombre</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label form-control-label">Usuario*</label>
+                                                    <div class="col-lg-9">
+                                                        <input class="form-control" type="text" name="user_name"
+                                                               value="{{ user.username }}" required placeholder="esteban">
+                                                    </div>
+                                                </div>
+                                            <div class="form-group row">
+                                                <legend class="col-form-label col-sm-3 pt-0">Tipo</legend>
+                                                <div class="col-sm-9">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="RadioVendedor" name="tipo_perfil"
+                                                               {% if user.is_vendedor %} checked{% endif %}
+                                                               value="vendedor"
+                                                               class="custom-control-input">
+                                                        <label class="custom-control-label"
+                                                               for="RadioVendedor">Vendedor</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="RadioAdministardor"
+                                                               name="tipo_perfil"
+                                                               value="admin"
+                                                               {% if user.is_administrador %} checked{% endif %}
+                                                               class="custom-control-input">
+                                                        <label class="custom-control-label"
+                                                               for="RadioAdministardor">Administrador</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label form-control-label">Contraseña
+                                                        *</label>
+                                                    <div class="col-lg-9">
 
+                                                        <input class="form-control" type="password" name="password1"
+                                                               value="{{ user.password }}" required placeholder="especifique contraseña">
+
+                                                    </div>
+                                                </div>
+
+                                            {% if error %}
+                                                <div class="col-lg-9">
+                                                    <div class="alert alert-danger">
+                                                        {{ error }}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
 
                                     </div>
-                                    <div class="form-group row" style="padding:0.5em 0.5em 0 0.5em">
-
-                                        <button type="submit" id="boton_formularios"
-                                                class="btn btn-warning btn-block">Modificar Usuario
-                                        </button>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <button style="margin-left: 10%" type="submit"
+                                                    id="boton_formularios" class="btn btn-primary">Modificar Usuario
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
