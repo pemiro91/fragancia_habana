@@ -442,6 +442,7 @@ def add_user(request):
 def edit_user(request, id_user=None):
     if request.user.is_authenticated:
         user = get_object_or_404(User, id=id_user)
+        user_custom = User.objects.get(id=id_user)
         notificaciones = Notification.objects.all().exclude(usuario=request.user)[:3]
         cant_notificaciones = len(notificaciones)
         if request.method == 'POST':
@@ -453,34 +454,34 @@ def edit_user(request, id_user=None):
             user_name = request.POST.get('user_name')
             tipo_perfil = request.POST.get('tipo_perfil')
             password1 = request.POST.get('password1')
-            user_custom = User.objects.get(id=id_user)
-            if tipo_perfil == 'vendedor':
-                User.objects.filter(id=id_user).update(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    telefono=phone,
-                    username=user_name,
-                    is_vendedor=True,
-                    is_administrador=False,
-                    genero=genero
-                )
-            else:
-                User.objects.filter(pk=id_user).update(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    telefono=phone,
-                    username=user_name,
-                    is_vendedor=False,
-                    is_administrador=True,
-                    genero=genero
-                )
-            user_custom.set_password(password1)
-            user_custom.save()
+            with transaction.atomic():
+                user_custom.set_password(password1)
+                user_custom.save()
+                if tipo_perfil == 'vendedor':
+                    User.objects.filter(id=id_user).update(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=True,
+                        is_administrador=False,
+                        genero=genero
+                    )
+                else:
+                    User.objects.filter(pk=id_user).update(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        telefono=phone,
+                        username=user_name,
+                        is_vendedor=False,
+                        is_administrador=True,
+                        genero=genero
+                    )
             messages.success(request, 'Datos de usuario actualizado satisfactoriamente')
             return redirect('users')
-        context = {'user': user,
+        context = {'user': user_custom,
                    'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}
         return render(request, 'fragancia/editar_usuario.html', context)
