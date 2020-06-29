@@ -621,9 +621,58 @@ def edit_reservation(request, id_reservation=None):
                 messages.success(request, 'Reserva modificada satisfactoriamente')
                 return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
 
-            elif reservation.producto.cantidad_disponible == 0:
-                messages.warning(request, 'La cantidad proporcionada es mayor que la disponible')
+            elif int(cantidad_reservada) < reservation.cantidad_producto:
+                value_real = reservation.cantidad_producto - int(cantidad_reservada)
+                if request.POST.get('switchMessenger'):
+                    Reservation.objects.filter(pk=id_reservation).update(
+                        cantidad_producto=cantidad_reservada,
+                        nombre=name_service,
+                        direccion=address_service,
+                        telefono=phone_service,
+                        fecha_entrega=date_service,
+                        horario_entrega=time_service
+                    )
+                else:
+                    Reservation.objects.filter(pk=id_reservation).update(
+                        cantidad_producto=cantidad_reservada,
+                        nombre="",
+                        direccion="",
+                        telefono="",
+                        fecha_entrega="",
+                        horario_entrega=""
+                    )
+
+                Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
+                messages.success(request, 'Reserva modificada satisfactoriamente')
                 return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
+            elif int(cantidad_reservada) > reservation.cantidad_producto:
+                valor = int(cantidad_reservada) - reservation.cantidad_producto
+                if valor > reservation.producto.cantidad_disponible:
+                    messages.warning(request, 'La cantidad proporcionada es mayor que la disponible')
+                    return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
+                else:
+                    value_real = reservation.producto.cantidad_disponible - valor
+                    if request.POST.get('switchMessenger'):
+                        Reservation.objects.filter(pk=id_reservation).update(
+                            cantidad_producto=cantidad_reservada,
+                            nombre=name_service,
+                            direccion=address_service,
+                            telefono=phone_service,
+                            fecha_entrega=date_service,
+                            horario_entrega=time_service
+                        )
+                    else:
+                        Reservation.objects.filter(pk=id_reservation).update(
+                            cantidad_producto=cantidad_reservada,
+                            nombre="",
+                            direccion="",
+                            telefono="",
+                            fecha_entrega="",
+                            horario_entrega=""
+                        )
+                    Product.objects.filter(pk=reservation.producto.id).update(cantidad_disponible=value_real)
+                    messages.success(request, 'Reserva modificada satisfactoriamente')
+                    return HttpResponseRedirect(reverse('edit_reservation', args=(id_reservation,)))
         context = {'reservation': reservation, 'value_real': value_real,
                    'notificaciones': notificaciones,
                    'cant_notificaciones': cant_notificaciones}

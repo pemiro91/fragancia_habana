@@ -20,7 +20,9 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Detalles del Producto</h1>
     <ol class="breadcrumb">
+    {% if request.user.is_administrador %}
         <li class="breadcrumb-item"><a href="{% url 'index' %}">Principal</a></li>
+    {% endif %}         
         <li class="breadcrumb-item"><a href="{% url 'catalogue' %}">Catálogo de Productos</a></li>
         <li class="breadcrumb-item active" aria-current="page">Detalles del Producto</li>
     </ol>
