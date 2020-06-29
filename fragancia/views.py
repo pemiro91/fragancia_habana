@@ -213,6 +213,28 @@ def add_type(request):
     return redirect('login')
 
 
+# -------------- Adicionar tipo de perfume editar--------------#
+def add_type_edit(request, id_product):
+    if request.user.is_authenticated:
+        notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
+            mensaje__contains='Agregó')
+        notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
+            mensaje__contains='Realizó')
+        cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        if request.method == 'POST':
+            name_type = request.POST.get('name_type')
+            description_type = request.POST.get('description_type')
+            Tipo_Perfume.objects.create(
+                tipo=name_type,
+                descripcion=description_type
+            )
+            return redirect(reverse('edit_product', args=(id_product,)))
+        return render(request, 'fragancia/editar_producto.html', {'notificaciones_reserv': notificaciones_reserv,
+                                                                   'notificaciones_prod': notificaciones_prod,
+                                                                   'cant_notificaciones': cant_notificaciones})
+    return redirect('login')
+
+
 # -------------- Adicionar producto--------------#
 def add_product(request):
     if request.user.is_authenticated:
@@ -302,7 +324,7 @@ def delete_product(request, id_product):
 
 def users(request):
     if request.user.is_authenticated:
-        list_users = User.objects.all().exclude(is_superuser=True)
+        list_users = User.objects.all().exclude(is_superuser=True).exclude(username=request.user.username)
         notificaciones_reserv = Notification.objects.all().exclude(usuario=request.user).exclude(
             mensaje__contains='Agregó')
         notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
@@ -335,9 +357,9 @@ def user_profile(request):
                 username=usuario,
             )
             return redirect('user_profile')
-        return render(request, "fragancia/perfil_usuario.html", {'notificaciones_reserv': notificaciones_reserv,
-                                                                 'notificaciones_prod': notificaciones_prod,
-                                                                 'cant_notificaciones': cant_notificaciones})
+        return render(request, "fragancia/editar_perfil_usuario.html", {'notificaciones_reserv': notificaciones_reserv,
+                                                                        'notificaciones_prod': notificaciones_prod,
+                                                                        'cant_notificaciones': cant_notificaciones})
     return redirect('login')
 
 
@@ -432,6 +454,7 @@ def edit_user(request, id_user=None):
         notificaciones_prod = Notification.objects.all().exclude(usuario=request.user).exclude(
             mensaje__contains='Realizó')
         cant_notificaciones = len(notificaciones_reserv) + len(notificaciones_prod)
+        user_custom = User.objects.get(id=id_user)
         if request.method == 'POST':
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
@@ -441,7 +464,6 @@ def edit_user(request, id_user=None):
             user_name = request.POST.get('user_name')
             tipo_perfil = request.POST.get('tipo_perfil')
             password1 = request.POST.get('password1')
-            user_custom = User.objects.get(id=id_user)
             if tipo_perfil == 'vendedor':
                 User.objects.filter(id=id_user).update(
                     first_name=first_name,
@@ -467,7 +489,7 @@ def edit_user(request, id_user=None):
             user_custom.set_password(password1)
             user_custom.save()
             return redirect('users')
-        context = {'user': user,
+        context = {'user': user_custom,
                    'notificaciones_reserv': notificaciones_reserv,
                    'notificaciones_prod': notificaciones_prod,
                    'cant_notificaciones': cant_notificaciones}

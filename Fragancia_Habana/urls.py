@@ -13,15 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
 from graphene_file_upload.django import FileUploadGraphQLView
 
 from fragancia import views
-from django.contrib import admin
-from graphene_django.views import GraphQLView
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -48,6 +47,7 @@ urlpatterns = [
     path('edit_product/<int:id_product>', views.edit_product, name="edit_product"),
     path('delete_product/<int:id_product>', views.delete_product, name="delete_product"),
     path('add_type', views.add_type, name="add_type"),
+    path('add_type_edit/<int:id_product>', views.add_type_edit, name="add_type_edit"),
 
     # Gestionar Reservaciones
     path('reservations', views.reservations, name="reservations"),
