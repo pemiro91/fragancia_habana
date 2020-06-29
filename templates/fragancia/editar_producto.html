@@ -39,8 +39,8 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="inputState" class="col-sm-3 col-form-label">Tipo</label>
-                                        <div class="col-sm-9">
+                                        <label for="inputTipo" class="col-sm-3 col-form-label">Tipo</label>
+                                        <div class="col-sm-8">
                                             <select id="inputTipo"  name="type_products" class="form-control">
                                                 {% if types_perfumes %}
                                                     {% for type in types_perfumes %}
@@ -49,6 +49,11 @@
                                                 {% endif %}
                                             </select>
                                         </div>
+                                        <a href="#" data-toggle="modal"
+                                               class="open-AddBookDialog"
+                                               data-target="#form-type">
+                                                <i id="add_tipo" class="fas fa-plus-circle "></i>
+                                        </a>
                                     </div>
                                     <fieldset class="form-group">
                                         <div class="row">
@@ -120,9 +125,10 @@
 {#                                    </div>#}
 
                                     <div class="form-group row">
-                                        <div class="col-sm-10">
-                                            <button type="submit" id="boton_formularios" class="btn btn-primary">
-                                                Editar Producto
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <button style="margin-left: 10%" type="submit"
+                                                    id="boton_formularios" class="btn btn-primary">Editar Producto
                                             </button>
                                         </div>
                                     </div>
@@ -134,6 +140,41 @@
 
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="form-type" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="item_update_form" class="form" role="form" method="post"
+                      action='{% url 'add_type_edit' product.id %}'>{% csrf_token %}
+                    <div class="modal-header justify-content-center">
+                        <h5 class="modal-title " id="exampleModalLabel">Agregar Tipo de Perfume</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="inputNombre" class="col-sm-3 col-form-label">Nombre* </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="name_type" class="form-control" id="inputNombre"
+                                       placeholder="Floral" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputNombre" class="col-sm-3 col-form-label">Descripci&oacute;n </label>
+                            <div class="col-sm-9">
+                            <textarea type="text" name="description_type" class="form-control" id="inputNombre"
+                                      placeholder="Descripci&oacute;n"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" id="boton_agregar" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

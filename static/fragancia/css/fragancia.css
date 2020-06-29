@@ -97,7 +97,7 @@ li #detalles_producto {
     font-size: 22px;
 }
 
-.btn-primary#boton_formularios, .btn-primary#boton_agregar, a#boton_tipo {
+a .btn-warning#boton_agregar,.btn-primary#boton_agregar, a#boton_tipo,#card_mensaje_notif {
     color: #625e5e;
     background-color: rgb(253, 253, 150);
     border-color: rgb(253, 253, 150);
@@ -105,12 +105,29 @@ li #detalles_producto {
 
 }
 
-#boton_formularios:hover, #boton_agregar:hover, #boton_formularios:checked, #boton_agregar:checked {
+#boton_agregar:hover, #boton_agregar:checked {
     color: #625e5e;
     background-color: #ffff7e;
     border-color: #ffff7e;
 
 }
+.btn-primary#boton_formularios,.btn-warning#boton_formularios {
+    color: #625e5e;
+    background-color: rgb(255, 233, 58);
+    border-color: rgb(253, 253, 150);
+    /*margin-left: 15%;*/
+
+}
+
+#boton_formularios:hover, #boton_formularios:checked{
+    color: #625e5e;
+    background-color: #ffe427;
+    border-color: #ffff7e;
+
+}
+
+
+
 
 a i#add_tipo {
     color: #908c8c;

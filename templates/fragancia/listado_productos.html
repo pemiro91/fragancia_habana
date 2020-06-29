@@ -8,17 +8,18 @@
 {% block header_content %}
     <h1 class="h5 mb-0 text-gray-800">Listado de Productos</h1>
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
+        <li class="breadcrumb-item">Tableros de Control</li>
         <li class="breadcrumb-item active" aria-current="page">Productos</li>
     </ol>
 {% endblock %}
+
 {% block content %}
     <div class="col-lg-12">
         <div class="card mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 id="titulo_tablas_formularios" class="m-0 font-weight-bold text-primary"></h6>
                 {% if perms.fragancia.add_product or request.user.is_administrador %}
-                    <a  id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar
+                    <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar
                         <i class="fas fa-plus-circle"></i></a>
                 {% endif %}
             </div>
@@ -110,6 +111,11 @@
         $(document).ready(function () {
 
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
     </script>
 

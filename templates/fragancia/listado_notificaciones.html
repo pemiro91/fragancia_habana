@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block header_content %}
-    <h1 class="h5 mb-0 text-gray-800">Listado de Notificaciones</h1>
+    <h1 class="h5 mb-0 text-gray-800">Centro de Notificaciones</h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Tableros de Control</li>
-        <li class="breadcrumb-item active" aria-current="page">Notifaciones</li>
+        <li class="breadcrumb-item active" aria-current="page">Centro de Notificaciones</li>
     </ol>
 {% endblock %}
 {% block content %}
@@ -17,48 +17,60 @@
         <div class="card mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 id="titulo_tablas_formularios" class="m-0 font-weight-bold text-primary"></h6>
-{#                {% if perms.fragancia.add_product or request.user.is_administrador %}#}
-{#                    <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar#}
-{#                        <i#}
-{#                                class="fas fa-plus"></i></a>#}
-{#                {% endif %}#}
+                {#                {% if perms.fragancia.add_product or request.user.is_administrador %}#}
+                {#                    <a id="boton_agregar" class="m-0 float-right btn btn-primary btn-sm" href="{% url 'add_product' %}">Agregar#}
+                {#                        <i#}
+                {#                                class="fas fa-plus"></i></a>#}
+                {#                {% endif %}#}
             </div>
             <div class="table-responsive p-3">
                 <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                     <tr>
-                        <th>Usuario</th>
-                        <th>Mensaje</th>
-                        <th>Fecha</th>
-{#                        <th>Acciones</th>#}
+                        <th>Notificación</th>
+                        <th>Tipo</th>
+                        <th>Autor</th>
+                        <th>Fecha y Hora</th>
+                        <th>Acciones</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>Usuario</th>
-                        <th>Mensaje</th>
-                        <th>Fecha</th>
-{#                        <th>Acciones</th>#}
+                        <th>Notificación</th>
+                        <th>Tipo</th>
+                        <th>Autor</th>
+                        <th>Fecha y Hora</th>
+                        <th>Acciones</th>
                     </tr>
                     </tfoot>
                     <tbody>
-                    {% for n in notificaciones %}
+                    {% for n in todas_notificaciones %}
                         <tr>
-                            <td>{{ n.usuario.username }}</td>
+
                             <td>{{ n.mensaje }}</td>
+                            <td> {{ n.tipo }}</td>
+                            <td>{{ n.usuario.username }}</td>
                             <td>{{ n.fecha }}</td>
-{#                            <td>#}
+                            <td>
+{#                                {% if request.user.is_administrador %}#}
+                                    {#                                    {% ifnotequal n.usuario request.user %}#}
+{#                                    {% if n.usuario.is_administrador or n.usuario.is_vendedor %}#}
 {##}
-{#                                    <a href=""> <i class="fas fa-fw fa-edit"></i></a>#}
-{##}
-{##}
-{#                                    <a href="#" data-href="" data-toggle="modal"#}
-{#                                       class="open-AddBookDialog" data-id=""#}
-{#                                       data-target="#confirm-delete">#}
-{#                                        <i class="fas fa-fw fa-trash-alt"></i>#}
-{#                                    </a>#}
-{##}
-{#                            </td>#}
+{#                                        <a href="#" data-href="{% url 'delete_message' n.id %}"#}
+{#                                           data-toggle="modal"#}
+{#                                           class="open-AddBookDialog" title="Eliminar Mensaje" data-id="{{ n.id }}"#}
+{#                                           data-target="#confirm-delete">#}
+{#                                            <i class="fas fa-fw fa-trash-alt"></i>#}
+{#                                        </a>#}
+{#                                    {% endif %}#}
+                                    {#                                    {% endifnotequal %}#}
+{#                                {% endif %}#}
+                                <a href="#" data-href="{% url 'delete_message' n.id %}" data-toggle="modal"
+                                       class="open-AddBookDialog" data-id="{{ n.id }}"
+                                       data-target="#confirm-delete">
+                                        <i class="fas fa-fw fa-trash-alt"></i>
+                                    </a>
+                            </td>
                         </tr>
                     {% endfor %}
 
@@ -74,17 +86,11 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Desea eliminar el producto?</h5>
-                    {#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-                    {#              <span aria-hidden="true">&times;</span>#}
-                    {#            </button>#}
+                    <h5 class="modal-title" id="exampleModalLabel">Desea eliminar el mensaje?</h5>
                 </div>
-                {#          <div class="modal-body">#}
-                {##}
-                {#          </div>#}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <a class="btn btn-danger btn-ok">Eliminar</a>
+                    <a id="boton_agregar" class="btn btn-primary btn-ok">Eliminar</a>
                 </div>
             </div>
         </div>
@@ -102,6 +108,11 @@
         $(document).ready(function () {
 
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
     </script>
 

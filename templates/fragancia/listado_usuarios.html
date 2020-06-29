@@ -30,7 +30,7 @@
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Vendedor</th>
-	                    {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
+	                    {% if perms.fragancia.assign_permissions_user or request.user.is_administrador %}
                             <th>Acciones</th>
                         {% endif %}
                     </tr>
@@ -41,7 +41,7 @@
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Vendedor</th>
-                        {% if perms.fragancia.assign_permissions_user or perms.fragancia.change_user or perms.fragancia.delete_user or request.user.is_administrador %}
+                        {% if perms.fragancia.assign_permissions_user or request.user.is_administrador %}
                             <th>Acciones</th>
                         {% endif %}
                     </tr>
@@ -58,7 +58,7 @@
                                      <td>No</td>
                                  {% endif %}
                                  <td>
-                                     {% if perms.fragancia.add_permission %}
+                                     {% if perms.fragancia.assign_permissions_user %}
                                          <a href="{% url 'assign_permissions' user.id %}" title="Asignar otros permisos"><i  class="fas fa-fw fa-user-plus"></i></a>
                                      {% endif %}
                                      {% if perms.fragancia.change_user or request.user.is_administrador %}

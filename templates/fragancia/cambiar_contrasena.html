@@ -19,18 +19,18 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-5">
                         <div class="card mb-8">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
                                 <h6 id="titulo_tablas_formularios"
                                     class="m-0 font-weight-bold text-secondary">Cambiar Contrase&ntilde;a</h6>
                             </div>
                             <div class="card-body">
                                 {% if messages %}
-                                  <ul class="messages">
-                                    {% for message in messages %}
-                                      <div class="alert {% if message.tags %}alert-danger{% endif %}"
-                                             role="alert">{{ message }}</div>
-                                    {% endfor %}
-                                  </ul>
+                                    <ul class="messages">
+                                        {% for message in messages %}
+                                            <div class="alert {% if message.tags %}alert-danger{% endif %}"
+                                                 role="alert">{{ message }}</div>
+                                        {% endfor %}
+                                    </ul>
                                 {% endif %}
                                 <form role="form" method="post">{% csrf_token %}
 
@@ -38,7 +38,8 @@
                                         <div class="tab-pane active" id="datos_personales">
 
                                             <div class="form-group row">
-                                                <label class="col-lg-4 col-form-label form-control-label">Contrase&ntilde;a anterior</label>
+                                                <label class="col-lg-4 col-form-label form-control-label">Contrase&ntilde;a
+                                                    anterior</label>
                                                 <div class="col-lg-8">
                                                     <input class="form-control" type="password" name="old_password">
                                                 </div>
@@ -50,9 +51,11 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-lg-4 col-form-label form-control-label">Confirmar contrase&ntilde;a</label>
+                                                <label class="col-lg-4 col-form-label form-control-label">Confirmar
+                                                    contrase&ntilde;a</label>
                                                 <div class="col-lg-8">
-                                                    <input class="form-control" type="password"  name="confirmed_new_password">
+                                                    <input class="form-control" type="password"
+                                                           name="confirmed_new_password">
                                                     <div class="invalid-feedback">
                                                         Por favor, rellene el campo.
                                                     </div>
@@ -63,13 +66,11 @@
 
 
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label form-control-label"></label>
-                                        <div class="col-lg-9">
-                                            <button style="margin-left: 10%" type="submit"
-                                                    id="boton_formularios" class="btn btn-primary">Guardar Cambios
-                                            </button>
-                                        </div>
+                                    <div class="form-group row" style="padding:0.5em 0.5em 0 0.5em">
+
+                                        <button type="submit" id="boton_formularios"
+                                                class="btn btn-warning btn-block">Cambiar
+                                        </button>
                                     </div>
                                 </form>
                             </div>

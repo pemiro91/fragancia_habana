@@ -6,21 +6,23 @@
     <link href="{% static 'fragancia/catalogo/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
 
     <link href="{% static 'fragancia/catalogo/vendor/venobox/venobox.css' %}" rel="stylesheet">
-    <link href="{% static 'fragancia/catalogo/vendor/animate.css/animate.min.css' %}" rel="stylesheet"
-          type="text/css">
+
     <link href="{% static 'fragancia/catalogo/vendor/aos/aos.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fragancia/catalogo/css/style.css' %}" rel="stylesheet">
+
+    <link href="{% static 'fragancia/dataspicker/css/datepicker.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'fragancia/dataspicker/css/gijgo.min.css' %}" rel="stylesheet" type="text/css"/>
 
 {% endblock %}
 
 {% block header_content %}
-    <h1 class="h5 mb-0 text-gray-800">Editar Reservacion</h1>
+    <h1 class="h5 mb-0 text-gray-800">Editar Reservación</h1>
     <ol class="breadcrumb">
-    {% if perms.fragancia.view_statistics or request.user.is_administrador %}
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Tableros de Control</a></li>
-    {% endif %}
+        {% if perms.fragancia.view_statistics or request.user.is_administrador %}
+            <li class="breadcrumb-item">Tableros de Control</li>
+        {% endif %}
         <li class="breadcrumb-item"><a href="{% url 'reservations' %}">Reservaciones</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Editar reservacion</li>
+        <li class="breadcrumb-item active" aria-current="page">Modificar Reservación</li>
     </ol>
 {% endblock %}
 {% block content %}
@@ -44,10 +46,15 @@
                         <div class="col-lg-5 portfolio-info">
                             <h3 id="nombre_producto_detalles"> {{ reservation.producto.nombre }}</h3>
                             <ul>
-                                <li id="detalles_producto"><strong>Categoria</strong>: {{ reservation.producto.categoria }}</li>
+                                <li id="detalles_producto">
+                                    <strong>Categoria</strong>: {{ reservation.producto.categoria }}</li>
                                 <li id="detalles_producto"><strong>Tipo</strong>: {{ reservation.producto.tipo }}</li>
-                                <li id="detalles_producto"><strong>Capacidad</strong>: {{ reservation.producto.capacidad }} ml</li>
-                                <li id="detalles_producto"><strong>Precio</strong>: {{ reservation.producto.precio }} CUC</li>
+                                <li id="detalles_producto">
+                                    <strong>Capacidad</strong>: {{ reservation.producto.capacidad }} ml
+                                </li>
+                                <li id="detalles_producto"><strong>Precio</strong>: {{ reservation.producto.precio }}
+                                    CUC
+                                </li>
                                 <li id="detalles_producto"><strong style="font-style: revert">Disponibilidad</strong>:
                                     {% if value_real != 0 %}
                                         : {{ value_real }} u
@@ -58,19 +65,12 @@
                                 </li>
 
                             </ul>
-                            {% if messages %}
-                              <ul class="messages">
-                                {% for message in messages %}
-                                  <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"
-                                         role="alert">{{ message }}</div>
-                                {% endfor %}
-                              </ul>
-                            {% endif %}
+
                             <hr id="nav_divider" class="sidebar-divider">
                             <div class="card mb-4">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
                                     <h6 style="color: #5a5c69!important;" id="titulo_tablas_formularios"
-                                        class="m-0 font-weight-bold text-primary">Reservacion</h6>
+                                        class="m-0 font-weight-bold text-primary">Modificar Reservacion</h6>
                                 </div>
                                 <div class="card-body">
                                     <form method="post" class="needs-validation" novalidate>{% csrf_token %}
@@ -93,7 +93,7 @@
                                                         <label>Mensajeria</label>
                                                         <div class="custom-control custom-switch">
                                                             <input type="checkbox" class="custom-control-input"
-                                                                   name="switchMessenger" id="switchMessenger" >
+                                                                   name="switchMessenger" id="switchMessenger">
                                                             <label class="custom-control-label" for="switchMessenger">¿Incluir
                                                                 Servicio
                                                                 de Mensajería?</label>
@@ -134,25 +134,31 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label for="inputFechaEntrega"
+                                                            <label for="datepicker"
                                                                    class="col-sm-5 col-form-label">Fecha entrega </label>
                                                             <div class="col-sm-7">
-                                                                <input type="tel" class="form-control"
-                                                                       id="inputFechaEntrega"
-                                                                       name="date_service"
-                                                                       placeholder="2020-06-16">
+                                                                <div class="input-group date">
+                                                                    <input id="datepicker" name="date_service"
+                                                                           placeholder="2020-06-16"/>
+
+                                                                </div>
+
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                         <div class="form-group row">
                                                             <label for="inputHorarioEntrega"
                                                                    class="col-sm-5 col-form-label">Horario </label>
                                                             <div class="col-sm-7">
-                                                                <select class="form-control" name="time_service" id="inputHorarioEntrega">
+                                                                <select class="form-control" name="time_service"
+                                                                        id="inputHorarioEntrega">
                                                                     <option value="--">---</option>
                                                                     <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                    <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                    <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                    <option value="11:00am-12:00m">11:00am-12:00m</option>
+                                                                    <option value="9:00am-10:00am">9:00am-10:00am
+                                                                    </option>
+                                                                    <option value="10:00am-11:00am">10:00am-11:00am
+                                                                    </option>
+                                                                    <option value="11:00am-12:00m">11:00am-12:00m
+                                                                    </option>
                                                                     <option value="12:00m-1:00pm">12:00m-1:00pm</option>
                                                                     <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
                                                                     <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
@@ -210,208 +216,378 @@
                                                             <label for="inputDireccion"
                                                                    class="col-sm-5 col-form-label">Dirección </label>
                                                             <div class="col-sm-7">
-                                                            <input class="form-control" maxlength="200"
-                                                                      id="inputDireccion"
-                                                                      name="address_service"
-                                                                      value="{{ reservation.direccion }}"
-                                                                      placeholder="San Francisco #20600.Boyeros"/>
+                                                                <input class="form-control" maxlength="200"
+                                                                       id="inputDireccion"
+                                                                       name="address_service"
+                                                                       value="{{ reservation.direccion }}"
+                                                                       placeholder="San Francisco #20600.Boyeros"/>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label for="inputFechaEntrega"
+                                                            <label for="datepicker"
                                                                    class="col-sm-5 col-form-label">Fecha entrega </label>
                                                             <div class="col-sm-7">
-                                                                <input type="tel" class="form-control"
-                                                                       id="inputFechaEntrega"
-                                                                       name="date_service"
-                                                                       value="{{ reservation.fecha_entrega }}"
-                                                                       placeholder="2020-06-16">
+                                                                <div class="input-group date">
+                                                                    <input id="datepicker" name="date_service"
+                                                                           value="{{ reservation.fecha_entrega }}"
+                                                                           placeholder="2020-06-16"/>
+
+                                                                </div>
+
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label for="inputHorarioEntrega"
                                                                    class="col-sm-5 col-form-label">Horario </label>
                                                             <div class="col-sm-7">
-                                                                <select class="form-control" name="time_service" id="inputHorarioEntrega">
+                                                                <select class="form-control" name="time_service"
+                                                                        id="inputHorarioEntrega">
                                                                     {% ifequal reservation.horario_entrega '8:00am-9:00am' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am" selected>8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am" selected>
+                                                                            8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '9:00am-10:00am' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am" selected>9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am" selected>
+                                                                            9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '10:00am-11:00am' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am" selected>10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am" selected>
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '11:00am-12:00m' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m" selected>11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m" selected>
+                                                                            11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '12:00m-1:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm" selected>12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm" selected>
+                                                                            12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '1:00pm-2:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm" selected>1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm" selected>
+                                                                            1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '2:00pm-3:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm" selected>2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm" selected>
+                                                                            2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '3:00pm-4:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm" selected>3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm" selected>
+                                                                            3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '4:00pm-5:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm" selected>4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm" selected>
+                                                                            4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '5:00pm-6:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm" selected>5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm" selected>
+                                                                            5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '6:00pm-7:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm" selected>6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm" selected>
+                                                                            6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm">7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
                                                                     {% ifequal reservation.horario_entrega '7:00pm-8:00pm' %}
                                                                         <option value="--">---</option>
-                                                                        <option value="8:00am-9:00am">8:00am-9:00am</option>
-                                                                        <option value="9:00am-10:00am">9:00am-10:00am</option>
-                                                                        <option value="10:00am-11:00am">10:00am-11:00am</option>
-                                                                        <option value="11:00am-12:00m">11:00am-12:00m</option>
-                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm</option>
-                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm</option>
-                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm</option>
-                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm</option>
-                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm</option>
-                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm</option>
-                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm</option>
-                                                                        <option value="7:00pm-8:00pm" selected>7:00pm-8:00pm</option>
+                                                                        <option value="8:00am-9:00am">8:00am-9:00am
+                                                                        </option>
+                                                                        <option value="9:00am-10:00am">9:00am-10:00am
+                                                                        </option>
+                                                                        <option value="10:00am-11:00am">
+                                                                            10:00am-11:00am
+                                                                        </option>
+                                                                        <option value="11:00am-12:00m">11:00am-12:00m
+                                                                        </option>
+                                                                        <option value="12:00m-1:00pm">12:00m-1:00pm
+                                                                        </option>
+                                                                        <option value="1:00pm-2:00pm">1:00pm-2:00pm
+                                                                        </option>
+                                                                        <option value="2:00pm-3:00pm">2:00pm-3:00pm
+                                                                        </option>
+                                                                        <option value="3:00pm-4:00pm">3:00pm-4:00pm
+                                                                        </option>
+                                                                        <option value="4:00pm-5:00pm">4:00pm-5:00pm
+                                                                        </option>
+                                                                        <option value="5:00pm-6:00pm">5:00pm-6:00pm
+                                                                        </option>
+                                                                        <option value="6:00pm-7:00pm">6:00pm-7:00pm
+                                                                        </option>
+                                                                        <option value="7:00pm-8:00pm" selected>
+                                                                            7:00pm-8:00pm
+                                                                        </option>
                                                                     {% endifequal %}
 
                                                                 </select>
@@ -422,12 +598,11 @@
                                             {% endif %}
                                         </div>
 
-                                        <div class="form-group row">
-                                            <div class="col-sm-10">
-                                                <button type="submit" id="boton_formularios" class="btn btn-primary">
-                                                    Editar Reservacion
-                                                </button>
-                                            </div>
+                                        <div class="form-group row" style="padding:0.5em 0.5em 0 0.5em">
+
+                                            <button type="submit" id="boton_formularios"
+                                                    class="btn btn-warning btn-block">Modificar
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -448,15 +623,26 @@
 
 {% block plugin_section %}
 
-    <script src="{% static 'fragancia/catalogo/php-email-form/validate.js' %}"></script>
-    <script src="{% static 'fragancia/catalogo/waypoints/jquery.waypoints.min.js' %}"></script>
-
     <script src="{% static 'fragancia/catalogo/vendor/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/venobox/venobox.min.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/vendor/aos/aos.js' %}"></script>
     <script src="{% static 'fragancia/catalogo/js/main.js' %}"></script>
+
+    <script src="{% static 'fragancia/dataspicker/js/gijgo.min.js' %}"></script>
+
+    <script>
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            startView: 2,
+            todayBtn: "linked",
+            language: "es",
+            format: "yyyy-mm-dd",
+
+        });
+
+    </script>
 
     <script>
         $(function () {
@@ -470,11 +656,11 @@
         })
     </script>
 
-	<script>
+    <script>
         $(function () {
             $('.custom-control-input').click(function () {
                 if ($(this).prop('checked')) {
-					$('#expandir_mensajeria').show();
+                    $('#expandir_mensajeria').show();
                 } else {
                     $('#expandir_mensajeria').hide();
                 }
@@ -483,22 +669,22 @@
     </script>
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function() {
-          'use strict';
-          window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-              }, false);
-            });
-          }, false);
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
         })();
     </script>
 {% endblock %}

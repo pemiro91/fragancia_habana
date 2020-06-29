@@ -45,8 +45,13 @@ ESTADO_ENTREGA = (
     ('Entregado', 'Entregado')
 )
 ESTADO_NOTIFICATION = (
-    ('Nueva', 'Nueva'),
+    ('No-Leida', 'No Leida'),
     ('Leida', 'Leida'),
+)
+TIPO_NOTIFICATION = (
+    ('Producto', 'Producto'),
+    ('Reservacion', 'Reservacion'),
+    ('Usuario', 'Usuario'),
 )
 
 
@@ -122,5 +127,6 @@ class Notification(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     mensaje = models.CharField(max_length=300)
     estado = models.CharField(max_length=50, choices=ESTADO_NOTIFICATION, name='estado')
-    fecha = models.DateField()
+    tipo = models.CharField(max_length=50, choices=TIPO_NOTIFICATION, name='tipo')
+    fecha = models.DateTimeField(auto_now_add=True)
 
